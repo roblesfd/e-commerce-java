@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ecommerce}
+    username: ${DB_USERNAME:ecommerce}
+    password: ${DB_PASSWORD:ecommerce}
+  jpa:
+    show-sql: true
