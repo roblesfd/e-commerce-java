@@ -24,7 +24,7 @@ spring:
       - classpath:db/migration/payment
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8084}
 
 management:
   endpoints:
@@ -33,8 +33,7 @@ management:
         include: health,info
 
 iam:
-  jwt:
-    secret: ${IAM_JWT_SECRET:changemechangemechangemechangeme}
+  base-url: ${IAM_BASE_URL:http://localhost:8083}
 
 logging:
   pattern:

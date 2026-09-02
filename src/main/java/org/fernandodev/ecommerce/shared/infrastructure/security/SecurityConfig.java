@@ -20,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Configuración de Spring Security.
  * <p>
@@ -32,15 +34,11 @@ import java.io.IOException;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JsonMapper jsonMapper;
-
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, JsonMapper jsonMapper) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.jsonMapper = jsonMapper;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

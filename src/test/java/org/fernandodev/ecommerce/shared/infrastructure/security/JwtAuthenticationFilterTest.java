@@ -1,13 +1,16 @@
 package org.fernandodev.ecommerce.shared.infrastructure.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
-import org.fernandodev.ecommerce.shared.adapter.out.iam.JwtAccessTokenValidator;
+import org.fernandodev.starter.iam.client.TokenValidator;
+import org.fernandodev.starter.iam.dto.ValidarTokenResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -15,7 +18,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
 
@@ -29,8 +31,9 @@ class JwtAuthenticationFilterTest {
     @Test
     void estableceAutenticacionConTokenValido() throws Exception {
         UUID userId = UUID.randomUUID();
-        JwtAccessTokenValidator validator = mock(JwtAccessTokenValidator.class);
-        when(validator.validateAndExtractSubject("token-valido")).thenReturn(Optional.of(userId));
+        TokenValidator validator = mock(TokenValidator.class);
+        when(validator.validate(anyString())).thenReturn(Optional.of(
+                new ValidarTokenResponse(userId, "ana", true, true, Set.of("USER_READ"))));
 
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(validator);
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -39,12 +42,14 @@ class JwtAuthenticationFilterTest {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertThat(authentication).isInstanceOf(UsernamePasswordAuthenticationToken.class);
-        assertThat(authentication.getPrincipal()).isEqualTo(new AuthenticatedUser(userId));
+        AuthenticatedUser principal = (AuthenticatedUser) authentication.getPrincipal();
+        assertThat(principal.id()).isEqualTo(userId);
+        assertThat(principal.permisos()).contains("USER_READ");
     }
 
     @Test
     void noEstableceAutenticacionSinToken() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(mock(JwtAccessTokenValidator.class));
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(mock(TokenValidator.class));
         MockHttpServletRequest request = new MockHttpServletRequest();
 
         filter.doFilter(request, new MockHttpServletResponse(), mock(FilterChain.class));
@@ -54,12 +59,26 @@ class JwtAuthenticationFilterTest {
 
     @Test
     void noEstableceAutenticacionConTokenInvalido() throws Exception {
-        JwtAccessTokenValidator validator = mock(JwtAccessTokenValidator.class);
-        when(validator.validateAndExtractSubject("token-invalido")).thenReturn(Optional.empty());
+        TokenValidator validator = mock(TokenValidator.class);
+        when(validator.validate(anyString())).thenReturn(Optional.empty());
 
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(validator);
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer token-invalido");
+
+        filter.doFilter(request, new MockHttpServletResponse(), mock(FilterChain.class));
+
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
+    }
+
+    @Test
+    void limpiaContextoSiElIamNoResponde() throws Exception {
+        TokenValidator validator = mock(TokenValidator.class);
+        when(validator.validate(anyString())).thenThrow(new RuntimeException("IAM caído"));
+
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(validator);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Bearer token");
 
         filter.doFilter(request, new MockHttpServletResponse(), mock(FilterChain.class));
 

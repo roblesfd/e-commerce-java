@@ -1,38 +1,40 @@
 package org.fernandodev.ecommerce.shared.infrastructure.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.fernandodev.ecommerce.shared.adapter.out.iam.JwtAccessTokenValidator;
+import java.io.IOException;
+import java.util.List;
+
+import org.fernandodev.starter.iam.client.TokenValidator;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.List;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Filtro de autenticación JWT.
+ * Filtro de autenticación por validación remota del JWT contra el IAM.
  * <p>
- * Lee el token del encabezado {@code Authorization: Bearer}, lo valida contra
- * el IAM y establece el contexto de seguridad con un {@link AuthenticatedUser}.
- * Si el token es inválido o no está presente, el contexto permanece vacío y la
- * cadena de seguridad decide si la ruta requiere autenticación.
+ * Lee el token del encabezado {@code Authorization: Bearer}, lo valida
+ * remotamente ({@link TokenValidator} → {@code POST /auth/validar}) y
+ * construye un {@link AuthenticatedUser} con la identidad y los permisos
+ * efectivos que devuelve el IAM. Si el token es inválido o el IAM no está
+ * disponible, el contexto permanece vacío.
  * </p>
  */
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String BEARER_PREFIX = "Bearer ";
 
-    private final JwtAccessTokenValidator validator;
-
-    public JwtAuthenticationFilter(JwtAccessTokenValidator validator) {
-        this.validator = validator;
-    }
+    private final TokenValidator tokenValidator;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -47,12 +49,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void authenticate(String token, HttpServletRequest request) {
-        validator.validateAndExtractSubject(token).ifPresent(userId -> {
-            AuthenticatedUser principal = new AuthenticatedUser(userId);
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(principal, null, List.of());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        });
+        try {
+            tokenValidator.validate(token).ifPresent(validation -> {
+                AuthenticatedUser principal = AuthenticatedUser.of(
+                        validation.usuarioId(), validation.username(), validation.permisos());
+
+                List<GrantedAuthority> authorities = validation.permisos().stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .map(GrantedAuthority.class::cast)
+                        .toList();
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(principal, null, authorities);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            });
+        } catch (Exception ex) {
+            SecurityContextHolder.clearContext();
+        }
     }
 }
