@@ -1,0 +1,22 @@
+package org.fernandodev.ecommerce.inventory.domain.value_object;
+
+import java.util.Objects;
+import java.util.UUID;
+
+/**
+ * Identificador de un inventario dentro del contexto Inventory.
+ */
+public record InventoryId(UUID value) {
+
+    public InventoryId {
+        Objects.requireNonNull(value, "value no puede ser null");
+    }
+
+    public static InventoryId generate() {
+        return new InventoryId(UUID.randomUUID());
+    }
+
+    public static InventoryId of(UUID value) {
+        return new InventoryId(value);
+    }
+}
