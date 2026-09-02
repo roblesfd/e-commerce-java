@@ -22,6 +22,12 @@ spring:
       - classpath:db/migration/checkout
       - classpath:db/migration/order
       - classpath:db/migration/payment
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      repositories:
+        enabled: false
 
 server:
   port: ${SERVER_PORT:8084}
@@ -34,6 +40,9 @@ management:
 
 iam:
   base-url: ${IAM_BASE_URL:http://localhost:8083}
+
+cart:
+  ttl: ${CART_TTL:PT168H}
 
 logging:
   pattern:
