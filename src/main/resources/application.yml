@@ -44,6 +44,12 @@ iam:
 cart:
   ttl: ${CART_TTL:PT168H}
 
+checkout:
+  ttl: ${CHECKOUT_TTL:PT24H}
+
+payment:
+  webhook-secret: ${PAYMENT_WEBHOOK_SECRET:mock-secret}
+
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
