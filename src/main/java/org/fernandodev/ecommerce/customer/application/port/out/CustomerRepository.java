@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.fernandodev.ecommerce.customer.domain.Customer;
-import org.fernandodev.ecommerce.customer.domain.CustomerId;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerId;
 
 /**
  * Puerto de salida de persistencia del agregado {@link Customer}.

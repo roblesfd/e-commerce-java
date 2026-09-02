@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.infrastructure.persistence;
+package org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa.CustomerAddressEmbeddable;
 
 /**
  * Entidad JPA del agregado {@code customer}.

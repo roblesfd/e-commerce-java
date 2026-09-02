@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.domain;
+package org.fernandodev.ecommerce.customer.domain.value_object;
 
 import java.util.Currency;
 import java.util.Objects;
@@ -12,7 +12,7 @@ import java.util.Objects;
 public record CustomerPreferences(boolean newsletterEnabled, String preferredCurrencyCode) {
 
     public CustomerPreferences {
-        Objects.requireNonNull(preferredCurrencyCode, "preferredCurrencyCode must not be null");
+        Objects.requireNonNull(preferredCurrencyCode, "preferredCurrencyCode no puede ser null");
         Currency.getInstance(preferredCurrencyCode);
     }
 

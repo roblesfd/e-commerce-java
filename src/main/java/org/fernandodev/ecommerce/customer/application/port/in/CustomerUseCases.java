@@ -1,11 +1,12 @@
-package org.fernandodev.ecommerce.customer.application;
+package org.fernandodev.ecommerce.customer.application.port.in;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.fernandodev.ecommerce.customer.application.dto.AddressCommand;
 import org.fernandodev.ecommerce.customer.application.dto.PreferencesCommand;
 import org.fernandodev.ecommerce.customer.application.dto.Profile;
-import org.fernandodev.ecommerce.customer.domain.Address;
+import org.fernandodev.ecommerce.customer.domain.value_object.Address;
 import org.fernandodev.ecommerce.customer.domain.Customer;
 
 /**
@@ -29,5 +30,5 @@ public interface CustomerUseCases {
 
     Customer updatePreferences(UUID iamUserId, PreferencesCommand preferences);
 
-    java.util.List<Address> listAddresses(UUID iamUserId);
+    List<Address> listAddresses(UUID iamUserId);
 }

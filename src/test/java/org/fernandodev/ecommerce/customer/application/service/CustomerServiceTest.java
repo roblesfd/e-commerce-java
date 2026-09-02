@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.application;
+package org.fernandodev.ecommerce.customer.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -13,7 +13,7 @@ import org.fernandodev.ecommerce.customer.application.dto.PreferencesCommand;
 import org.fernandodev.ecommerce.customer.application.dto.Profile;
 import org.fernandodev.ecommerce.customer.application.port.out.CustomerRepository;
 import org.fernandodev.ecommerce.customer.domain.Customer;
-import org.fernandodev.ecommerce.customer.domain.CustomerId;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerId;
 import org.fernandodev.ecommerce.shared.domain.exception.ConflictException;
 import org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class CustomerServiceTest {
 
         Customer customer = service.register(iamUserId, new Profile("Ana", "García", "ana@example.com", null));
 
-        assertThat(customer.iamUserId()).isEqualTo(iamUserId);
+        assertThat(customer.getIamUserId()).isEqualTo(iamUserId);
         assertThat(repository.findByIamUserId(iamUserId)).contains(customer);
     }
 
@@ -51,11 +51,11 @@ class CustomerServiceTest {
     void addAddressPersisteLaDireccionComoPredeterminada() {
         Customer customer = service.register(UUID.randomUUID(), new Profile("Ana", "García", "ana@example.com", null));
 
-        Customer actualizado = service.addAddress(customer.iamUserId(),
+        Customer actualizado = service.addAddress(customer.getIamUserId(),
                 new AddressCommand("Calle 1", "Madrid", null, "28001", "España"));
 
-        assertThat(actualizado.addresses()).hasSize(1);
-        assertThat(actualizado.defaultAddressId()).isPresent();
+        assertThat(actualizado.getAddresses()).hasSize(1);
+        assertThat(actualizado.getDefaultAddressId()).isPresent();
     }
 
     @Test
@@ -63,7 +63,7 @@ class CustomerServiceTest {
         Customer first = service.register(UUID.randomUUID(), new Profile("Ana", "García", "ana@example.com", null));
         service.register(UUID.randomUUID(), new Profile("Luis", "Pérez", "luis@example.com", null));
 
-        assertThatThrownBy(() -> service.updateProfile(first.iamUserId(),
+        assertThatThrownBy(() -> service.updateProfile(first.getIamUserId(),
                 new Profile("Ana", "García", "luis@example.com", null)))
                 .isInstanceOf(ConflictException.class);
     }
@@ -72,10 +72,10 @@ class CustomerServiceTest {
     void updatePreferencesAplicaCambios() {
         Customer customer = service.register(UUID.randomUUID(), new Profile("Ana", "García", "ana@example.com", null));
 
-        Customer actualizado = service.updatePreferences(customer.iamUserId(), new PreferencesCommand(true, "EUR"));
+        Customer actualizado = service.updatePreferences(customer.getIamUserId(), new PreferencesCommand(true, "EUR"));
 
-        assertThat(actualizado.preferences().newsletterEnabled()).isTrue();
-        assertThat(actualizado.preferences().preferredCurrencyCode()).isEqualTo("EUR");
+        assertThat(actualizado.getPreferences().newsletterEnabled()).isTrue();
+        assertThat(actualizado.getPreferences().preferredCurrencyCode()).isEqualTo("EUR");
     }
 
     private static final class FakeCustomerRepository implements CustomerRepository {
@@ -96,13 +96,13 @@ class CustomerServiceTest {
 
         @Override
         public boolean existsByEmail(String email) {
-            return byId.values().stream().anyMatch(c -> c.email().value().equals(email));
+            return byId.values().stream().anyMatch(c -> c.getEmail().direccion().equals(email));
         }
 
         @Override
         public Customer save(Customer customer) {
-            byId.put(customer.id(), customer);
-            byIamUserId.put(customer.iamUserId(), customer.id());
+            byId.put(customer.getId(), customer);
+            byIamUserId.put(customer.getIamUserId(), customer.getId());
             return customer;
         }
     }

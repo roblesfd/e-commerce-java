@@ -1,7 +1,7 @@
 package org.fernandodev.ecommerce.customer.adapter;
 
-import org.fernandodev.ecommerce.customer.application.CustomerService;
-import org.fernandodev.ecommerce.customer.application.CustomerUseCases;
+import org.fernandodev.ecommerce.customer.application.service.CustomerService;
+import org.fernandodev.ecommerce.customer.application.port.in.CustomerUseCases;
 import org.fernandodev.ecommerce.customer.application.port.out.CustomerRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

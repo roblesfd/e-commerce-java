@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.infrastructure.persistence;
+package org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,9 +7,10 @@ import java.util.UUID;
 import org.fernandodev.ecommerce.AbstractIntegrationTest;
 import org.fernandodev.ecommerce.customer.application.port.out.CustomerRepository;
 import org.fernandodev.ecommerce.customer.domain.Customer;
-import org.fernandodev.ecommerce.customer.domain.CustomerId;
-import org.fernandodev.ecommerce.customer.domain.Email;
-import org.fernandodev.ecommerce.customer.domain.PhoneNumber;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerId;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerPreferences;
+import org.fernandodev.model.value_object.Email;
+import org.fernandodev.model.value_object.PhoneNumber;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,11 +24,11 @@ class JpaCustomerRepositoryTest extends AbstractIntegrationTest {
         Customer customer = crear(email());
 
         repository.save(customer);
-        Customer loaded = repository.findById(customer.id()).orElseThrow();
+        Customer loaded = repository.findById(customer.getId()).orElseThrow();
 
-        assertThat(loaded.id()).isEqualTo(customer.id());
-        assertThat(loaded.email()).isEqualTo(customer.email());
-        assertThat(loaded.iamUserId()).isEqualTo(customer.iamUserId());
+        assertThat(loaded.getId()).isEqualTo(customer.getId());
+        assertThat(loaded.getEmail()).isEqualTo(customer.getEmail());
+        assertThat(loaded.getIamUserId()).isEqualTo(customer.getIamUserId());
     }
 
     @Test
@@ -38,7 +39,7 @@ class JpaCustomerRepositoryTest extends AbstractIntegrationTest {
         repository.save(customer);
         Customer loaded = repository.findByIamUserId(iamUserId).orElseThrow();
 
-        assertThat(loaded.id()).isEqualTo(customer.id());
+        assertThat(loaded.getId()).isEqualTo(customer.getId());
     }
 
     @Test
@@ -58,18 +59,18 @@ class JpaCustomerRepositoryTest extends AbstractIntegrationTest {
         Customer customer = crear(email);
         customer.addAddress("Calle 1", "Madrid", null, "28001", "España");
         customer.addAddress("Calle 2", "Barcelona", null, "08001", "España");
-        customer.updateProfile("Ana", "García", new Email(email), new PhoneNumber("+34600000000"));
-        customer.updatePreferences(new org.fernandodev.ecommerce.customer.domain.CustomerPreferences(true, "EUR"));
+        customer.updateProfile("Ana", "García", new Email(email), new PhoneNumber("5512345678"));
+        customer.updatePreferences(new CustomerPreferences(true, "EUR"));
 
         repository.save(customer);
-        Customer loaded = repository.findById(customer.id()).orElseThrow();
+        Customer loaded = repository.findById(customer.getId()).orElseThrow();
 
-        assertThat(loaded.addresses()).hasSize(2);
-        assertThat(loaded.addresses().get(0).street()).isEqualTo("Calle 1");
-        assertThat(loaded.defaultAddressId()).isPresent();
-        assertThat(loaded.phoneNumber().value()).isEqualTo("+34600000000");
-        assertThat(loaded.preferences().newsletterEnabled()).isTrue();
-        assertThat(loaded.preferences().preferredCurrencyCode()).isEqualTo("EUR");
+        assertThat(loaded.getAddresses()).hasSize(2);
+        assertThat(loaded.getAddresses().get(0).street()).isEqualTo("Calle 1");
+        assertThat(loaded.getDefaultAddressId()).isPresent();
+        assertThat(loaded.getPhoneNumber().value()).isEqualTo("5512345678");
+        assertThat(loaded.getPreferences().newsletterEnabled()).isTrue();
+        assertThat(loaded.getPreferences().preferredCurrencyCode()).isEqualTo("EUR");
     }
 
     private static String email() {

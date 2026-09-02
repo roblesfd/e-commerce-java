@@ -7,8 +7,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import lombok.*;
+import org.fernandodev.ecommerce.customer.domain.value_object.Address;
+import org.fernandodev.ecommerce.customer.domain.value_object.AddressId;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerId;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerPreferences;
 import org.fernandodev.ecommerce.shared.domain.exception.BusinessRuleViolationException;
 import org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundException;
+import org.fernandodev.model.value_object.Email;
+import org.fernandodev.model.value_object.PhoneNumber;
 
 /**
  * Agregado raíz del contexto Customer Management.
@@ -18,19 +25,25 @@ import org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundExcepti
  * información específica de comercio (perfil, direcciones, preferencias).
  * </p>
  */
+@Getter
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+@AllArgsConstructor(access = lombok.AccessLevel.PUBLIC)
+@ToString()
 public class Customer {
 
-    private final CustomerId id;
-    private final UUID iamUserId;
+    private CustomerId id;
+    private UUID iamUserId;
     private String firstName;
     private String lastName;
     private Email email;
     private PhoneNumber phoneNumber;
-    private final List<Address> addresses;
+    @Getter(AccessLevel.NONE)
+    private List<Address> addresses;
+    @Getter(AccessLevel.NONE)
     private AddressId defaultAddressId;
     private CustomerPreferences preferences;
 
-    public Customer(
+    public static Customer crear(
             CustomerId id,
             UUID iamUserId,
             String firstName,
@@ -41,15 +54,20 @@ public class Customer {
             AddressId defaultAddressId,
             CustomerPreferences preferences
     ) {
-        this.id = Objects.requireNonNull(id, "id must not be null");
-        this.iamUserId = Objects.requireNonNull(iamUserId, "iamUserId must not be null");
-        setFirstName(firstName);
-        setLastName(lastName);
-        this.email = Objects.requireNonNull(email, "email must not be null");
-        this.phoneNumber = phoneNumber;
-        this.addresses = new ArrayList<>(addresses == null ? List.of() : addresses);
-        this.defaultAddressId = defaultAddressId;
-        this.preferences = Objects.requireNonNull(preferences, "preferences must not be null");
+
+        Customer c =  new Customer();
+
+        c.id = Objects.requireNonNull(id, "id no puede ser null");
+        c.iamUserId = Objects.requireNonNull(iamUserId, "iamUserId no puede ser null");
+        c.firstName = requireName(firstName, "nombre");
+        c.lastName = requireName(lastName, "apellido");
+        c.email = Objects.requireNonNull(email, "email no puede ser null");
+        c.phoneNumber = phoneNumber;
+        c.addresses = new ArrayList<>(addresses == null ? List.of() : addresses);
+        c.defaultAddressId = defaultAddressId;
+        c.preferences = Objects.requireNonNull(preferences, "preferences no puede ser null");
+
+        return c;
     }
 
     /**
@@ -63,59 +81,31 @@ public class Customer {
             Email email,
             PhoneNumber phoneNumber
     ) {
-        return new Customer(id, iamUserId, firstName, lastName, email, phoneNumber,
-                List.of(), null, CustomerPreferences.defaults());
+        return new Customer(id, iamUserId, requireName(firstName, "nombre"), requireName(lastName, "apellido"),
+                email, phoneNumber, new ArrayList<>(), null, CustomerPreferences.defaults());
     }
 
-    public CustomerId id() {
-        return id;
-    }
-
-    public UUID iamUserId() {
-        return iamUserId;
-    }
-
-    public String firstName() {
-        return firstName;
-    }
-
-    public String lastName() {
-        return lastName;
-    }
-
-    public String fullName() {
+    public String getFullName() {
         return firstName + " " + lastName;
     }
 
-    public Email email() {
-        return email;
-    }
-
-    public PhoneNumber phoneNumber() {
-        return phoneNumber;
-    }
-
-    public List<Address> addresses() {
+    public List<Address> getAddresses() {
         return Collections.unmodifiableList(addresses);
     }
 
-    public Optional<AddressId> defaultAddressId() {
+    public Optional<AddressId> getDefaultAddressId() {
         return Optional.ofNullable(defaultAddressId);
     }
 
-    public CustomerPreferences preferences() {
-        return preferences;
-    }
-
     public void updateProfile(String firstName, String lastName, Email email, PhoneNumber phoneNumber) {
-        setFirstName(firstName);
-        setLastName(lastName);
-        this.email = Objects.requireNonNull(email, "email must not be null");
+        this.firstName = requireName(firstName, "nombre");
+        this.lastName = requireName(lastName, "apellido");
+        this.email = Objects.requireNonNull(email, "correo no puede ser null");
         this.phoneNumber = phoneNumber;
     }
 
     public void updatePreferences(CustomerPreferences preferences) {
-        this.preferences = Objects.requireNonNull(preferences, "preferences must not be null");
+        this.preferences = Objects.requireNonNull(preferences, "preferencias no puede ser null");
     }
 
     /**
@@ -151,25 +141,18 @@ public class Customer {
     }
 
     private int indexOf(AddressId addressId) {
-        for (int i = 0; i < addresses.size(); i++) {
-            if (addresses.get(i).id().equals(addressId)) {
-                return i;
-            }
-        }
-        throw new ResourceNotFoundException("Dirección no encontrada: " + addressId);
+
+        return addresses.stream()
+                .filter(a -> a.id().equals(addressId))
+                .findFirst()
+                .map(a -> addresses.indexOf(a))
+                .orElseThrow(() -> new ResourceNotFoundException("Dirección no encontrada: " + addressId));
     }
 
-    private void setFirstName(String firstName) {
-        if (firstName == null || firstName.isBlank()) {
-            throw new BusinessRuleViolationException("firstName es obligatorio");
+    private static String requireName(String value, String campo) {
+        if (value == null || value.isBlank()) {
+            throw new BusinessRuleViolationException("El " + campo + " es obligatorio");
         }
-        this.firstName = firstName.trim();
-    }
-
-    private void setLastName(String lastName) {
-        if (lastName == null || lastName.isBlank()) {
-            throw new BusinessRuleViolationException("lastName es obligatorio");
-        }
-        this.lastName = lastName.trim();
+        return value;
     }
 }

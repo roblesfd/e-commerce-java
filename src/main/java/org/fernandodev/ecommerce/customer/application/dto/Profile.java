@@ -8,5 +8,9 @@ package org.fernandodev.ecommerce.customer.application.dto;
  * @param email         correo electrónico.
  * @param phoneNumber   teléfono (opcional).
  */
-public record Profile(String firstName, String lastName, String email, String phoneNumber) {
-}
+public record Profile(
+        String firstName,
+        String lastName,
+        String email,
+        String phoneNumber
+) {}

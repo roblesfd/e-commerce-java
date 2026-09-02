@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.domain;
+package org.fernandodev.ecommerce.customer.domain.value_object;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ public record Address(
 ) {
 
     public Address {
-        Objects.requireNonNull(id, "id must not be null");
+        Objects.requireNonNull(id, "id no puede ser null");
         requireNotBlank(street, "street");
         requireNotBlank(city, "city");
         requireNotBlank(postalCode, "postalCode");
@@ -32,7 +32,7 @@ public record Address(
 
     private static void requireNotBlank(String value, String name) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(name + " must not be blank");
+            throw new IllegalArgumentException(name + " no puede ser null");
         }
     }
 }

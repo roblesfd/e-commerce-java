@@ -1,8 +1,9 @@
-package org.fernandodev.ecommerce.customer.infrastructure.persistence;
+package org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa;
 
 import java.util.Optional;
 import java.util.UUID;
 
+import org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa.entity.CustomerJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

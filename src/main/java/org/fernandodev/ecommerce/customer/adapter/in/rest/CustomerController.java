@@ -10,7 +10,7 @@ import org.fernandodev.ecommerce.customer.adapter.in.rest.dto.CustomerResponse;
 import org.fernandodev.ecommerce.customer.adapter.in.rest.dto.PreferencesRequest;
 import org.fernandodev.ecommerce.customer.adapter.in.rest.dto.UpdateProfileRequest;
 import org.fernandodev.ecommerce.customer.adapter.in.rest.mapper.CustomerMapper;
-import org.fernandodev.ecommerce.customer.application.CustomerUseCases;
+import org.fernandodev.ecommerce.customer.application.port.in.CustomerUseCases;
 import org.fernandodev.ecommerce.shared.infrastructure.security.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST del contexto Customer Management.
@@ -35,15 +36,11 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/v1/customers")
+@RequiredArgsConstructor
 public class CustomerController {
 
     private final CustomerUseCases customerUseCases;
     private final CustomerMapper mapper;
-
-    public CustomerController(CustomerUseCases customerUseCases, CustomerMapper mapper) {
-        this.customerUseCases = customerUseCases;
-        this.mapper = mapper;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

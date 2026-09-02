@@ -11,7 +11,7 @@ import org.fernandodev.ecommerce.customer.adapter.in.rest.dto.UpdateProfileReque
 import org.fernandodev.ecommerce.customer.application.dto.AddressCommand;
 import org.fernandodev.ecommerce.customer.application.dto.PreferencesCommand;
 import org.fernandodev.ecommerce.customer.application.dto.Profile;
-import org.fernandodev.ecommerce.customer.domain.Address;
+import org.fernandodev.ecommerce.customer.domain.value_object.Address;
 import org.fernandodev.ecommerce.customer.domain.Customer;
 import org.springframework.stereotype.Component;
 
@@ -40,16 +40,16 @@ public class CustomerMapper {
 
     public CustomerResponse toResponse(Customer customer) {
         return new CustomerResponse(
-                customer.id().value(),
-                customer.firstName(),
-                customer.lastName(),
-                customer.email().value(),
-                customer.phoneNumber() == null ? null : customer.phoneNumber().value(),
-                customer.addresses().stream().map(this::toAddressResponse).toList(),
-                customer.defaultAddressId().map(id -> id.value()).orElse(null),
+                customer.getId().value(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail().direccion(),
+                customer.getPhoneNumber() == null ? null : customer.getPhoneNumber().value(),
+                customer.getAddresses().stream().map(this::toAddressResponse).toList(),
+                customer.getDefaultAddressId().map(id -> id.value()).orElse(null),
                 new CustomerResponse.PreferencesResponse(
-                        customer.preferences().newsletterEnabled(),
-                        customer.preferences().preferredCurrencyCode()));
+                        customer.getPreferences().newsletterEnabled(),
+                        customer.getPreferences().preferredCurrencyCode()));
     }
 
     public AddressResponse toAddressResponse(Address address) {

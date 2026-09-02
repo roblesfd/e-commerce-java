@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.application;
+package org.fernandodev.ecommerce.customer.application.service;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,16 +6,18 @@ import java.util.UUID;
 import org.fernandodev.ecommerce.customer.application.dto.AddressCommand;
 import org.fernandodev.ecommerce.customer.application.dto.PreferencesCommand;
 import org.fernandodev.ecommerce.customer.application.dto.Profile;
+import org.fernandodev.ecommerce.customer.application.port.in.CustomerUseCases;
 import org.fernandodev.ecommerce.customer.application.port.out.CustomerRepository;
-import org.fernandodev.ecommerce.customer.domain.Address;
-import org.fernandodev.ecommerce.customer.domain.AddressId;
+import org.fernandodev.ecommerce.customer.domain.value_object.Address;
+import org.fernandodev.ecommerce.customer.domain.value_object.AddressId;
 import org.fernandodev.ecommerce.customer.domain.Customer;
-import org.fernandodev.ecommerce.customer.domain.CustomerId;
-import org.fernandodev.ecommerce.customer.domain.CustomerPreferences;
-import org.fernandodev.ecommerce.customer.domain.Email;
-import org.fernandodev.ecommerce.customer.domain.PhoneNumber;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerId;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerPreferences;
 import org.fernandodev.ecommerce.shared.domain.exception.ConflictException;
 import org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundException;
+import org.fernandodev.model.value_object.Email;
+import org.fernandodev.model.value_object.PhoneNumber;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Servicio de aplicación del contexto Customer Management.
@@ -24,13 +26,10 @@ import org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundExcepti
  * email) sobre el puerto de persistencia. No depende de Spring.
  * </p>
  */
+@RequiredArgsConstructor
 public class CustomerService implements CustomerUseCases {
 
     private final CustomerRepository repository;
-
-    public CustomerService(CustomerRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Customer register(UUID iamUserId, Profile profile) {
@@ -58,7 +57,7 @@ public class CustomerService implements CustomerUseCases {
     public Customer updateProfile(UUID iamUserId, Profile profile) {
         Customer customer = getByIamUserId(iamUserId);
         String email = profile.email().trim();
-        if (!customer.email().value().equals(email) && repository.existsByEmail(email)) {
+        if (!customer.getEmail().direccion().equals(email) && repository.existsByEmail(email)) {
             throw new ConflictException("Ya existe un cliente con el email: " + email);
         }
         customer.updateProfile(
@@ -107,6 +106,6 @@ public class CustomerService implements CustomerUseCases {
 
     @Override
     public List<Address> listAddresses(UUID iamUserId) {
-        return getByIamUserId(iamUserId).addresses();
+        return getByIamUserId(iamUserId).getAddresses();
     }
 }

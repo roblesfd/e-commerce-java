@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.domain;
+package org.fernandodev.ecommerce.customer.domain.value_object;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -9,7 +9,7 @@ import java.util.UUID;
 public record AddressId(UUID value) {
 
     public AddressId {
-        Objects.requireNonNull(value, "value must not be null");
+        Objects.requireNonNull(value, "value no puede ser null");
     }
 
     public static AddressId generate() {

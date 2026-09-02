@@ -1,12 +1,14 @@
-package org.fernandodev.ecommerce.customer.infrastructure.persistence;
+package org.fernandodev.ecommerce.customer.adapter.util.mapper;
 
-import org.fernandodev.ecommerce.customer.domain.Address;
-import org.fernandodev.ecommerce.customer.domain.AddressId;
+import org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa.CustomerAddressEmbeddable;
+import org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa.entity.CustomerJpaEntity;
+import org.fernandodev.ecommerce.customer.domain.value_object.Address;
+import org.fernandodev.ecommerce.customer.domain.value_object.AddressId;
 import org.fernandodev.ecommerce.customer.domain.Customer;
-import org.fernandodev.ecommerce.customer.domain.CustomerId;
-import org.fernandodev.ecommerce.customer.domain.CustomerPreferences;
-import org.fernandodev.ecommerce.customer.domain.Email;
-import org.fernandodev.ecommerce.customer.domain.PhoneNumber;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerId;
+import org.fernandodev.ecommerce.customer.domain.value_object.CustomerPreferences;
+import org.fernandodev.model.value_object.Email;
+import org.fernandodev.model.value_object.PhoneNumber;
 
 /**
  * Mapper manual entre el agregado de dominio {@link Customer} y la entidad
@@ -19,21 +21,21 @@ public final class CustomerPersistenceMapper {
 
     public static CustomerJpaEntity toEntity(Customer customer) {
         CustomerJpaEntity entity = new CustomerJpaEntity();
-        entity.setId(customer.id().value());
-        entity.setIamUserId(customer.iamUserId());
-        entity.setFirstName(customer.firstName());
-        entity.setLastName(customer.lastName());
-        entity.setEmail(customer.email().value());
-        entity.setPhoneNumber(customer.phoneNumber() == null ? null : customer.phoneNumber().value());
-        entity.setDefaultAddressId(customer.defaultAddressId().map(AddressId::value).orElse(null));
-        entity.setNewsletterEnabled(customer.preferences().newsletterEnabled());
-        entity.setPreferredCurrency(customer.preferences().preferredCurrencyCode());
-        customer.addresses().forEach(address -> entity.getAddresses().add(toEmbeddable(address)));
+        entity.setId(customer.getId().value());
+        entity.setIamUserId(customer.getIamUserId());
+        entity.setFirstName(customer.getFirstName());
+        entity.setLastName(customer.getLastName());
+        entity.setEmail(customer.getEmail().direccion());
+        entity.setPhoneNumber(customer.getPhoneNumber() == null ? null : customer.getPhoneNumber().value());
+        entity.setDefaultAddressId(customer.getDefaultAddressId().map(AddressId::value).orElse(null));
+        entity.setNewsletterEnabled(customer.getPreferences().newsletterEnabled());
+        entity.setPreferredCurrency(customer.getPreferences().preferredCurrencyCode());
+        customer.getAddresses().forEach(address -> entity.getAddresses().add(toEmbeddable(address)));
         return entity;
     }
 
     public static Customer toDomain(CustomerJpaEntity entity) {
-        return new Customer(
+        return Customer.crear(
                 CustomerId.of(entity.getId()),
                 entity.getIamUserId(),
                 entity.getFirstName(),

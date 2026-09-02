@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.infrastructure.persistence;
+package org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa;
 
 import java.util.UUID;
 
