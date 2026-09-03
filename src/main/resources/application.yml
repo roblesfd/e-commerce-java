@@ -22,6 +22,7 @@ spring:
       - classpath:db/migration/checkout
       - classpath:db/migration/order
       - classpath:db/migration/payment
+      - classpath:db/migration/shipping
   data:
     redis:
       host: ${REDIS_HOST:localhost}
@@ -49,6 +50,9 @@ checkout:
 
 payment:
   webhook-secret: ${PAYMENT_WEBHOOK_SECRET:mock-secret}
+
+shipping:
+  webhook-secret: ${SHIPPING_WEBHOOK_SECRET:mock-secret}
 
 logging:
   pattern:

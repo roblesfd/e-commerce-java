@@ -12,4 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface OrderSpringDataRepository extends JpaRepository<OrderJpaEntity, UUID> {
 
     List<OrderJpaEntity> findByCustomerIdOrderByCreatedAtDesc(UUID customerId);
+
+    List<OrderJpaEntity> findAllByOrderByCreatedAtDesc();
 }

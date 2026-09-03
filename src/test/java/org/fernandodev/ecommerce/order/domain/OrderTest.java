@@ -88,6 +88,37 @@ class OrderTest {
                 .isInstanceOf(BusinessRuleViolationException.class);
     }
 
+    @Test
+    void cicloDeFulfillmentCompleto() {
+        Order order = orden();
+
+        order.confirm(T1);
+        order.process(T1);
+        order.markReadyToShip(T1);
+        order.markShipped(T1);
+        order.markDelivered(T1);
+
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.DELIVERED);
+        assertThat(order.getStatusHistory()).hasSize(6);
+        assertThat(order.getStatusHistory())
+                .extracting(entry -> entry.status())
+                .containsExactly(OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.PROCESSING,
+                        OrderStatus.READY_TO_SHIP, OrderStatus.SHIPPED, OrderStatus.DELIVERED);
+    }
+
+    @Test
+    void transicionesDeFulfillmentInvalidasLanzanExcepcion() {
+        Order order = orden();
+
+        assertThatThrownBy(() -> order.markShipped(T1))
+                .isInstanceOf(BusinessRuleViolationException.class);
+
+        order.confirm(T1);
+        order.process(T1);
+        assertThatThrownBy(() -> order.markDelivered(T1))
+                .isInstanceOf(BusinessRuleViolationException.class);
+    }
+
     private static Order orden() {
         return Order.create(OrderId.generate(), UUID.randomUUID(),
                 List.of(item()), null, null, "WELCOME10", usd(1800), usd(180), usd(1620), T1);

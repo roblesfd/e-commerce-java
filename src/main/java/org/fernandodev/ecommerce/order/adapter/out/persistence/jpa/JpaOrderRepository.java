@@ -39,4 +39,11 @@ public class JpaOrderRepository implements OrderRepository {
                 .map(OrderPersistenceMapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public List<Order> findAll() {
+        return springData.findAllByOrderByCreatedAtDesc().stream()
+                .map(OrderPersistenceMapper::toDomain)
+                .toList();
+    }
 }

@@ -41,6 +41,14 @@ class OrderServiceTest {
     }
 
     @Test
+    void listAllDevuelveTodasLasOrdenes() {
+        service.create(comando());
+        service.create(comando());
+
+        assertThat(service.listAll()).hasSize(2);
+    }
+
+    @Test
     void confirmCambiaElEstado() {
         Order order = service.create(comando());
 
@@ -56,6 +64,20 @@ class OrderServiceTest {
         Order cancelled = service.cancel(order.getId());
 
         assertThat(cancelled.getStatus()).isEqualTo(OrderStatus.CANCELLED);
+    }
+
+    @Test
+    void fulfillmentCambiaElEstadoHastaEntregado() {
+        Order order = service.create(comando());
+        Order confirmed = service.confirm(order.getId());
+
+        Order shipped = service.markShipped(
+                service.markReadyToShip(service.process(confirmed.getId()).getId()).getId());
+
+        assertThat(shipped.getStatus()).isEqualTo(OrderStatus.SHIPPED);
+
+        Order delivered = service.markDelivered(shipped.getId());
+        assertThat(delivered.getStatus()).isEqualTo(OrderStatus.DELIVERED);
     }
 
     @Test
@@ -102,6 +124,11 @@ class OrderServiceTest {
         @Override
         public List<Order> findByCustomerId(UUID customerId) {
             return byId.values().stream().filter(o -> o.getCustomerId().equals(customerId)).toList();
+        }
+
+        @Override
+        public List<Order> findAll() {
+            return List.copyOf(byId.values());
         }
     }
 }

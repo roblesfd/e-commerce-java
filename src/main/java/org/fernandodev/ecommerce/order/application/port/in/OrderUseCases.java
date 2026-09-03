@@ -18,7 +18,17 @@ public interface OrderUseCases {
 
     List<Order> listByCustomer(UUID customerId);
 
+    List<Order> listAll();
+
     Order confirm(OrderId id);
+
+    Order process(OrderId id);
+
+    Order markReadyToShip(OrderId id);
+
+    Order markShipped(OrderId id);
+
+    Order markDelivered(OrderId id);
 
     Order cancel(OrderId id);
 }

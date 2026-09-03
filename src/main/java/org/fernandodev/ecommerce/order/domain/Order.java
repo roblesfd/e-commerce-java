@@ -112,11 +112,42 @@ public class Order {
         transition(OrderStatus.CONFIRMED, at);
     }
 
+    public void process(Instant at) {
+        requireTransition(OrderStatus.PROCESSING, "procesar", at);
+    }
+
+    public void markReadyToShip(Instant at) {
+        requireTransition(OrderStatus.READY_TO_SHIP, "marcar como lista para envío", at);
+    }
+
+    public void markShipped(Instant at) {
+        requireTransition(OrderStatus.SHIPPED, "marcar como enviada", at);
+    }
+
+    public void markDelivered(Instant at) {
+        requireTransition(OrderStatus.DELIVERED, "marcar como entregada", at);
+    }
+
     public void cancel(Instant at) {
         if (status != OrderStatus.PENDING && status != OrderStatus.CONFIRMED) {
             throw new BusinessRuleViolationException("Solo se puede cancelar una orden PENDING o CONFIRMED");
         }
         transition(OrderStatus.CANCELLED, at);
+    }
+
+    private void requireTransition(OrderStatus target, String operacion, Instant at) {
+        boolean valid = switch (target) {
+            case PROCESSING -> status == OrderStatus.CONFIRMED;
+            case READY_TO_SHIP -> status == OrderStatus.PROCESSING;
+            case SHIPPED -> status == OrderStatus.READY_TO_SHIP;
+            case DELIVERED -> status == OrderStatus.SHIPPED;
+            default -> false;
+        };
+        if (!valid) {
+            throw new BusinessRuleViolationException(
+                    "No se puede " + operacion + " una orden en estado " + status);
+        }
+        transition(target, at);
     }
 
     private void transition(OrderStatus target, Instant at) {

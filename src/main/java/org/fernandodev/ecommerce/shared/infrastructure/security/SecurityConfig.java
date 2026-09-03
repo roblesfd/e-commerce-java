@@ -61,7 +61,8 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/api/v1/payments/webhooks"
+                                "/api/v1/payments/webhooks",
+                                "/api/v1/shipments/webhooks"
                         ).permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().authenticated()

@@ -34,7 +34,7 @@ public class OrderService implements OrderUseCases {
                 items,
                 command.addressId(),
                 command.addressSnapshot(),
-                command.couponCode(),
+                command.couponCode(),   
                 command.subtotal(),
                 command.discounts(),
                 command.total(),
@@ -53,9 +53,42 @@ public class OrderService implements OrderUseCases {
     }
 
     @Override
+    public List<Order> listAll() {
+        return orders.findAll();
+    }
+
+    @Override
     public Order confirm(OrderId id) {
         Order order = getExisting(id);
         order.confirm(Instant.now());
+        return orders.save(order);
+    }
+
+    @Override
+    public Order process(OrderId id) {
+        Order order = getExisting(id);
+        order.process(Instant.now());
+        return orders.save(order);
+    }
+
+    @Override
+    public Order markReadyToShip(OrderId id) {
+        Order order = getExisting(id);
+        order.markReadyToShip(Instant.now());
+        return orders.save(order);
+    }
+
+    @Override
+    public Order markShipped(OrderId id) {
+        Order order = getExisting(id);
+        order.markShipped(Instant.now());
+        return orders.save(order);
+    }
+
+    @Override
+    public Order markDelivered(OrderId id) {
+        Order order = getExisting(id);
+        order.markDelivered(Instant.now());
         return orders.save(order);
     }
 
