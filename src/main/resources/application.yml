@@ -27,6 +27,7 @@ spring:
       - classpath:db/migration/reviews
       - classpath:db/migration/wishlist
       - classpath:db/migration/notifications
+      - classpath:db/migration/search
   data:
     redis:
       host: ${REDIS_HOST:localhost}
