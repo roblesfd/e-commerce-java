@@ -159,6 +159,18 @@ class PricingServiceTest {
         return BigDecimal.valueOf(value);
     }
 
+    @Test
+    void getByProductDevuelveElPrecioConHistorial() {
+        ProductId productId = ProductId.generate();
+        Price price = service.defineBasePrice(new DefinePriceCommand(productId, null, new BigDecimal("900"), "USD"));
+        service.updateBasePrice(price.getId(), new UpdatePriceCommand(new BigDecimal("850"), "USD"));
+
+        Price resolved = service.getByProduct(productId, null);
+
+        assertThat(resolved.getId()).isEqualTo(price.getId());
+        assertThat(resolved.getHistory()).hasSize(1);
+    }
+
     private static Money usd(int value) {
         return Money.of(String.valueOf(value), "USD");
     }

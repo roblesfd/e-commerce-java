@@ -34,7 +34,7 @@ class CustomerControllerTest extends AbstractIntegrationTest {
 
     private void autenticarComo(UUID userId) {
         when(tokenValidator.validate(anyString()))
-                .thenReturn(Optional.of(new ValidarTokenResponse(userId, "ana", true, true, Set.of())));
+                .thenReturn(Optional.of(new ValidarTokenResponse(userId, "ana", true, true, Set.of(), Set.of(), Set.of())));
     }
 
     @Test

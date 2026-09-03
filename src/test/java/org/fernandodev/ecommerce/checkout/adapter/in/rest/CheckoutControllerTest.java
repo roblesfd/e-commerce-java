@@ -83,7 +83,7 @@ class CheckoutControllerTest extends AbstractIntegrationTest {
     private void prepararEscenario() {
         userId = UUID.randomUUID();
         when(tokenValidator.validate(anyString()))
-                .thenReturn(Optional.of(new ValidarTokenResponse(userId, "ana", true, true, Set.of())));
+                .thenReturn(Optional.of(new ValidarTokenResponse(userId, "ana", true, true, Set.of(), Set.of(), Set.of())));
 
         customers.register(userId, new Profile("Ana", "García", "ana@example.com", null));
         customers.addAddress(userId, new AddressCommand("Calle 1", "Madrid", null, "28001", "España"));

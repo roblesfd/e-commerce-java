@@ -108,4 +108,9 @@ public class CustomerService implements CustomerUseCases {
     public List<Address> listAddresses(UUID iamUserId) {
         return getByIamUserId(iamUserId).getAddresses();
     }
+
+    @Override
+    public List<Customer> listAll() {
+        return repository.findAll();
+    }
 }

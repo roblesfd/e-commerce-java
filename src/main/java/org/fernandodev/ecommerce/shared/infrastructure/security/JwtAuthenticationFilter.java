@@ -1,7 +1,9 @@
 package org.fernandodev.ecommerce.shared.infrastructure.security;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.fernandodev.starter.iam.client.TokenValidator;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,12 +54,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             tokenValidator.validate(token).ifPresent(validation -> {
                 AuthenticatedUser principal = AuthenticatedUser.of(
-                        validation.usuarioId(), validation.username(), validation.permisos());
+                        validation.usuarioId(), validation.username(),
+                        validation.permisos(), validation.roles(), validation.grupos());
 
-                List<GrantedAuthority> authorities = validation.permisos().stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .map(GrantedAuthority.class::cast)
-                        .toList();
+                List<GrantedAuthority> authorities = new ArrayList<>();
+                Set<String> permisos = validation.permisos() == null ? Set.of() : validation.permisos();
+                Set<String> roles = validation.roles() == null ? Set.of() : validation.roles();
+                Set<String> grupos = validation.grupos() == null ? Set.of() : validation.grupos();
+
+                permisos.forEach(p -> authorities.add(new SimpleGrantedAuthority(p)));
+                roles.forEach(r -> authorities.add(new SimpleGrantedAuthority("ROLE_" + r)));
+                grupos.forEach(g -> authorities.add(new SimpleGrantedAuthority("GRUPO_" + g)));
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(principal, null, authorities);

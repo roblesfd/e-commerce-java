@@ -24,6 +24,8 @@ public interface PricingUseCases {
 
     Price getById(PriceId id);
 
+    Price getByProduct(ProductId productId, ProductVariantId variantId);
+
     Price addOverride(PriceId id, AddPriceOverrideCommand command);
 
     Price removeOverride(PriceId id, PriceOverrideId overrideId);

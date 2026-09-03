@@ -1,5 +1,6 @@
 package org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,6 +29,13 @@ public class JpaCustomerRepository implements CustomerRepository {
     @Override
     public Optional<Customer> findByIamUserId(UUID iamUserId) {
         return springData.findByIamUserId(iamUserId).map(CustomerPersistenceMapper::toDomain);
+    }
+
+    @Override
+    public List<Customer> findAll() {
+        return springData.findAll().stream()
+                .map(CustomerPersistenceMapper::toDomain)
+                .toList();
     }
 
     @Override

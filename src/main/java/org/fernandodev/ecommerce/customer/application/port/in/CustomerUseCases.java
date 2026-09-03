@@ -31,4 +31,6 @@ public interface CustomerUseCases {
     Customer updatePreferences(UUID iamUserId, PreferencesCommand preferences);
 
     List<Address> listAddresses(UUID iamUserId);
+
+    List<Customer> listAll();
 }

@@ -104,6 +104,11 @@ public class PricingService implements PricingUseCases {
                 .orElseThrow(() -> new ResourceNotFoundException("Precio no encontrado: " + id));
     }
 
+    @Override
+    public Price getByProduct(ProductId productId, ProductVariantId variantId) {
+        return resolve(productId, variantId);
+    }
+
     private Price resolve(ProductId productId, ProductVariantId variantId) {
         Optional<Price> price = variantId == null
                 ? prices.findByProductAndVariant(productId, null)

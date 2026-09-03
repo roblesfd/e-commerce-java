@@ -1,5 +1,6 @@
 package org.fernandodev.ecommerce.customer.adapter.out.persistence.jpa;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

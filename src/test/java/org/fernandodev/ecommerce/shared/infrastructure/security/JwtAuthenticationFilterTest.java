@@ -33,7 +33,8 @@ class JwtAuthenticationFilterTest {
         UUID userId = UUID.randomUUID();
         TokenValidator validator = mock(TokenValidator.class);
         when(validator.validate(anyString())).thenReturn(Optional.of(
-                new ValidarTokenResponse(userId, "ana", true, true, Set.of("USER_READ"))));
+                new ValidarTokenResponse(userId, "ana", true, true,
+                        Set.of("USER_READ"), Set.of("ADMINISTRADOR"), Set.of("ADMINISTRADORES"))));
 
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(validator);
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -45,6 +46,11 @@ class JwtAuthenticationFilterTest {
         AuthenticatedUser principal = (AuthenticatedUser) authentication.getPrincipal();
         assertThat(principal.id()).isEqualTo(userId);
         assertThat(principal.permisos()).contains("USER_READ");
+        assertThat(principal.roles()).contains("ADMINISTRADOR");
+        assertThat(principal.grupos()).contains("ADMINISTRADORES");
+        assertThat(authentication.getAuthorities())
+                .extracting("authority")
+                .contains("USER_READ", "ROLE_ADMINISTRADOR", "GRUPO_ADMINISTRADORES");
     }
 
     @Test

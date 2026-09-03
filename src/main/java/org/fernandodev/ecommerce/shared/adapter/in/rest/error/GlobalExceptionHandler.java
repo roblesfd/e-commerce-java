@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +46,18 @@ public class GlobalExceptionHandler {
                 status.value(),
                 status.getReasonPhrase(),
                 "Validación fallida: " + errors,
+                request.getDescription(false),
+                MDC.get("correlationId"));
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ApiError body = ApiError.of(
+                status.value(),
+                status.getReasonPhrase(),
+                ex.getMessage(),
                 request.getDescription(false),
                 MDC.get("correlationId"));
         return ResponseEntity.status(status).body(body);

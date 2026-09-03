@@ -51,7 +51,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
 
     private void autenticarComo() {
         when(tokenValidator.validate(anyString()))
-                .thenReturn(Optional.of(new ValidarTokenResponse(UUID.randomUUID(), "ana", true, true, Set.of())));
+                .thenReturn(Optional.of(new ValidarTokenResponse(UUID.randomUUID(), "ana", true, true, Set.of(), Set.of(), Set.of())));
     }
 
     @Test

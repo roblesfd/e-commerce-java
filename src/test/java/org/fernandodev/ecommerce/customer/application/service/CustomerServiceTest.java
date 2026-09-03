@@ -3,6 +3,7 @@ package org.fernandodev.ecommerce.customer.application.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +32,14 @@ class CustomerServiceTest {
 
         assertThat(customer.getIamUserId()).isEqualTo(iamUserId);
         assertThat(repository.findByIamUserId(iamUserId)).contains(customer);
+    }
+
+    @Test
+    void listAllDevuelveTodosLosClientes() {
+        service.register(UUID.randomUUID(), new Profile("Ana", "García", "ana@example.com", null));
+        service.register(UUID.randomUUID(), new Profile("Luis", "Pérez", "luis@example.com", null));
+
+        assertThat(service.listAll()).hasSize(2);
     }
 
     @Test
@@ -104,6 +113,11 @@ class CustomerServiceTest {
             byId.put(customer.getId(), customer);
             byIamUserId.put(customer.getIamUserId(), customer.getId());
             return customer;
+        }
+
+        @Override
+        public List<Customer> findAll() {
+            return List.copyOf(byId.values());
         }
     }
 }
