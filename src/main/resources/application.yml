@@ -23,6 +23,7 @@ spring:
       - classpath:db/migration/order
       - classpath:db/migration/payment
       - classpath:db/migration/shipping
+      - classpath:db/migration/returns
   data:
     redis:
       host: ${REDIS_HOST:localhost}
