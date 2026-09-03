@@ -123,10 +123,11 @@ class PaymentTest {
         payment.authorize("txn-1", true, T1);
         payment.capture("txn-2", T1);
 
-        boolean refunded = payment.refund("txn-3", T2);
+        boolean refunded = payment.refund("txn-3", usd(1000), T2);
 
         assertThat(refunded).isTrue();
         assertThat(payment.getStatus()).isEqualTo(PaymentStatus.REFUNDED);
+        assertThat(payment.getRefundedAmount()).isEqualTo(usd(1000));
     }
 
     @Test
@@ -134,12 +135,49 @@ class PaymentTest {
         Payment payment = pago();
         payment.authorize("txn-1", true, T1);
         payment.capture("txn-2", T1);
-        payment.refund("txn-3", T2);
+        payment.refund("txn-3", usd(1000), T2);
 
-        boolean repeated = payment.refund("txn-3", T2);
+        boolean repeated = payment.refund("txn-3", usd(1000), T2);
 
         assertThat(repeated).isFalse();
         assertThat(payment.getStatus()).isEqualTo(PaymentStatus.REFUNDED);
+    }
+
+    @Test
+    void refundParcialMantieneCapturedConEvento() {
+        Payment payment = pago();
+        payment.authorize("txn-1", true, T1);
+        payment.capture("txn-2", T1);
+
+        boolean refunded = payment.refund("txn-3", usd(400), T2);
+
+        assertThat(refunded).isTrue();
+        assertThat(payment.getStatus()).isEqualTo(PaymentStatus.CAPTURED);
+        assertThat(payment.getRefundedAmount()).isEqualTo(usd(400));
+        assertThat(payment.getEvents().get(payment.getEvents().size() - 1).type()).isEqualTo("PARTIAL_REFUND");
+    }
+
+    @Test
+    void refundParcialLuegoCompletoPasaARefunded() {
+        Payment payment = pago();
+        payment.authorize("txn-1", true, T1);
+        payment.capture("txn-2", T1);
+
+        payment.refund("txn-3", usd(400), T2);
+        payment.refund("txn-3", usd(600), T2);
+
+        assertThat(payment.getStatus()).isEqualTo(PaymentStatus.REFUNDED);
+        assertThat(payment.getRefundedAmount()).isEqualTo(usd(1000));
+    }
+
+    @Test
+    void refundQueExcedeElMontoLanzaExcepcion() {
+        Payment payment = pago();
+        payment.authorize("txn-1", true, T1);
+        payment.capture("txn-2", T1);
+
+        assertThatThrownBy(() -> payment.refund("txn-3", usd(1200), T2))
+                .isInstanceOf(BusinessRuleViolationException.class);
     }
 
     @Test

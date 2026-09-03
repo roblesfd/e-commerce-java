@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
 import org.fernandodev.ecommerce.payment.adapter.in.rest.dto.InitiatePaymentRequest;
 import org.fernandodev.ecommerce.payment.adapter.in.rest.dto.PaymentResponse;
+import org.fernandodev.ecommerce.payment.adapter.in.rest.dto.RefundRequest;
 import org.fernandodev.ecommerce.payment.adapter.in.rest.mapper.PaymentMapper;
 import org.fernandodev.ecommerce.payment.application.port.in.PaymentUseCases;
 import org.fernandodev.ecommerce.payment.domain.value_object.PaymentId;
@@ -73,7 +74,8 @@ public class PaymentController {
     }
 
     @PostMapping("/{id}/refund")
-    public PaymentResponse refund(@PathVariable UUID id) {
-        return mapper.toResponse(paymentUseCases.refund(PaymentId.of(id)));
+    public PaymentResponse refund(@PathVariable UUID id, @Valid @RequestBody RefundRequest request) {
+        return mapper.toResponse(paymentUseCases.refund(
+                PaymentId.of(id), Money.of(request.amount(), request.currency())));
     }
 }

@@ -34,6 +34,7 @@ public class Payment {
     private Money amount;
     private PaymentStatus status;
     private String providerTransactionId;
+    private Money refundedAmount;
     @Getter(AccessLevel.NONE)
     private List<PaymentEvent> events;
     private Instant createdAt;
@@ -50,6 +51,7 @@ public class Payment {
         }
         payment.status = PaymentStatus.PENDING;
         payment.providerTransactionId = null;
+        payment.refundedAmount = null;
         payment.events = new ArrayList<>();
         payment.createdAt = Objects.requireNonNull(at, "at no puede ser null");
         payment.updatedAt = at;
@@ -67,6 +69,7 @@ public class Payment {
             Money amount,
             PaymentStatus status,
             String providerTransactionId,
+            Money refundedAmount,
             List<PaymentEvent> events,
             Instant createdAt,
             Instant updatedAt
@@ -78,6 +81,7 @@ public class Payment {
         payment.amount = Objects.requireNonNull(amount, "amount no puede ser null");
         payment.status = Objects.requireNonNull(status, "status no puede ser null");
         payment.providerTransactionId = providerTransactionId;
+        payment.refundedAmount = refundedAmount;
         payment.events = new ArrayList<>(events == null ? List.of() : events);
         payment.createdAt = Objects.requireNonNull(createdAt, "createdAt no puede ser null");
         payment.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt no puede ser null");
@@ -143,20 +147,31 @@ public class Payment {
     }
 
     /**
-     * Reembolsa el pago (CAPTURED → REFUNDED). Idempotente: si ya está reembolsado
-     * es un no-op (evita reembolsos duplicados).
+     * Reembolsa el pago por un monto (parcial o completo). Idempotente: si ya
+     * está reembolsado por completo es un no-op. Acumula {@code refundedAmount}
+     * y pasa a REFUNDED solo cuando el acumulado cubre el monto total.
      *
      * @return {@code true} si el reembolso se aplicó.
      */
-    public boolean refund(String transactionId, Instant at) {
+    public boolean refund(String transactionId, Money refundAmount, Instant at) {
         if (status == PaymentStatus.REFUNDED) {
             return false;
         }
         requireState(PaymentStatus.CAPTURED, "reembolsar");
+        Money current = refundedAmount == null ? Money.zero(amount.currencyCode()) : refundedAmount;
+        Money totalRefunded = current.add(refundAmount);
+        if (totalRefunded.isGreaterThan(amount)) {
+            throw new BusinessRuleViolationException("El reembolso excede el monto del pago");
+        }
+        this.refundedAmount = totalRefunded;
         this.providerTransactionId = transactionId;
-        this.status = PaymentStatus.REFUNDED;
         this.updatedAt = at;
-        addEvent("REFUNDED", transactionId, at);
+        if (totalRefunded.equals(amount)) {
+            this.status = PaymentStatus.REFUNDED;
+            addEvent("REFUNDED", transactionId, at);
+        } else {
+            addEvent("PARTIAL_REFUND", transactionId, at);
+        }
         return true;
     }
 

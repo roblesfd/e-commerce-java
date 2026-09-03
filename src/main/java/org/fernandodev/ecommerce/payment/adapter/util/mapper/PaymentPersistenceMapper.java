@@ -26,6 +26,7 @@ public final class PaymentPersistenceMapper {
         entity.setCurrency(payment.getAmount().currencyCode());
         entity.setStatus(payment.getStatus());
         entity.setProviderTransactionId(payment.getProviderTransactionId());
+        entity.setRefundedAmount(payment.getRefundedAmount() == null ? null : payment.getRefundedAmount().amount());
         entity.setCreatedAt(payment.getCreatedAt());
         payment.getEvents().forEach(event -> entity.getEvents().add(toEventEmbeddable(event)));
         return entity;
@@ -39,6 +40,7 @@ public final class PaymentPersistenceMapper {
                 Money.of(entity.getAmount(), entity.getCurrency()),
                 entity.getStatus(),
                 entity.getProviderTransactionId(),
+                entity.getRefundedAmount() == null ? null : Money.of(entity.getRefundedAmount(), entity.getCurrency()),
                 entity.getEvents().stream().map(PaymentPersistenceMapper::toDomainEvent).toList(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt() == null ? entity.getCreatedAt() : entity.getUpdatedAt());

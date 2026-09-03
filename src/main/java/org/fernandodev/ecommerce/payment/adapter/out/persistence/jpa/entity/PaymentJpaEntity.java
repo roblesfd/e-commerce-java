@@ -57,6 +57,9 @@ public class PaymentJpaEntity {
     @Column(name = "provider_transaction_id", length = 128)
     private String providerTransactionId;
 
+    @Column(name = "refunded_amount", precision = 19, scale = 2)
+    private BigDecimal refundedAmount;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

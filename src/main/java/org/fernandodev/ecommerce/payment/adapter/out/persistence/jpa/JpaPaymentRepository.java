@@ -1,5 +1,6 @@
 package org.fernandodev.ecommerce.payment.adapter.out.persistence.jpa;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
@@ -50,5 +51,12 @@ public class JpaPaymentRepository implements PaymentRepository {
     @Override
     public boolean existsByRequestId(String requestId) {
         return springData.existsByRequestId(requestId);
+    }
+
+    @Override
+    public List<Payment> findAll() {
+        return springData.findAllByOrderByCreatedAtDesc().stream()
+                .map(PaymentPersistenceMapper::toDomain)
+                .toList();
     }
 }

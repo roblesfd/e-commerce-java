@@ -1,5 +1,6 @@
 package org.fernandodev.ecommerce.payment.application.port.in;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
@@ -26,11 +27,13 @@ public interface PaymentUseCases {
 
     Payment cancel(PaymentId id);
 
-    Payment refund(PaymentId id);
+    Payment refund(PaymentId id, Money amount);
 
     Payment getById(PaymentId id);
 
     Optional<Payment> getByOrder(OrderId orderId);
+
+    List<Payment> listAll();
 
     /**
      * Procesa un callback del proveedor (webhook). Idempotente: callbacks

@@ -50,7 +50,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
 
     private void autenticarComo() {
         when(tokenValidator.validate(anyString()))
-                .thenReturn(Optional.of(new ValidarTokenResponse(UUID.randomUUID(), "ana", true, true, Set.of())));
+                .thenReturn(Optional.of(new ValidarTokenResponse(UUID.randomUUID(), "ana", true, true, Set.of(), Set.of(), Set.of())));
     }
 
     @Test
@@ -87,7 +87,11 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         capturar(id);
 
         mockMvc.perform(post("/api/v1/payments/{id}/refund", id)
-                        .header("Authorization", "Bearer " + TOKEN))
+                        .header("Authorization", "Bearer " + TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"amount":1000.00,"currency":"USD"}
+                                """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("REFUNDED"));
     }

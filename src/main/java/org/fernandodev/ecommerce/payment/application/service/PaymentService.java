@@ -1,6 +1,7 @@
 package org.fernandodev.ecommerce.payment.application.service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
@@ -91,13 +92,13 @@ public class PaymentService implements PaymentUseCases {
 
     @Override
     @Transactional
-    public Payment refund(PaymentId id) {
+    public Payment refund(PaymentId id, Money amount) {
         Payment payment = lockExisting(id);
         PaymentGateway.GatewayResult result = gateway.refund(
                 payment.getProviderTransactionId() == null ? payment.getId().value().toString() : payment.getProviderTransactionId(),
-                payment.getAmount());
+                amount);
         if (result.outcome() == PaymentGateway.GatewayOutcome.SUCCESS) {
-            payment.refund(result.transactionId(), Instant.now());
+            payment.refund(result.transactionId(), amount, Instant.now());
         } else {
             payment.recordUnknownState("reembolso no confirmado por el proveedor: " + result.outcome(), Instant.now());
         }
@@ -113,6 +114,11 @@ public class PaymentService implements PaymentUseCases {
     @Override
     public Optional<Payment> getByOrder(OrderId orderId) {
         return payments.findByOrderId(orderId);
+    }
+
+    @Override
+    public List<Payment> listAll() {
+        return payments.findAll();
     }
 
     @Override
@@ -133,7 +139,13 @@ public class PaymentService implements PaymentUseCases {
                 }
             }
             case "captured" -> payment.capture(payment.getProviderTransactionId(), now);
-            case "refunded" -> payment.refund(payment.getProviderTransactionId(), now);
+            case "refunded" -> {
+                Money remaining = payment.getAmount().subtract(
+                        payment.getRefundedAmount() == null
+                                ? Money.zero(payment.getAmount().currencyCode())
+                                : payment.getRefundedAmount());
+                payment.refund(payment.getProviderTransactionId(), remaining, now);
+            }
             case "failed" -> {
                 if (payment.getStatus() == org.fernandodev.ecommerce.payment.domain.value_object.PaymentStatus.PENDING) {
                     payment.authorize(payment.getProviderTransactionId(), false, now);

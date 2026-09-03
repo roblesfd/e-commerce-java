@@ -1,5 +1,6 @@
 package org.fernandodev.ecommerce.payment.adapter.out.persistence.jpa;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,4 +26,6 @@ public interface PaymentSpringDataRepository extends JpaRepository<PaymentJpaEnt
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from PaymentJpaEntity p where p.id = :id")
     Optional<PaymentJpaEntity> findByIdForUpdate(@Param("id") UUID id);
+
+    List<PaymentJpaEntity> findAllByOrderByCreatedAtDesc();
 }

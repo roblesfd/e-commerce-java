@@ -3,6 +3,7 @@ package org.fernandodev.ecommerce.payment.application.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -112,7 +113,7 @@ class PaymentServiceTest {
     void refundDesdeCapturedPasaARefunded() {
         Payment payment = capturado();
 
-        Payment refunded = service.refund(payment.getId());
+        Payment refunded = service.refund(payment.getId(), usd(1000));
 
         assertThat(refunded.getStatus()).isEqualTo(PaymentStatus.REFUNDED);
     }
@@ -120,11 +121,21 @@ class PaymentServiceTest {
     @Test
     void refundDuplicadoEsNoOp() {
         Payment payment = capturado();
-        service.refund(payment.getId());
+        service.refund(payment.getId(), usd(1000));
 
-        Payment repeated = service.refund(payment.getId());
+        Payment repeated = service.refund(payment.getId(), usd(1000));
 
         assertThat(repeated.getStatus()).isEqualTo(PaymentStatus.REFUNDED);
+    }
+
+    @Test
+    void refundParcialMantieneCaptured() {
+        Payment payment = capturado();
+
+        Payment refunded = service.refund(payment.getId(), usd(400));
+
+        assertThat(refunded.getStatus()).isEqualTo(PaymentStatus.CAPTURED);
+        assertThat(refunded.getRefundedAmount()).isEqualTo(usd(400));
     }
 
     @Test
@@ -177,6 +188,14 @@ class PaymentServiceTest {
         return repository.save(payment);
     }
 
+    @Test
+    void listAllDevuelveTodosLosPagos() {
+        service.initiate(OrderId.generate(), usd(100), UUID.randomUUID().toString());
+        service.initiate(OrderId.generate(), usd(200), UUID.randomUUID().toString());
+
+        assertThat(service.listAll()).hasSize(2);
+    }
+
     private static Money usd(int amount) {
         return Money.of(String.valueOf(amount), "USD");
     }
@@ -216,6 +235,11 @@ class PaymentServiceTest {
         @Override
         public boolean existsByRequestId(String requestId) {
             return byId.values().stream().anyMatch(p -> p.getRequestId().equals(requestId));
+        }
+
+        @Override
+        public List<Payment> findAll() {
+            return List.copyOf(byId.values());
         }
     }
 

@@ -1,5 +1,6 @@
 package org.fernandodev.ecommerce.payment.application.port.out;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
@@ -26,4 +27,6 @@ public interface PaymentRepository {
     Optional<Payment> findByProviderTransactionId(String transactionId);
 
     boolean existsByRequestId(String requestId);
+
+    List<Payment> findAll();
 }
