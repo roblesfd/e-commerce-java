@@ -11,10 +11,21 @@ package org.fernandodev.ecommerce.payment.domain.value_object;
  */
 public enum PaymentStatus {
 
+    /** Pago creado, pendiente de autorización. */
     PENDING,
+
+    /** Autorizado por el proveedor, listo para capturar. */
     AUTHORIZED,
+
+    /** Capturado (dinero retenido). */
     CAPTURED,
+
+    /** Rechazado o fallido por el proveedor. */
     FAILED,
+
+    /** Cancelado. */
     CANCELLED,
+
+    /** Reembolsado por completo. */
     REFUNDED
 }

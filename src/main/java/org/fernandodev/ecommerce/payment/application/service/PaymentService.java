@@ -31,6 +31,12 @@ public class PaymentService implements PaymentUseCases {
     private final PaymentRepository payments;
     private final PaymentGateway gateway;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Payment initiate(OrderId orderId, Money amount, String requestId) {
@@ -44,6 +50,12 @@ public class PaymentService implements PaymentUseCases {
         return payments.save(payment);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Payment authorize(PaymentId id) {
@@ -51,6 +63,12 @@ public class PaymentService implements PaymentUseCases {
         applyAuthorizeResult(payment, gateway.authorize(payment.getId().value().toString(), payment.getAmount()));
         return payments.save(payment);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -67,6 +85,12 @@ public class PaymentService implements PaymentUseCases {
         return payments.save(payment);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Payment reject(PaymentId id) {
@@ -74,6 +98,12 @@ public class PaymentService implements PaymentUseCases {
         payment.reject(Instant.now());
         return payments.save(payment);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -90,6 +120,12 @@ public class PaymentService implements PaymentUseCases {
         return payments.save(payment);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Payment refund(PaymentId id, Money amount) {
@@ -105,21 +141,45 @@ public class PaymentService implements PaymentUseCases {
         return payments.save(payment);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Payment getById(PaymentId id) {
         return payments.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pago no encontrado: " + id));
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Optional<Payment> getByOrder(OrderId orderId) {
         return payments.findByOrderId(orderId);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Payment> listAll() {
         return payments.findAll();
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

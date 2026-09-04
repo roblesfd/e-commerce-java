@@ -12,6 +12,11 @@ import java.util.Objects;
  */
 public record PaymentEvent(String type, String detail, Instant at) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code type} o {@code at} son {@code null}.
+     */
     public PaymentEvent {
         Objects.requireNonNull(type, "type no puede ser null");
         Objects.requireNonNull(at, "at no puede ser null");

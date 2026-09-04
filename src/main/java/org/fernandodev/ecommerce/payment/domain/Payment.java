@@ -40,6 +40,17 @@ public class Payment {
     private Instant createdAt;
     private Instant updatedAt;
 
+    /**
+     * Crea un pago en estado {@code PENDING}.
+     *
+     * @param id        identificador del pago.
+     * @param orderId   orden a pagar.
+     * @param requestId clave de idempotencia.
+     * @param amount    importe.
+     * @param at        momento de creación.
+     * @return el pago creado.
+     * @throws BusinessRuleViolationException si el monto no es positivo.
+     */
     public static Payment create(PaymentId id, OrderId orderId, String requestId, Money amount, Instant at) {
         Payment payment = new Payment();
         payment.id = Objects.requireNonNull(id, "id no puede ser null");
@@ -61,6 +72,11 @@ public class Payment {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría completa con copia defensiva. Usada por la persistencia.
+     *
+     * @return el pago reconstruido.
      */
     public static Payment crear(
             PaymentId id,
@@ -88,6 +104,9 @@ public class Payment {
         return payment;
     }
 
+    /**
+     * @return el historial de eventos del pago como lista inmutable.
+     */
     public List<PaymentEvent> getEvents() {
         return Collections.unmodifiableList(events);
     }
@@ -96,6 +115,15 @@ public class Payment {
      * Autoriza el pago (PENDING → AUTHORIZED/FAILED).
      *
      * @return {@code true} si se autorizó.
+     */
+    /**
+     * Autoriza el pago (PENDING → AUTHORIZED o FAILED).
+     *
+     * @param transactionId identificador de transacción del proveedor.
+     * @param approved      si el proveedor aprobó la autorización.
+     * @param at            momento de la operación.
+     * @return {@code true} si se autorizó.
+     * @throws BusinessRuleViolationException si el pago no está {@code PENDING}.
      */
     public boolean authorize(String transactionId, boolean approved, Instant at) {
         requireState(PaymentStatus.PENDING, "autorizar");
@@ -112,6 +140,15 @@ public class Payment {
      *
      * @return {@code true} si la captura se aplicó.
      */
+    /**
+     * Captura el pago (AUTHORIZED → CAPTURED). Idempotente: si ya está capturado
+     * es un no-op (evita capturas duplicadas).
+     *
+     * @param transactionId identificador de transacción del proveedor.
+     * @param at            momento de la operación.
+     * @return {@code true} si la captura se aplicó.
+     * @throws BusinessRuleViolationException si el pago no está {@code AUTHORIZED}.
+     */
     public boolean capture(String transactionId, Instant at) {
         if (status == PaymentStatus.CAPTURED) {
             return false;
@@ -127,6 +164,12 @@ public class Payment {
     /**
      * Rechaza el pago (PENDING → FAILED).
      */
+    /**
+     * Rechaza el pago (PENDING → FAILED).
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si el pago no está {@code PENDING}.
+     */
     public void reject(Instant at) {
         requireState(PaymentStatus.PENDING, "rechazar");
         this.status = PaymentStatus.FAILED;
@@ -136,6 +179,12 @@ public class Payment {
 
     /**
      * Cancela el pago (PENDING o AUTHORIZED → CANCELLED).
+     */
+    /**
+     * Cancela el pago (PENDING o AUTHORIZED → CANCELLED).
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si el pago no está {@code PENDING} o {@code AUTHORIZED}.
      */
     public void cancel(Instant at) {
         if (status != PaymentStatus.PENDING && status != PaymentStatus.AUTHORIZED) {
@@ -152,6 +201,17 @@ public class Payment {
      * y pasa a REFUNDED solo cuando el acumulado cubre el monto total.
      *
      * @return {@code true} si el reembolso se aplicó.
+     */
+    /**
+     * Reembolsa el pago por un monto (parcial o completo). Idempotente: si ya
+     * está reembolsado por completo es un no-op. Acumula {@code refundedAmount}
+     * y pasa a REFUNDED solo cuando el acumulado cubre el monto total.
+     *
+     * @param transactionId identificador de transacción del proveedor.
+     * @param refundAmount  monto a reembolsar.
+     * @param at            momento de la operación.
+     * @return {@code true} si el reembolso se aplicó.
+     * @throws BusinessRuleViolationException si excede el monto del pago o no está {@code CAPTURED}.
      */
     public boolean refund(String transactionId, Money refundAmount, Instant at) {
         if (status == PaymentStatus.REFUNDED) {
@@ -178,17 +238,33 @@ public class Payment {
     /**
      * Registra un estado desconocido del proveedor sin asumir éxito ni fallo.
      */
+    /**
+     * Registra un estado desconocido del proveedor sin asumir éxito ni fallo.
+     *
+     * @param detail detalle del estado desconocido.
+     * @param at     momento de la operación.
+     */
     public void recordUnknownState(String detail, Instant at) {
         addEvent("UNKNOWN_STATE", detail, at);
         this.updatedAt = at;
     }
 
+    /**
+     * @return {@code true} si el pago está en un estado terminal.
+     */
     public boolean isTerminal() {
         return status == PaymentStatus.FAILED
                 || status == PaymentStatus.CANCELLED
                 || status == PaymentStatus.REFUNDED;
     }
 
+    /**
+     * Valida que el pago esté en el estado esperado.
+     *
+     * @param expected  estado esperado.
+     * @param operacion operación en curso.
+     * @throws BusinessRuleViolationException si el estado no coincide.
+     */
     private void requireState(PaymentStatus expected, String operacion) {
         if (status != expected) {
             throw new BusinessRuleViolationException(
@@ -196,6 +272,13 @@ public class Payment {
         }
     }
 
+    /**
+     * Registra un evento en el historial del pago.
+     *
+     * @param type   tipo de evento.
+     * @param detail detalle (opcional).
+     * @param at     momento del evento.
+     */
     private void addEvent(String type, String detail, Instant at) {
         events.add(new PaymentEvent(type, detail, at));
     }

@@ -37,6 +37,11 @@ public class PaymentWebhookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Process.
+     * @param signature signature.
+     * @param request request.
+     */
     public void process(@RequestHeader(SIGNATURE_HEADER) String signature,
                         @Valid @RequestBody WebhookRequest request) {
         if (!webhookSecret.equals(signature)) {

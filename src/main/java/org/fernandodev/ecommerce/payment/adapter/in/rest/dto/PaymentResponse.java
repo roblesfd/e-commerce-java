@@ -20,9 +20,22 @@ public record PaymentResponse(
         Instant updatedAt
 ) {
 
+    /**
+     * Importe monetario en la respuesta.
+     *
+     * @param amount   cantidad.
+     * @param currency divisa ISO 4217.
+     */
     public record MoneyResponse(BigDecimal amount, String currency) {
     }
 
+    /**
+     * Evento del historial en la respuesta.
+     *
+     * @param type   tipo de evento.
+     * @param detail detalle (opcional).
+     * @param at     momento del evento.
+     */
     public record EventResponse(String type, String detail, Instant at) {
     }
 }

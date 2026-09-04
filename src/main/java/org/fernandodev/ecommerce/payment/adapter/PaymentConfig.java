@@ -18,6 +18,12 @@ import io.github.resilience4j.retry.Retry;
 @Configuration
 public class PaymentConfig {
 
+    /**
+
+     * Configura un bean del contexto Payments.
+
+     */
+
     @Bean
     public PaymentUseCases paymentUseCases(
             PaymentRepository paymentRepository,

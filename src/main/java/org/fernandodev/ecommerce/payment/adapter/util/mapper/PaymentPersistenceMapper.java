@@ -17,6 +17,10 @@ public final class PaymentPersistenceMapper {
     private PaymentPersistenceMapper() {
     }
 
+    /**
+     * @param payment agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static PaymentJpaEntity toEntity(Payment payment) {
         PaymentJpaEntity entity = new PaymentJpaEntity();
         entity.setId(payment.getId().value());
@@ -32,6 +36,10 @@ public final class PaymentPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Payment toDomain(PaymentJpaEntity entity) {
         return Payment.crear(
                 PaymentId.of(entity.getId()),

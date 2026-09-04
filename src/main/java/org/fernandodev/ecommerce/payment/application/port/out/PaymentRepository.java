@@ -12,8 +12,14 @@ import org.fernandodev.ecommerce.payment.domain.value_object.PaymentId;
  */
 public interface PaymentRepository {
 
+    /**
+     * Persiste el pago.
+     */
     Payment save(Payment payment);
 
+    /**
+     * Consulta un pago por identificador.
+     */
     Optional<Payment> findById(PaymentId id);
 
     /**
@@ -22,11 +28,23 @@ public interface PaymentRepository {
      */
     Optional<Payment> findByIdForUpdate(PaymentId id);
 
+    /**
+     * Consulta el pago de una orden.
+     */
     Optional<Payment> findByOrderId(OrderId orderId);
 
+    /**
+     * Consulta un pago por la transacción del proveedor.
+     */
     Optional<Payment> findByProviderTransactionId(String transactionId);
 
+    /**
+     * Indica si ya existe un pago con esa clave de idempotencia.
+     */
     boolean existsByRequestId(String requestId);
 
+    /**
+     * Lista todos los pagos.
+     */
     List<Payment> findAll();
 }

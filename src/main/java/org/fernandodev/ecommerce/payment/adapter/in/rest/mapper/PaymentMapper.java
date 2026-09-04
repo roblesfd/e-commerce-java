@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PaymentMapper {
 
+    /**
+     * @param payment agregado de dominio.
+     * @return respuesta REST con el pago.
+     */
     public PaymentResponse toResponse(Payment payment) {
         return new PaymentResponse(
                 payment.getId().value(),
@@ -25,10 +29,18 @@ public class PaymentMapper {
                 payment.getUpdatedAt());
     }
 
+    /**
+     * @param event evento de dominio.
+     * @return respuesta REST con el evento.
+     */
     private PaymentResponse.EventResponse toEventResponse(PaymentEvent event) {
         return new PaymentResponse.EventResponse(event.type(), event.detail(), event.at());
     }
 
+    /**
+     * @param money importe de dominio.
+     * @return respuesta REST con el importe.
+     */
     private static PaymentResponse.MoneyResponse toMoney(Money money) {
         return new PaymentResponse.MoneyResponse(money.amount(), money.currencyCode());
     }

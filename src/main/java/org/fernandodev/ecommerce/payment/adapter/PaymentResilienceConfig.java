@@ -17,6 +17,12 @@ import io.github.resilience4j.retry.RetryConfig;
 @Configuration
 public class PaymentResilienceConfig {
 
+    /**
+
+     * Configura un bean de resiliencia de la pasarela de pagos.
+
+     */
+
     @Bean
     public Retry paymentGatewayRetry() {
         RetryConfig config = RetryConfig.custom()
@@ -25,6 +31,12 @@ public class PaymentResilienceConfig {
                 .build();
         return Retry.of("paymentGateway", config);
     }
+
+    /**
+
+     * Configura un bean de resiliencia de la pasarela de pagos.
+
+     */
 
     @Bean
     public CircuitBreaker paymentGatewayCircuitBreaker() {

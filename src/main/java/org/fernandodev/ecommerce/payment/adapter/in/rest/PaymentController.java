@@ -46,11 +46,19 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public PaymentResponse get(@PathVariable UUID id) {
         return mapper.toResponse(paymentUseCases.getById(PaymentId.of(id)));
     }
 
     @GetMapping
+    /**
+     * Get by order.
+     * @param orderId orderId.
+     */
     public PaymentResponse getByOrder(@RequestParam UUID orderId) {
         return paymentUseCases.getByOrder(OrderId.of(orderId))
                 .map(mapper::toResponse)
@@ -59,21 +67,38 @@ public class PaymentController {
     }
 
     @PostMapping("/{id}/capture")
+    /**
+     * Capture.
+     * @param id id.
+     */
     public PaymentResponse capture(@PathVariable UUID id) {
         return mapper.toResponse(paymentUseCases.capture(PaymentId.of(id)));
     }
 
     @PostMapping("/{id}/reject")
+    /**
+     * Reject.
+     * @param id id.
+     */
     public PaymentResponse reject(@PathVariable UUID id) {
         return mapper.toResponse(paymentUseCases.reject(PaymentId.of(id)));
     }
 
     @PostMapping("/{id}/cancel")
+    /**
+     * Cancel.
+     * @param id id.
+     */
     public PaymentResponse cancel(@PathVariable UUID id) {
         return mapper.toResponse(paymentUseCases.cancel(PaymentId.of(id)));
     }
 
     @PostMapping("/{id}/refund")
+    /**
+     * Refund.
+     * @param id id.
+     * @param request request.
+     */
     public PaymentResponse refund(@PathVariable UUID id, @Valid @RequestBody RefundRequest request) {
         return mapper.toResponse(paymentUseCases.refund(
                 PaymentId.of(id), Money.of(request.amount(), request.currency())));
