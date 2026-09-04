@@ -28,6 +28,12 @@ public record OrderItem(
         Money unitPrice
 ) {
 
+    /**
+     * Constructor compacto que valida los invariantes del item.
+     *
+     * @throws NullPointerException     si {@code id}, {@code productId} o {@code unitPrice} son {@code null}.
+     * @throws IllegalArgumentException si {@code quantity} no es positiva.
+     */
     public OrderItem {
         Objects.requireNonNull(id, "id no puede ser null");
         Objects.requireNonNull(productId, "productId no puede ser null");
@@ -37,6 +43,9 @@ public record OrderItem(
         }
     }
 
+    /**
+     * @return el subtotal del item ({@code unitPrice × quantity}).
+     */
     public Money subtotal() {
         return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }

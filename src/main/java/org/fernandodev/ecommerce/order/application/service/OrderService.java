@@ -23,6 +23,12 @@ public class OrderService implements OrderUseCases {
 
     private final OrderRepository orders;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Order create(CreateOrderCommand command) {
         List<OrderItem> items = command.items().stream()
@@ -42,20 +48,44 @@ public class OrderService implements OrderUseCases {
         return orders.save(order);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Order getById(OrderId id) {
         return getExisting(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public List<Order> listByCustomer(UUID customerId) {
         return orders.findByCustomerId(customerId);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Order> listAll() {
         return orders.findAll();
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Order confirm(OrderId id) {
@@ -64,12 +94,24 @@ public class OrderService implements OrderUseCases {
         return orders.save(order);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Order process(OrderId id) {
         Order order = getExisting(id);
         order.process(Instant.now());
         return orders.save(order);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Order markReadyToShip(OrderId id) {
@@ -78,12 +120,24 @@ public class OrderService implements OrderUseCases {
         return orders.save(order);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Order markShipped(OrderId id) {
         Order order = getExisting(id);
         order.markShipped(Instant.now());
         return orders.save(order);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Order markDelivered(OrderId id) {
@@ -92,6 +146,12 @@ public class OrderService implements OrderUseCases {
         return orders.save(order);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Order cancel(OrderId id) {
         Order order = getExisting(id);
@@ -99,11 +159,22 @@ public class OrderService implements OrderUseCases {
         return orders.save(order);
     }
 
+    /**
+     * @param id identificador de la orden.
+     * @return la orden existente.
+     * @throws ResourceNotFoundException si no existe.
+     */
     private Order getExisting(OrderId id) {
         return orders.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada: " + id));
     }
 
+    /**
+     * Convierte un comando de item en el item de dominio con snapshot.
+     *
+     * @param command comando del item.
+     * @return el item de dominio.
+     */
     private static OrderItem toDomainItem(OrderItemCommand command) {
         return new OrderItem(
                 OrderItemId.generate(),

@@ -31,6 +31,9 @@ public class OrderController {
     private final OrderUseCases orderUseCases;
     private final OrderMapper mapper;
 
+    /**
+     * @return las órdenes del usuario autenticado.
+     */
     @GetMapping("/me")
     public List<OrderResponse> mine() {
         return orderUseCases.listByCustomer(SecurityUtils.requiredUserId()).stream()
@@ -38,16 +41,32 @@ public class OrderController {
                 .toList();
     }
 
+    /**
+     * @param id identificador de la orden.
+     * @return el detalle de la orden.
+     */
     @GetMapping("/{id}")
     public OrderResponse get(@PathVariable UUID id) {
         return mapper.toResponse(orderUseCases.getById(OrderId.of(id)));
     }
 
+    /**
+     * Confirma la orden.
+     *
+     * @param id identificador de la orden.
+     * @return la orden confirmada.
+     */
     @PatchMapping("/{id}/confirm")
     public OrderResponse confirm(@PathVariable UUID id) {
         return mapper.toResponse(orderUseCases.confirm(OrderId.of(id)));
     }
 
+    /**
+     * Cancela la orden.
+     *
+     * @param id identificador de la orden.
+     * @return la orden cancelada.
+     */
     @PatchMapping("/{id}/cancel")
     public OrderResponse cancel(@PathVariable UUID id) {
         return mapper.toResponse(orderUseCases.cancel(OrderId.of(id)));

@@ -11,6 +11,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface OrderSpringDataRepository extends JpaRepository<OrderJpaEntity, UUID> {
 
+    /**
+     * @param customerId identificador del cliente.
+     * @return las órdenes del cliente ordenadas por fecha de creación descendente.
+     */
     List<OrderJpaEntity> findByCustomerIdOrderByCreatedAtDesc(UUID customerId);
 
     List<OrderJpaEntity> findAllByOrderByCreatedAtDesc();

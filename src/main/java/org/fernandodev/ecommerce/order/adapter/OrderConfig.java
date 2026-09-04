@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OrderConfig {
 
+    /**
+     * @param orderRepository puerto de persistencia de órdenes.
+     * @return servicio de aplicación del contexto Order Management.
+     */
     @Bean
     public OrderUseCases orderUseCases(OrderRepository orderRepository) {
         return new OrderService(orderRepository);

@@ -43,6 +43,22 @@ public class Order {
     private List<OrderStatusEntry> statusHistory;
     private Instant createdAt;
 
+    /**
+     * Crea una orden en estado {@code PENDING} con su primer estado en el historial.
+     *
+     * @param id              identificador de la orden.
+     * @param customerId      cliente.
+     * @param items           items con snapshots históricos.
+     * @param addressId       identificador de la dirección de envío.
+     * @param addressSnapshot copia de la dirección de envío.
+     * @param couponCode      cupón aplicado (opcional).
+     * @param subtotal        subtotal.
+     * @param discounts       descuentos aplicados.
+     * @param total           total.
+     * @param at              momento de creación.
+     * @return la orden creada.
+     * @throws BusinessRuleViolationException si los totales son inconsistentes.
+     */
     public static Order create(
             OrderId id,
             UUID customerId,
@@ -62,6 +78,12 @@ public class Order {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría completa con copia defensiva. Usada por la persistencia.
+     *
+     * @return la orden reconstruida.
+     * @throws BusinessRuleViolationException si no tiene items o los totales son inconsistentes.
      */
     public static Order crear(
             OrderId id,
@@ -97,14 +119,26 @@ public class Order {
         return order;
     }
 
+    /**
+     * @return los items de la orden como lista inmutable.
+     */
     public List<OrderItem> getItems() {
         return Collections.unmodifiableList(items);
     }
 
+    /**
+     * @return el historial de estados como lista inmutable.
+     */
     public List<OrderStatusEntry> getStatusHistory() {
         return Collections.unmodifiableList(statusHistory);
     }
 
+    /**
+     * Confirma la orden.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si la transición no está permitida.
+     */
     public void confirm(Instant at) {
         if (status != OrderStatus.PENDING) {
             throw new BusinessRuleViolationException("Solo se puede confirmar una orden PENDING");
@@ -112,22 +146,52 @@ public class Order {
         transition(OrderStatus.CONFIRMED, at);
     }
 
+    /**
+     * Procesa la orden.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si la transición no está permitida.
+     */
     public void process(Instant at) {
         requireTransition(OrderStatus.PROCESSING, "procesar", at);
     }
 
+    /**
+     * Marca la orden como lista para envío.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si la transición no está permitida.
+     */
     public void markReadyToShip(Instant at) {
         requireTransition(OrderStatus.READY_TO_SHIP, "marcar como lista para envío", at);
     }
 
+    /**
+     * Marca la orden como enviada.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si la transición no está permitida.
+     */
     public void markShipped(Instant at) {
         requireTransition(OrderStatus.SHIPPED, "marcar como enviada", at);
     }
 
+    /**
+     * Marca la orden como entregada.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si la transición no está permitida.
+     */
     public void markDelivered(Instant at) {
         requireTransition(OrderStatus.DELIVERED, "marcar como entregada", at);
     }
 
+    /**
+     * Cancela la orden (solo {@code PENDING} o {@code CONFIRMED}).
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si la orden no está {@code PENDING} o {@code CONFIRMED}.
+     */
     public void cancel(Instant at) {
         if (status != OrderStatus.PENDING && status != OrderStatus.CONFIRMED) {
             throw new BusinessRuleViolationException("Solo se puede cancelar una orden PENDING o CONFIRMED");
@@ -135,6 +199,14 @@ public class Order {
         transition(OrderStatus.CANCELLED, at);
     }
 
+    /**
+     * Valida y aplica una transición de estado.
+     *
+     * @param target    estado destino.
+     * @param operacion operación en curso.
+     * @param at        momento de la transición.
+     * @throws BusinessRuleViolationException si la transición no está permitida.
+     */
     private void requireTransition(OrderStatus target, String operacion, Instant at) {
         boolean valid = switch (target) {
             case PROCESSING -> status == OrderStatus.CONFIRMED;
@@ -150,11 +222,23 @@ public class Order {
         transition(target, at);
     }
 
+    /**
+     * Aplica la transición y registra el nuevo estado en el historial.
+     *
+     * @param target estado destino.
+     * @param at     momento de la transición.
+     */
     private void transition(OrderStatus target, Instant at) {
         this.status = target;
         statusHistory.add(new OrderStatusEntry(target, at));
     }
 
+    /**
+     * Valida que los totales sean consistentes ({@code subtotal = discounts + total}).
+     *
+     * @param order orden a validar.
+     * @throws BusinessRuleViolationException si los totales son inconsistentes.
+     */
     private static void requireConsistentTotals(Order order) {
         if (!order.subtotal.equals(order.discounts.add(order.total))) {
             throw new BusinessRuleViolationException("Los totales de la orden son inconsistentes");

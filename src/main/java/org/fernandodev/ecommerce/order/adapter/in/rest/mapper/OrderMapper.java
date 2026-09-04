@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderMapper {
 
+    /**
+     * @param order agregado de dominio.
+     * @return respuesta REST con el detalle de la orden.
+     */
     public OrderResponse toResponse(Order order) {
         return new OrderResponse(
                 order.getId().value(),
@@ -31,6 +35,10 @@ public class OrderMapper {
                 order.getCreatedAt());
     }
 
+    /**
+     * @param item item de dominio.
+     * @return respuesta REST con el item.
+     */
     private OrderResponse.OrderItemResponse toItemResponse(OrderItem item) {
         return new OrderResponse.OrderItemResponse(
                 item.id().value(),
@@ -43,6 +51,10 @@ public class OrderMapper {
                 toMoney(item.subtotal()));
     }
 
+    /**
+     * @param money importe de dominio.
+     * @return respuesta REST con el importe.
+     */
     private static OrderResponse.MoneyResponse toMoney(Money money) {
         return new OrderResponse.MoneyResponse(money.amount(), money.currencyCode());
     }

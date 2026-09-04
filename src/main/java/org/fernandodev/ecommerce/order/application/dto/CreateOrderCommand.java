@@ -19,6 +19,9 @@ public record CreateOrderCommand(
         Money total
 ) {
 
+    /**
+     * Constructor compacto que normaliza los items a lista vacía.
+     */
     public CreateOrderCommand {
         items = items == null ? List.of() : items;
     }

@@ -11,6 +11,11 @@ import java.util.Objects;
  */
 public record OrderStatusEntry(OrderStatus status, Instant at) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code status} o {@code at} son {@code null}.
+     */
     public OrderStatusEntry {
         Objects.requireNonNull(status, "status no puede ser null");
         Objects.requireNonNull(at, "at no puede ser null");

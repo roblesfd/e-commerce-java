@@ -12,11 +12,23 @@ import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
  */
 public interface OrderRepository {
 
+    /**
+     * Persiste la orden.
+     */
     Order save(Order order);
 
+    /**
+     * Consulta una orden por identificador.
+     */
     Optional<Order> findById(OrderId id);
 
+    /**
+     * Lista las órdenes de un cliente.
+     */
     List<Order> findByCustomerId(UUID customerId);
 
+    /**
+     * Lista todas las órdenes.
+     */
     List<Order> findAll();
 }

@@ -24,6 +24,10 @@ public final class OrderPersistenceMapper {
     private OrderPersistenceMapper() {
     }
 
+    /**
+     * @param order agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static OrderJpaEntity toEntity(Order order) {
         OrderJpaEntity entity = new OrderJpaEntity();
         entity.setId(order.getId().value());
@@ -45,6 +49,10 @@ public final class OrderPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Order toDomain(OrderJpaEntity entity) {
         return Order.crear(
                 OrderId.of(entity.getId()),

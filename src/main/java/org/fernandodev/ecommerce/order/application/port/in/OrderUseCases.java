@@ -12,23 +12,53 @@ import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
  */
 public interface OrderUseCases {
 
+    /**
+     * Crea una orden en estado {@code PENDING}.
+     */
     Order create(CreateOrderCommand command);
 
+    /**
+     * Consulta una orden por identificador.
+     */
     Order getById(OrderId id);
 
+    /**
+     * Lista las órdenes de un cliente.
+     */
     List<Order> listByCustomer(UUID customerId);
 
+    /**
+     * Lista todas las órdenes (uso administrativo).
+     */
     List<Order> listAll();
 
+    /**
+     * Confirma la orden.
+     */
     Order confirm(OrderId id);
 
+    /**
+     * Procesa la orden.
+     */
     Order process(OrderId id);
 
+    /**
+     * Marca la orden como lista para envío.
+     */
     Order markReadyToShip(OrderId id);
 
+    /**
+     * Marca la orden como enviada.
+     */
     Order markShipped(OrderId id);
 
+    /**
+     * Marca la orden como entregada.
+     */
     Order markDelivered(OrderId id);
 
+    /**
+     * Cancela la orden.
+     */
     Order cancel(OrderId id);
 }
