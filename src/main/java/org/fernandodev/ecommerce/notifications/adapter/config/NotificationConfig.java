@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.notifications.adapter;
+package org.fernandodev.ecommerce.notifications.adapter.config;
 
 import java.time.Duration;
 import java.util.List;

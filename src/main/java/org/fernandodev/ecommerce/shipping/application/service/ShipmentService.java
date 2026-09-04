@@ -46,11 +46,8 @@ public class ShipmentService implements ShipmentUseCases {
     private final CustomerAddressProvider addresses;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment create(OrderId orderId, CreateShipmentCommand command) {
@@ -81,44 +78,32 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Shipment getById(ShipmentId id) {
         return getExisting(id);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Shipment> listByCustomer(UUID customerId) {
         return shipments.findByCustomerId(customerId);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Optional<Shipment> getByOrder(OrderId orderId) {
         return shipments.findByOrderId(orderId);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Money calculateCost(ShippingMethodId methodId) {
         ShippingMethod method = methods.findById(methodId)
@@ -127,11 +112,8 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment markPrepared(ShipmentId id) {
@@ -139,11 +121,8 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment markShipped(ShipmentId id) {
@@ -151,11 +130,8 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment markInTransit(ShipmentId id) {
@@ -163,11 +139,8 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment markOutForDelivery(ShipmentId id) {
@@ -175,11 +148,8 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment markDelivered(ShipmentId id) {
@@ -187,11 +157,8 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment handleFailure(ShipmentId id) {
@@ -201,11 +168,8 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment cancel(ShipmentId id) {
@@ -215,11 +179,8 @@ public class ShipmentService implements ShipmentUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Shipment processWebhook(String trackingNumber, String providerStatus) {

@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.order.adapter;
+package org.fernandodev.ecommerce.order.adapter.config;
 
 import org.fernandodev.ecommerce.order.application.port.in.OrderUseCases;
 import org.fernandodev.ecommerce.order.application.port.out.OrderRepository;

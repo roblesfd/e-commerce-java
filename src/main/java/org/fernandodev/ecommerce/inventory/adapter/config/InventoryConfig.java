@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.inventory.adapter;
+package org.fernandodev.ecommerce.inventory.adapter.config;
 
 import org.fernandodev.ecommerce.inventory.application.port.in.InventoryUseCases;
 import org.fernandodev.ecommerce.inventory.application.port.out.InventoryRepository;

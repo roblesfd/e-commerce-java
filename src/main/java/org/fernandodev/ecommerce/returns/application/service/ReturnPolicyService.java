@@ -19,9 +19,7 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     private final ReturnPolicyRepository policies;
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -32,9 +30,7 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -43,9 +39,7 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -54,9 +48,7 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -67,9 +59,7 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override

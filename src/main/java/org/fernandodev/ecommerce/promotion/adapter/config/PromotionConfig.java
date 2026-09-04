@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.promotion.adapter;
+package org.fernandodev.ecommerce.promotion.adapter.config;
 
 import org.fernandodev.ecommerce.promotion.application.port.in.CouponUseCases;
 import org.fernandodev.ecommerce.promotion.application.port.in.PromotionUseCases;

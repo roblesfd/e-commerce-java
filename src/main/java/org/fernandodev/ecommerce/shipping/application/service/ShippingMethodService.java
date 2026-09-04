@@ -19,11 +19,8 @@ public class ShippingMethodService implements ShippingMethodUseCases {
     private final ShippingMethodRepository methods;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public ShippingMethod create(CreateShippingMethodCommand command) {
         ShippingMethod method = ShippingMethod.create(
@@ -32,33 +29,24 @@ public class ShippingMethodService implements ShippingMethodUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<ShippingMethod> list() {
         return methods.findAll();
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public ShippingMethod getById(ShippingMethodId id) {
         return getExisting(id);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public ShippingMethod activate(ShippingMethodId id) {
         ShippingMethod method = getExisting(id);
@@ -67,11 +55,8 @@ public class ShippingMethodService implements ShippingMethodUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public ShippingMethod deactivate(ShippingMethodId id) {
         ShippingMethod method = getExisting(id);

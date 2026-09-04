@@ -44,9 +44,7 @@ public class ReturnService implements ReturnUseCases {
     private final PaymentPort payments;
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -78,9 +76,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -89,9 +85,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -100,9 +94,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -111,9 +103,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -122,9 +112,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -140,9 +128,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -154,9 +140,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -168,9 +152,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -182,9 +164,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -196,9 +176,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -210,9 +188,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -227,9 +203,7 @@ public class ReturnService implements ReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override

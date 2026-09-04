@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.search.adapter.Config;
+package org.fernandodev.ecommerce.search.adapter.config;
 
 import org.fernandodev.ecommerce.search.application.port.in.IndexUseCases;
 import org.fernandodev.ecommerce.search.application.port.in.SearchUseCases;

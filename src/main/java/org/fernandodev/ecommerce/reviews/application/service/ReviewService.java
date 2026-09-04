@@ -41,11 +41,8 @@ public class ReviewService implements ReviewUseCases {
     private final OrderPort orders;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review create(UUID customerId, ProductId productId, CreateReviewCommand command) {
@@ -61,11 +58,8 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review update(ReviewId id, UpdateReviewCommand command) {
@@ -75,11 +69,8 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review delete(ReviewId id) {
@@ -89,11 +80,8 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review approve(ReviewId id) {
@@ -103,11 +91,8 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review reject(ReviewId id) {
@@ -117,11 +102,8 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review hide(ReviewId id) {
@@ -131,11 +113,8 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review restore(ReviewId id) {
@@ -145,11 +124,8 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review addReply(ReviewId id, UUID authorId, String comment) {
@@ -159,22 +135,16 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Review getById(ReviewId id) {
         return getExisting(id);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Review> listByProduct(ProductId productId) {
         return reviews.findByProductId(productId).stream()
@@ -183,33 +153,24 @@ public class ReviewService implements ReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Review> listByCustomer(UUID customerId) {
         return reviews.findByCustomerId(customerId);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Review> listForModeration() {
         return reviews.findByStatus(ReviewStatus.PENDING_MODERATION);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public RatingSummary ratingSummary(ProductId productId) {
         List<Integer> ratings = reviews.findPublishedRatingsByProductId(productId);

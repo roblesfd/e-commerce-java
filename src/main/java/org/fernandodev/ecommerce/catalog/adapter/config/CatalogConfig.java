@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.catalog.adapter;
+package org.fernandodev.ecommerce.catalog.adapter.config;
 
 import org.fernandodev.ecommerce.catalog.application.service.BrandService;
 import org.fernandodev.ecommerce.catalog.application.port.in.BrandUseCases;

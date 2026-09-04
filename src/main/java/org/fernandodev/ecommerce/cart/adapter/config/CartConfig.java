@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.cart.adapter;
+package org.fernandodev.ecommerce.cart.adapter.config;
 
 import org.fernandodev.ecommerce.cart.application.port.in.CartUseCases;
 import org.fernandodev.ecommerce.cart.application.port.out.AvailabilityProvider;

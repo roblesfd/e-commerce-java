@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.checkout.adapter;
+package org.fernandodev.ecommerce.checkout.adapter.config;
 
 import org.fernandodev.ecommerce.checkout.application.port.in.CheckoutUseCases;
 import org.fernandodev.ecommerce.checkout.application.port.out.CartProvider;

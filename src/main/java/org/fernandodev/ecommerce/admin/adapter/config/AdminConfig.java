@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.admin.adapter;
+package org.fernandodev.ecommerce.admin.adapter.config;
 
 import org.fernandodev.ecommerce.admin.application.port.in.AdminCatalogUseCases;
 import org.fernandodev.ecommerce.admin.application.port.in.AdminCustomerUseCases;

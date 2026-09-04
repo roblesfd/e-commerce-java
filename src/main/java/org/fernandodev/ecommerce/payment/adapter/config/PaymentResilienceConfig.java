@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.payment.adapter;
+package org.fernandodev.ecommerce.payment.adapter.config;
 
 import java.time.Duration;
 

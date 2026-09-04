@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.reviews.adapter.Config;
+package org.fernandodev.ecommerce.reviews.adapter.config;
 
 import org.fernandodev.ecommerce.reviews.application.port.in.ReviewUseCases;
 import org.fernandodev.ecommerce.reviews.application.port.out.OrderPort;

@@ -35,11 +35,8 @@ public class WishlistService implements WishlistUseCases {
     private final InventoryPort inventory;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Wishlist create(UUID customerId, String name) {
@@ -48,33 +45,24 @@ public class WishlistService implements WishlistUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Wishlist getById(WishlistId id) {
         return getExisting(id);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Wishlist> listByCustomer(UUID customerId) {
         return wishlists.findByCustomerId(customerId);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Wishlist rename(WishlistId id, String name) {
@@ -84,11 +72,8 @@ public class WishlistService implements WishlistUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public void delete(WishlistId id) {
@@ -97,11 +82,8 @@ public class WishlistService implements WishlistUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Wishlist addItem(WishlistId id, AddItemCommand command) {
@@ -112,11 +94,8 @@ public class WishlistService implements WishlistUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Wishlist removeItem(WishlistId id, ProductId productId, ProductVariantId variantId) {
@@ -126,11 +105,8 @@ public class WishlistService implements WishlistUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Wishlist clear(WishlistId id) {

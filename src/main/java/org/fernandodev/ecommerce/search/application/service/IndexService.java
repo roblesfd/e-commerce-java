@@ -38,11 +38,8 @@ public class IndexService implements IndexUseCases {
     private final InventoryPort inventory;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public SearchDocument indexProduct(ProductId productId) {
@@ -75,11 +72,8 @@ public class IndexService implements IndexUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public void removeProduct(ProductId productId) {
@@ -87,11 +81,8 @@ public class IndexService implements IndexUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public void rebuild() {
@@ -99,11 +90,8 @@ public class IndexService implements IndexUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public SearchDocument retryIndexing(ProductId productId) {
@@ -116,11 +104,8 @@ public class IndexService implements IndexUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<SearchDocument> listIndexFailures() {
         return index.findByIndexStatus(IndexStatus.FAILED);

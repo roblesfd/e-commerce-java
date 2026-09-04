@@ -1,6 +1,5 @@
 package org.fernandodev.ecommerce.promotion.adapter.in.rest.mapper;
 
-import java.util.UUID;
 
 import org.fernandodev.ecommerce.catalog.domain.value_object.ProductId;
 import org.fernandodev.ecommerce.promotion.adapter.in.rest.dto.ApplyCouponRequest;

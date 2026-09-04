@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.pricing.adapter;
+package org.fernandodev.ecommerce.pricing.adapter.config;
 
 import org.fernandodev.ecommerce.pricing.application.port.in.PricingUseCases;
 import org.fernandodev.ecommerce.pricing.application.port.out.PriceRepository;

@@ -19,16 +19,24 @@ import org.fernandodev.ecommerce.pricing.domain.Price;
 import org.fernandodev.ecommerce.pricing.domain.value_object.PriceOverride;
 import org.fernandodev.ecommerce.shared.domain.Money;
 import org.springframework.stereotype.Component;
-
-/** 
+/**
  * Mapper manual entre DTOs REST y objetos de aplicación/dominio del contexto
- * Pricing. Sin lógica de negocio.
+ * {@code Pricing}.
+ *
+ * <p>Su responsabilidad se limita a transformar datos entre las capas REST
+ * y aplicación/dominio. No contiene lógica de negocio ni reglas de validación
+ * propias del dominio.</p>
  */
 @Component
 public class PricingMapper {
 
     /**
-     * Convierte la petición en un comando de aplicación equivalente.
+     * Convierte una petición REST en el comando de aplicación utilizado para
+     * definir el precio de un producto o de una variante.
+     *
+     * @param productId identificador del producto al que pertenece el precio
+     * @param request datos necesarios para definir el precio
+     * @return comando de aplicación para definir el precio
      */
     public DefinePriceCommand toCommand(UUID productId, DefinePriceRequest request) {
         return new DefinePriceCommand(
@@ -39,14 +47,22 @@ public class PricingMapper {
     }
 
     /**
-     * Convierte la petición en un comando de aplicación equivalente.
+     * Convierte una petición REST en el comando de aplicación utilizado para
+     * actualizar el precio base existente.
+     *
+     * @param request datos del nuevo precio
+     * @return comando de aplicación para actualizar el precio
      */
     public UpdatePriceCommand toCommand(UpdatePriceRequest request) {
         return new UpdatePriceCommand(request.amount(), request.currency());
     }
 
     /**
-     * Convierte la petición en un comando de aplicación equivalente.
+     * Convierte una petición REST en el comando de aplicación utilizado para
+     * agregar una modificación de precio con vigencia determinada.
+     *
+     * @param request datos del override de precio
+     * @return comando de aplicación para agregar el override
      */
     public AddPriceOverrideCommand toCommand(AddOverrideRequest request) {
         return new AddPriceOverrideCommand(
@@ -58,7 +74,14 @@ public class PricingMapper {
     }
 
     /**
-     * @return respuesta REST con el precio.
+     * Convierte una entidad de dominio {@link Price} en su representación
+     * correspondiente para la API REST.
+     *
+     * <p>Incluye el precio base, el historial de cambios y los overrides
+     * asociados al precio.</p>
+     *
+     * @param price precio del dominio que será expuesto por la API
+     * @return respuesta REST con la información completa del precio
      */
     public PriceResponse toResponse(Price price) {
         return new PriceResponse(
@@ -72,18 +95,32 @@ public class PricingMapper {
                                 change.amount().currencyCode(),
                                 change.effectiveAt()))
                         .toList(),
-                price.getOverrides().stream().map(this::toOverrideResponse).toList());
+                price.getOverrides().stream()
+                        .map(this::toOverrideResponse)
+                        .toList());
     }
 
     /**
-     * @return respuesta REST con el precio vigente.
+     * Convierte un importe monetario vigente en la respuesta REST utilizada
+     * para consultar el precio actual.
+     *
+     * @param price precio vigente
+     * @param at instante en el que se determinó la vigencia del precio
+     * @return respuesta REST con el precio vigente y el instante de consulta
      */
     public CurrentPriceResponse toCurrentPriceResponse(Money price, Instant at) {
-        return new CurrentPriceResponse(price.amount(), price.currencyCode(), at);
+        return new CurrentPriceResponse(
+                price.amount(),
+                price.currencyCode(),
+                at);
     }
 
     /**
-     * @return respuesta REST con la instantánea.
+     * Convierte una instantánea de precio del dominio en su representación
+     * correspondiente para la API REST.
+     *
+     * @param snapshot instantánea del precio
+     * @return respuesta REST con el estado del precio en el instante indicado
      */
     public PriceSnapshotResponse toSnapshotResponse(PriceSnapshot snapshot) {
         return new PriceSnapshotResponse(
@@ -95,6 +132,12 @@ public class PricingMapper {
                 snapshot.at());
     }
 
+    /**
+     * Convierte un override de precio del dominio en su representación REST.
+     *
+     * @param override override de precio
+     * @return representación REST del override
+     */
     private PriceResponse.PriceOverrideResponse toOverrideResponse(PriceOverride override) {
         return new PriceResponse.PriceOverrideResponse(
                 override.id().value(),
@@ -105,11 +148,28 @@ public class PricingMapper {
                 override.type().name());
     }
 
+    /**
+     * Convierte un {@link Money} del dominio en su representación REST.
+     *
+     * @param money valor monetario del dominio
+     * @return representación REST del valor monetario
+     */
     private static PriceResponse.MoneyResponse toMoneyResponse(Money money) {
-        return new PriceResponse.MoneyResponse(money.amount(), money.currencyCode());
+        return new PriceResponse.MoneyResponse(
+                money.amount(),
+                money.currencyCode());
     }
 
+    /**
+     * Convierte un {@link Money} del dominio en el objeto monetario utilizado
+     * dentro de una instantánea de precio.
+     *
+     * @param money valor monetario del dominio
+     * @return representación monetaria de la instantánea
+     */
     private static PriceSnapshotResponse.Money toMoney(Money money) {
-        return new PriceSnapshotResponse.Money(money.amount(), money.currencyCode());
+        return new PriceSnapshotResponse.Money(
+                money.amount(),
+                money.currencyCode());
     }
 }

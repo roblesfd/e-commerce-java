@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.returns.adapter.Config;
+package org.fernandodev.ecommerce.returns.adapter.config;
 
 import org.fernandodev.ecommerce.returns.application.port.in.ReturnPolicyUseCases;
 import org.fernandodev.ecommerce.returns.application.port.in.ReturnUseCases;

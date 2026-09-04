@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.payment.adapter;
+package org.fernandodev.ecommerce.payment.adapter.config;
 
 import org.fernandodev.ecommerce.payment.adapter.out.ResilientPaymentGateway;
 import org.fernandodev.ecommerce.payment.application.port.in.PaymentUseCases;

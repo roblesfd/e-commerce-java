@@ -19,11 +19,8 @@ public class SearchService implements SearchUseCases {
     private final SearchDocumentRepository index;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public SearchResults<SearchResult> search(SearchQuery query) {
         SearchResults<SearchDocument> results = index.search(query);
@@ -34,22 +31,16 @@ public class SearchService implements SearchUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<String> autocomplete(String q, int limit) {
         return index.findAutocompleteNames(normalize(q), limit);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<String> suggest(String q, int limit) {
         return index.findSuggestions(normalize(q), limit);

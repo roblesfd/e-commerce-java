@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.wishlist.adapter.Config;
+package org.fernandodev.ecommerce.wishlist.adapter.config;
 
 import org.fernandodev.ecommerce.wishlist.application.port.in.WishlistUseCases;
 import org.fernandodev.ecommerce.wishlist.application.port.out.CatalogPort;

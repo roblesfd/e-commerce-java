@@ -1,4 +1,4 @@
-package org.fernandodev.ecommerce.customer.adapter;
+package org.fernandodev.ecommerce.customer.adapter.config;
 
 import org.fernandodev.ecommerce.customer.application.service.CustomerService;
 import org.fernandodev.ecommerce.customer.application.port.in.CustomerUseCases;
