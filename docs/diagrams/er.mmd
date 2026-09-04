@@ -1,0 +1,479 @@
+
+erDiagram
+  %% ===== Customer Management (V1) =====
+  customer ||--o{ customer_address : "tiene"
+
+  customer {
+    UUID id PK
+    UUID iam_user_id UK
+    varchar first_name
+    varchar last_name
+    varchar email UK
+    varchar phone_number
+    UUID default_address_id
+    boolean newsletter_enabled
+    varchar preferred_currency
+    timestamp created_at
+    timestamp updated_at
+  }
+  customer_address {
+    UUID customer_id PK,FK
+    int position PK
+    UUID id
+    varchar street
+    varchar city
+    varchar state
+    varchar postal_code
+    varchar country
+  }
+
+  %% ===== Product Catalog (V2) =====
+  category ||--o{ category : "hijo de"
+  brand ||--o{ product : "tiene"
+  product ||--o{ product_variant : "tiene"
+  product ||--o{ product_category : "clasificado en"
+  category ||--o{ product_category : "agrupa"
+  product ||--o{ product_attribute : "tiene"
+  product ||--o{ product_image : "tiene"
+  product_variant ||--o{ product_variant_attribute : "tiene"
+
+  brand {
+    UUID id PK
+    varchar name
+    boolean active
+    timestamp created_at
+    timestamp updated_at
+    timestamp deleted_at
+  }
+  category {
+    UUID id PK
+    UUID parent_id FK
+    varchar name
+    boolean active
+    timestamp created_at
+    timestamp updated_at
+    timestamp deleted_at
+  }
+  product {
+    UUID id PK
+    varchar sku UK
+    varchar barcode UK
+    varchar name
+    text description
+    boolean active
+    UUID brand_id FK
+    timestamp created_at
+    timestamp updated_at
+    timestamp deleted_at
+  }
+  product_variant {
+    UUID id PK
+    UUID product_id FK
+    varchar sku UK
+    varchar barcode UK
+    int position
+  }
+  product_attribute {
+    UUID product_id PK,FK
+    varchar name PK
+    varchar value
+  }
+  product_variant_attribute {
+    UUID variant_id PK,FK
+    varchar name PK
+    varchar value
+  }
+  product_image {
+    UUID product_id PK,FK
+    varchar url
+    int position PK
+  }
+  product_category {
+    UUID product_id PK,FK
+    UUID category_id PK,FK
+  }
+
+  %% ===== Pricing (V3) =====
+  price ||--o{ price_override : "tiene"
+  price ||--o{ price_change : "registra"
+
+  price {
+    UUID id PK
+    UUID product_id
+    UUID variant_id
+    numeric base_amount
+    varchar currency
+    bigint version
+    timestamp created_at
+    timestamp updated_at
+  }
+  price_override {
+    UUID id PK
+    UUID price_id FK
+    numeric amount
+    varchar currency
+    timestamp valid_from
+    timestamp valid_to
+    varchar type
+  }
+  price_change {
+    UUID price_id PK,FK
+    timestamp effective_at PK
+    numeric amount
+    varchar currency
+  }
+
+  %% ===== Inventory (V4) =====
+  inventory ||--o{ stock_reservation : "tiene"
+  inventory ||--o{ stock_movement : "registra"
+
+  inventory {
+    UUID id PK
+    UUID product_id
+    UUID variant_id
+    int on_hand
+    int reserved
+    int minimum_stock
+    timestamp created_at
+    timestamp updated_at
+  }
+  stock_reservation {
+    UUID id PK
+    UUID inventory_id FK
+    int quantity
+    varchar status
+    timestamp expires_at
+    timestamp created_at
+  }
+  stock_movement {
+    UUID inventory_id PK,FK
+    varchar type PK
+    int quantity
+    varchar reason
+    timestamp at
+  }
+
+  %% ===== Promotions & Coupons (V5) =====
+  promotion ||--o{ promotion_scope_product : "aplica a"
+  promotion ||--o{ promotion_scope_category : "aplica a"
+  promotion ||--o{ promotion_volume_tier : "tiene"
+  promotion ||--o{ promotion_usage : "usa"
+  promotion ||--o{ coupon : "asociado a"
+
+  promotion {
+    UUID id PK
+    varchar name
+    varchar discount_type
+    boolean active
+    timestamp valid_from
+    timestamp valid_to
+    numeric percentage_value
+    numeric fixed_amount
+    varchar fixed_currency
+    int buy_quantity
+    int get_quantity
+    numeric min_purchase_amount
+    varchar min_purchase_currency
+    numeric max_discount_amount
+    varchar max_discount_currency
+    int max_usage
+    int max_usage_per_customer
+    int used_count
+    timestamp created_at
+    timestamp updated_at
+  }
+  promotion_scope_product {
+    UUID promotion_id PK,FK
+    UUID product_id PK
+  }
+  promotion_scope_category {
+    UUID promotion_id PK,FK
+    UUID category_id PK
+  }
+  promotion_volume_tier {
+    UUID promotion_id PK,FK
+    int min_quantity PK
+    varchar discount_type
+    numeric value
+  }
+  promotion_usage {
+    UUID promotion_id PK,FK
+    UUID customer_id PK
+    int count
+  }
+  coupon {
+    UUID id PK
+    varchar code UK
+    UUID promotion_id FK
+    boolean active
+    timestamp valid_from
+    timestamp valid_to
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  %% ===== Order Management (V6) =====
+  orders ||--o{ order_item : "contiene"
+  orders ||--o{ order_status_history : "registra"
+
+  orders {
+    UUID id PK
+    UUID customer_id
+    varchar status
+    UUID address_id
+    varchar address_snapshot
+    varchar coupon_code
+    numeric subtotal_amount
+    numeric discounts_amount
+    numeric total_amount
+    varchar currency
+    timestamp created_at
+    timestamp updated_at
+  }
+  order_item {
+    UUID id PK
+    UUID order_id FK
+    UUID product_id
+    UUID variant_id
+    varchar sku
+    varchar name
+    int quantity
+    numeric unit_amount
+    varchar unit_currency
+    numeric subtotal_amount
+    int position
+  }
+  order_status_history {
+    UUID order_id PK,FK
+    varchar status PK
+    timestamp at
+  }
+
+  %% ===== Payments (V7 + V9) =====
+  payment ||--o{ payment_event : "registra"
+
+  payment {
+    UUID id PK
+    UUID order_id UK
+    varchar request_id UK
+    numeric amount
+    varchar currency
+    varchar status
+    varchar provider_transaction_id
+    numeric refunded_amount
+    timestamp created_at
+    timestamp updated_at
+  }
+  payment_event {
+    UUID payment_id PK,FK
+    varchar type PK
+    varchar detail
+    timestamp at
+  }
+
+  %% ===== Shipping (V8) =====
+  shipping_method ||--o{ shipment : "usado en"
+  shipment ||--o{ shipment_status_history : "registra"
+
+  shipping_method {
+    UUID id PK
+    varchar name
+    varchar carrier
+    numeric cost_amount
+    varchar currency
+    boolean active
+    timestamp created_at
+    timestamp updated_at
+  }
+  shipment {
+    UUID id PK
+    UUID order_id UK
+    UUID customer_id
+    UUID shipping_method_id FK
+    UUID address_id
+    varchar address_snapshot
+    varchar tracking_number
+    varchar status
+    numeric cost_amount
+    varchar currency
+    timestamp created_at
+    timestamp updated_at
+  }
+  shipment_status_history {
+    UUID shipment_id PK,FK
+    varchar status PK
+    timestamp at
+  }
+
+  %% ===== Returns & Refunds (V10) =====
+  return_policy ||--o{ return_policy_product : "restringe"
+  return_request ||--o{ return_item : "contiene"
+  return_request ||--o{ return_status_history : "registra"
+
+  return_policy {
+    UUID id PK
+    int return_window_days
+    boolean active
+    timestamp created_at
+    timestamp updated_at
+  }
+  return_policy_product {
+    UUID return_policy_id PK,FK
+    UUID product_id PK
+  }
+  return_request {
+    UUID id PK
+    UUID order_id
+    UUID customer_id
+    varchar reason
+    varchar status
+    varchar tracking_number
+    numeric refund_amount
+    varchar refund_currency
+    varchar refund_status
+    boolean refund_requested
+    varchar inspection_condition
+    varchar inspection_notes
+    boolean inspection_passed
+    timestamp inspection_at
+    timestamp created_at
+    timestamp updated_at
+  }
+  return_item {
+    UUID return_id PK,FK
+    UUID order_item_id PK
+    UUID product_id
+    int quantity
+    numeric refund_amount
+    varchar currency
+  }
+  return_status_history {
+    UUID return_id PK,FK
+    varchar status PK
+    timestamp at
+  }
+
+  %% ===== Reviews (V11) =====
+  review ||--o{ review_status_history : "registra"
+  review ||--o{ review_reply : "tiene"
+
+  review {
+    UUID id PK
+    UUID customer_id
+    UUID product_id
+    UUID variant_id
+    UUID order_id
+    UUID order_item_id
+    int rating
+    varchar title
+    varchar comment
+    varchar status
+    boolean verified_purchase
+    timestamp created_at
+    timestamp updated_at
+  }
+  review_status_history {
+    UUID review_id PK,FK
+    varchar status PK
+    timestamp at
+  }
+  review_reply {
+    UUID review_id PK,FK
+    UUID reply_id PK
+    UUID author_id
+    varchar comment
+    timestamp at
+  }
+
+  %% ===== Wishlist (V12) =====
+  wishlist ||--o{ wishlist_item : "contiene"
+
+  wishlist {
+    UUID id PK
+    UUID customer_id
+    varchar name
+    timestamp created_at
+    timestamp updated_at
+  }
+  wishlist_item {
+    UUID wishlist_id PK,FK
+    UUID product_id PK
+    UUID variant_id
+    timestamp added_at
+  }
+
+  %% ===== Notifications (V13) =====
+  notification_template {
+    UUID id PK
+    varchar code UK
+    varchar title
+    varchar body
+    boolean active
+    timestamp created_at
+    timestamp updated_at
+  }
+  notification {
+    UUID id PK
+    UUID customer_id
+    varchar channel
+    varchar title
+    varchar body
+    varchar status
+    boolean is_read
+    int delivery_attempts
+    varchar dedup_key
+    timestamp sent_at
+    timestamp failed_at
+    timestamp created_at
+    timestamp updated_at
+  }
+  notification_preferences {
+    UUID customer_id PK
+    boolean email_enabled
+    boolean sms_enabled
+    boolean push_enabled
+    boolean in_app_enabled
+    timestamp updated_at
+  }
+
+  %% ===== Search index (V14) =====
+  search_document ||--o{ search_document_category : "clasificado en"
+
+  search_document {
+    UUID product_id PK
+    varchar name
+    text description
+    varchar sku
+    varchar barcode
+    text attributes
+    UUID brand_id
+    numeric price
+    varchar currency
+    boolean available
+    boolean active
+    text searchable_text
+    varchar index_status
+    varchar last_error
+    int attempts
+    timestamp updated_at
+  }
+  search_document_category {
+    UUID product_id PK,FK
+    UUID category_id PK
+  }
+
+  %% ===== Administration (V15) =====
+  audit_log {
+    UUID id PK
+    UUID actor_id
+    varchar action
+    varchar target_type
+    UUID target_id
+    varchar detail
+    timestamp created_at
+  }
+  system_config {
+    varchar config_key PK
+    varchar value
+    timestamp updated_at
+  }
