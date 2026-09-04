@@ -12,6 +12,9 @@ import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
  */
 public interface OrderPort {
 
+    /**
+     * Verifica si el cliente compró (orden entregada) el producto.
+     */
     Optional<VerifiedPurchase> verifyPurchase(UUID customerId, ProductId productId);
 
     record VerifiedPurchase(OrderId orderId, UUID orderItemId) {

@@ -40,6 +40,12 @@ public class ReviewService implements ReviewUseCases {
     private final ReviewRepository reviews;
     private final OrderPort orders;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Review create(UUID customerId, ProductId productId, CreateReviewCommand command) {
@@ -54,6 +60,12 @@ public class ReviewService implements ReviewUseCases {
         return reviews.save(review);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Review update(ReviewId id, UpdateReviewCommand command) {
@@ -61,6 +73,12 @@ public class ReviewService implements ReviewUseCases {
         review.update(command.title(), command.comment(), command.rating(), Instant.now());
         return reviews.save(review);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -70,6 +88,12 @@ public class ReviewService implements ReviewUseCases {
         return reviews.save(review);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Review approve(ReviewId id) {
@@ -77,6 +101,12 @@ public class ReviewService implements ReviewUseCases {
         review.approve(Instant.now());
         return reviews.save(review);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -86,6 +116,12 @@ public class ReviewService implements ReviewUseCases {
         return reviews.save(review);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Review hide(ReviewId id) {
@@ -93,6 +129,12 @@ public class ReviewService implements ReviewUseCases {
         review.hide(Instant.now());
         return reviews.save(review);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -102,6 +144,12 @@ public class ReviewService implements ReviewUseCases {
         return reviews.save(review);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Review addReply(ReviewId id, UUID authorId, String comment) {
@@ -110,10 +158,22 @@ public class ReviewService implements ReviewUseCases {
         return reviews.save(review);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Review getById(ReviewId id) {
         return getExisting(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public List<Review> listByProduct(ProductId productId) {
@@ -122,15 +182,33 @@ public class ReviewService implements ReviewUseCases {
                 .toList();
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Review> listByCustomer(UUID customerId) {
         return reviews.findByCustomerId(customerId);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Review> listForModeration() {
         return reviews.findByStatus(ReviewStatus.PENDING_MODERATION);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public RatingSummary ratingSummary(ProductId productId) {

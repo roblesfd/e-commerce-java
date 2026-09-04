@@ -50,22 +50,38 @@ public class ReviewController {
     }
 
     @PutMapping("/reviews/{id}")
+    /**
+     * Update.
+     * @param id id.
+     * @param request request.
+     */
     public ReviewResponse update(@PathVariable UUID id, @Valid @RequestBody UpdateReviewRequest request) {
         return mapper.toResponse(reviewUseCases.update(ReviewId.of(id), mapper.toUpdateCommand(request)));
     }
 
     @DeleteMapping("/reviews/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Delete.
+     * @param id id.
+     */
     public void delete(@PathVariable UUID id) {
         reviewUseCases.delete(ReviewId.of(id));
     }
 
     @GetMapping("/reviews/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public ReviewResponse get(@PathVariable UUID id) {
         return mapper.toResponse(reviewUseCases.getById(ReviewId.of(id)));
     }
 
     @GetMapping("/reviews/me")
+    /**
+     * Mine.
+     */
     public List<ReviewResponse> mine() {
         return reviewUseCases.listByCustomer(SecurityUtils.requiredUserId()).stream()
                 .map(mapper::toResponse)
@@ -73,6 +89,10 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews")
+    /**
+     * Moderation.
+     * @param status status.
+     */
     public List<ReviewResponse> moderation(@RequestParam(required = false) ReviewStatus status) {
         return reviewUseCases.listForModeration().stream()
                 .map(mapper::toResponse)
@@ -80,32 +100,57 @@ public class ReviewController {
     }
 
     @PostMapping("/reviews/{id}/approve")
+    /**
+     * Approve.
+     * @param id id.
+     */
     public ReviewResponse approve(@PathVariable UUID id) {
         return mapper.toResponse(reviewUseCases.approve(ReviewId.of(id)));
     }
 
     @PostMapping("/reviews/{id}/reject")
+    /**
+     * Reject.
+     * @param id id.
+     */
     public ReviewResponse reject(@PathVariable UUID id) {
         return mapper.toResponse(reviewUseCases.reject(ReviewId.of(id)));
     }
 
     @PostMapping("/reviews/{id}/hide")
+    /**
+     * Hide.
+     * @param id id.
+     */
     public ReviewResponse hide(@PathVariable UUID id) {
         return mapper.toResponse(reviewUseCases.hide(ReviewId.of(id)));
     }
 
     @PostMapping("/reviews/{id}/restore")
+    /**
+     * Restore.
+     * @param id id.
+     */
     public ReviewResponse restore(@PathVariable UUID id) {
         return mapper.toResponse(reviewUseCases.restore(ReviewId.of(id)));
     }
 
     @PostMapping("/reviews/{id}/replies")
+    /**
+     * Add reply.
+     * @param id id.
+     * @param request request.
+     */
     public ReviewResponse addReply(@PathVariable UUID id, @Valid @RequestBody AddReplyRequest request) {
         return mapper.toResponse(reviewUseCases.addReply(ReviewId.of(id), SecurityUtils.requiredUserId(),
                 request.comment()));
     }
 
     @GetMapping("/products/{productId}/reviews")
+    /**
+     * List by product.
+     * @param productId productId.
+     */
     public List<ReviewResponse> listByProduct(@PathVariable UUID productId) {
         return reviewUseCases.listByProduct(ProductId.of(productId)).stream()
                 .map(mapper::toResponse)
@@ -113,6 +158,10 @@ public class ReviewController {
     }
 
     @GetMapping("/products/{productId}/rating")
+    /**
+     * Rating.
+     * @param productId productId.
+     */
     public RatingSummaryResponse rating(@PathVariable UUID productId) {
         return ratingSummaryMapper.toResponse(reviewUseCases.ratingSummary(ProductId.of(productId)));
     }

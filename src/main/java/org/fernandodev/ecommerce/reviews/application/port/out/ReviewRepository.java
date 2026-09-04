@@ -14,17 +14,38 @@ import org.fernandodev.ecommerce.reviews.domain.value_object.ReviewStatus;
  */
 public interface ReviewRepository {
 
+    /**
+     * Persiste el review.
+     */
     Review save(Review review);
 
+    /**
+     * Consulta un review por identificador.
+     */
     Optional<Review> findById(ReviewId id);
 
+    /**
+     * Lista los reviews de un producto.
+     */
     List<Review> findByProductId(ProductId productId);
 
+    /**
+     * Lista los reviews de un cliente.
+     */
     List<Review> findByCustomerId(UUID customerId);
 
+    /**
+     * Lista los reviews por estado.
+     */
     List<Review> findByStatus(ReviewStatus status);
 
+    /**
+     * Indica si el cliente ya reviewó el producto.
+     */
     boolean existsByCustomerAndProduct(UUID customerId, ProductId productId);
 
+    /**
+     * Devuelve los ratings de los reviews publicados de un producto.
+     */
     List<Integer> findPublishedRatingsByProductId(ProductId productId);
 }

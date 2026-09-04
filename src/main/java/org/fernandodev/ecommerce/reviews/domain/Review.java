@@ -52,6 +52,9 @@ public class Review {
     private Instant createdAt;
     private Instant updatedAt;
 
+    /**
+     * Factoría del agregado.
+     */
     public static Review create(ReviewId id, UUID customerId, ProductId productId, ProductVariantId variantId,
                                 int rating, String title, String comment, Instant at) {
         Review review = new Review();
@@ -75,6 +78,9 @@ public class Review {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría completa usada por la persistencia.
      */
     public static Review crear(
             ReviewId id,
