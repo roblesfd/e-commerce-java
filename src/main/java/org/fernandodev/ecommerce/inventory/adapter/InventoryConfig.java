@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class InventoryConfig {
 
+    /**
+     * @param inventoryRepository puerto de persistencia del inventario.
+     * @return servicio de aplicación del contexto Inventory.
+     */
     @Bean
     public InventoryUseCases inventoryUseCases(InventoryRepository inventoryRepository) {
         return new InventoryService(inventoryRepository);

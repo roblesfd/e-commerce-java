@@ -27,26 +27,50 @@ import org.springframework.stereotype.Component;
 @Component
 public class InventoryMapper {
 
+    /**
+     * @param request petición de incremento.
+     * @return comando de aplicación equivalente.
+     */
     public IncreaseStockCommand toCommand(IncreaseStockRequest request) {
         return new IncreaseStockCommand(request.quantity(), request.reason());
     }
 
+    /**
+     * @param request petición de disminución.
+     * @return comando de aplicación equivalente.
+     */
     public DecreaseStockCommand toCommand(DecreaseStockRequest request) {
         return new DecreaseStockCommand(request.quantity(), request.reason());
     }
 
+    /**
+     * @param request petición de ajuste.
+     * @return comando de aplicación equivalente.
+     */
     public AdjustStockCommand toCommand(AdjustStockRequest request) {
         return new AdjustStockCommand(request.targetQuantity(), request.reason());
     }
 
+    /**
+     * @param request petición de umbral mínimo.
+     * @return comando de aplicación equivalente.
+     */
     public SetMinimumStockCommand toCommand(SetMinimumStockRequest request) {
         return new SetMinimumStockCommand(request.minimumStock());
     }
 
+    /**
+     * @param request petición de reserva.
+     * @return comando de aplicación equivalente.
+     */
     public ReserveStockCommand toCommand(ReserveStockRequest request) {
         return new ReserveStockCommand(request.quantity(), request.expiresAt());
     }
 
+    /**
+     * @param inventory agregado de dominio.
+     * @return respuesta REST con el detalle del inventario.
+     */
     public InventoryResponse toResponse(Inventory inventory) {
         return new InventoryResponse(
                 inventory.getId().value(),
@@ -66,6 +90,10 @@ public class InventoryMapper {
                         .toList());
     }
 
+    /**
+     * @param reservation reserva de dominio.
+     * @return respuesta REST con la reserva.
+     */
     public InventoryResponse.StockReservationResponse toReservationResponse(StockReservation reservation) {
         return new InventoryResponse.StockReservationResponse(
                 reservation.id().value(),
@@ -75,14 +103,26 @@ public class InventoryMapper {
                 reservation.expiresAt());
     }
 
+    /**
+     * @param inventory agregado de dominio.
+     * @return respuesta REST con el stock disponible y estado bajo mínimo.
+     */
     public AvailableStockResponse toAvailableResponse(Inventory inventory) {
         return new AvailableStockResponse(inventory.availableQuantity(), inventory.isLowStock());
     }
 
+    /**
+     * @param variantId variante en texto, o {@code null}.
+     * @return la variante de dominio equivalente, o {@code null}.
+     */
     public static ProductVariantId variant(UUID variantId) {
         return variantId == null ? null : ProductVariantId.of(variantId);
     }
 
+    /**
+     * @param productId producto en texto.
+     * @return el producto de dominio equivalente.
+     */
     public static ProductId product(UUID productId) {
         return ProductId.of(productId);
     }

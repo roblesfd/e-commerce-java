@@ -20,6 +20,12 @@ public record StockReservation(
         Instant expiresAt
 ) {
 
+    /**
+     * Constructor compacto que valida los invariantes de la reserva.
+     *
+     * @throws NullPointerException     si {@code id}, {@code status}, {@code createdAt} o {@code expiresAt} son {@code null}.
+     * @throws IllegalArgumentException si {@code quantity} no es positiva.
+     */
     public StockReservation {
         Objects.requireNonNull(id, "id no puede ser null");
         Objects.requireNonNull(status, "status no puede ser null");
@@ -30,10 +36,19 @@ public record StockReservation(
         }
     }
 
+    /**
+     * @return {@code true} si la reserva está {@code ACTIVE}.
+     */
     public boolean isActive() {
         return status == ReservationStatus.ACTIVE;
     }
 
+    /**
+     * Devuelve una copia de la reserva con un nuevo estado.
+     *
+     * @param newStatus nuevo estado.
+     * @return la reserva con el estado actualizado.
+     */
     public StockReservation withStatus(ReservationStatus newStatus) {
         return new StockReservation(id, quantity, newStatus, createdAt, expiresAt);
     }

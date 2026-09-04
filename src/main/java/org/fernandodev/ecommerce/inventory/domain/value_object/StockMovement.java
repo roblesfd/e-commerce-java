@@ -13,6 +13,11 @@ import java.util.Objects;
  */
 public record StockMovement(StockMovementType type, int quantity, String reason, Instant at) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code type} o {@code at} son {@code null}.
+     */
     public StockMovement {
         Objects.requireNonNull(type, "type no puede ser null");
         Objects.requireNonNull(at, "at no puede ser null");

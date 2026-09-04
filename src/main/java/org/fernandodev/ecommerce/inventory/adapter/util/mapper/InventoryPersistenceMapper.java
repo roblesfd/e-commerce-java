@@ -20,6 +20,10 @@ public final class InventoryPersistenceMapper {
     private InventoryPersistenceMapper() {
     }
 
+    /**
+     * @param inventory agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static InventoryJpaEntity toEntity(Inventory inventory) {
         InventoryJpaEntity entity = new InventoryJpaEntity();
         entity.setId(inventory.getId().value());
@@ -33,6 +37,10 @@ public final class InventoryPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Inventory toDomain(InventoryJpaEntity entity) {
         return Inventory.crear(
                 InventoryId.of(entity.getId()),

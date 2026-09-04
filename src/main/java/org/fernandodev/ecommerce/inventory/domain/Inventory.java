@@ -48,6 +48,14 @@ public class Inventory {
 
     /**
      * Define un inventario con stock inicial.
+     *
+     * @param id           identificador del inventario.
+     * @param productId    producto.
+     * @param variantId    variante (null si el stock es a nivel producto).
+     * @param onHand       stock físico inicial.
+     * @param minimumStock umbral de stock mínimo.
+     * @return el inventario definido.
+     * @throws BusinessRuleViolationException si algún valor de stock es negativo.
      */
     public static Inventory define(InventoryId id, ProductId productId, ProductVariantId variantId,
                                    int onHand, int minimumStock) {
@@ -56,6 +64,18 @@ public class Inventory {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     *
+     * @param id           identificador del inventario.
+     * @param productId    producto.
+     * @param variantId    variante (null si el stock es a nivel producto).
+     * @param onHand       stock físico.
+     * @param reserved     stock reservado.
+     * @param minimumStock umbral de stock mínimo.
+     * @param movements    movimientos de inventario.
+     * @param reservations reservas de stock.
+     * @return el inventario reconstruido.
+     * @throws BusinessRuleViolationException si algún valor de stock es negativo.
+     * @throws NullPointerException           si {@code id} o {@code productId} son {@code null}.
      */
     public static Inventory crear(
             InventoryId id,
@@ -82,35 +102,63 @@ public class Inventory {
         return inventory;
     }
 
+    /**
+     * @return la variante, o {@code Optional.empty()} si el stock es a nivel producto.
+     */
     public Optional<ProductVariantId> getVariantId() {
         return Optional.ofNullable(variantId);
     }
 
     /**
-     * Stock disponible para la venta/reserva.
+     * @return el stock disponible para la venta/reserva ({@code onHand − reserved}).
      */
     public int availableQuantity() {
         return onHand - reserved;
     }
 
+    /**
+     * @return {@code true} si el stock disponible está por debajo o igual al mínimo.
+     */
     public boolean isLowStock() {
         return availableQuantity() <= minimumStock;
     }
 
+    /**
+     * @return los movimientos de inventario como lista inmutable.
+     */
     public List<StockMovement> getMovements() {
         return Collections.unmodifiableList(movements);
     }
 
+    /**
+     * @return las reservas de stock como lista inmutable.
+     */
     public List<StockReservation> getReservations() {
         return Collections.unmodifiableList(reservations);
     }
 
+    /**
+     * Incrementa el stock físico y registra el movimiento.
+     *
+     * @param quantity cantidad a incrementar.
+     * @param reason    motivo del movimiento (opcional).
+     * @param at        momento del movimiento.
+     * @throws BusinessRuleViolationException si {@code quantity} no es positiva.
+     */
     public void increase(int quantity, String reason, Instant at) {
         requirePositive(quantity, "quantity");
         onHand += quantity;
         registerMovement(StockMovementType.INCREASE, quantity, reason, at);
     }
 
+    /**
+     * Disminuye el stock físico, sin dejarlo por debajo de lo reservado.
+     *
+     * @param quantity cantidad a disminuir.
+     * @param reason    motivo del movimiento (opcional).
+     * @param at        momento del movimiento.
+     * @throws BusinessRuleViolationException si no hay stock suficiente o se reduce por debajo de lo reservado.
+     */
     public void decrease(int quantity, String reason, Instant at) {
         requirePositive(quantity, "quantity");
         if (quantity > onHand) {
@@ -123,6 +171,14 @@ public class Inventory {
         registerMovement(StockMovementType.DECREASE, -quantity, reason, at);
     }
 
+    /**
+     * Ajusta el stock a un valor objetivo (conteo físico), sin dejarlo por debajo de lo reservado.
+     *
+     * @param targetQuantity valor objetivo de stock físico.
+     * @param reason         motivo del ajuste (opcional).
+     * @param at             momento del movimiento.
+     * @throws BusinessRuleViolationException si el objetivo es negativo o queda por debajo de lo reservado.
+     */
     public void adjust(int targetQuantity, String reason, Instant at) {
         requireNonNegative(targetQuantity, "targetQuantity");
         if (targetQuantity < reserved) {
@@ -133,6 +189,12 @@ public class Inventory {
         registerMovement(StockMovementType.ADJUST, delta, reason, at);
     }
 
+    /**
+     * Establece el umbral de stock mínimo.
+     *
+     * @param minimumStock nuevo umbral.
+     * @throws BusinessRuleViolationException si el umbral es negativo.
+     */
     public void setMinimumStock(int minimumStock) {
         requireNonNegative(minimumStock, "minimumStock");
         this.minimumStock = minimumStock;
@@ -141,7 +203,12 @@ public class Inventory {
     /**
      * Reserva stock validando la disponibilidad (previene overselling).
      *
+     * @param quantity  cantidad a reservar.
+     * @param expiresAt momento de vencimiento de la reserva.
+     * @param at        momento actual.
      * @return la reserva creada en estado {@code ACTIVE}.
+     * @throws BusinessRuleViolationException si no hay stock suficiente o {@code expiresAt} no es posterior a {@code at}.
+     * @throws NullPointerException           si {@code expiresAt} o {@code at} son {@code null}.
      */
     public StockReservation reserve(int quantity, Instant expiresAt, Instant at) {
         requirePositive(quantity, "quantity");
@@ -162,6 +229,14 @@ public class Inventory {
         return reservation;
     }
 
+    /**
+     * Consume una reserva activa: descuenta el stock y marca la reserva como confirmada.
+     *
+     * @param id identificador de la reserva.
+     * @param at momento de la operación.
+     * @throws ResourceNotFoundException si la reserva no existe.
+     * @throws BusinessRuleViolationException si la reserva no está activa.
+     */
     public void confirmReservation(StockReservationId id, Instant at) {
         StockReservation reservation = requireActive(id, "confirmar");
         replace(reservation.withStatus(ReservationStatus.CONFIRMED));
@@ -170,6 +245,14 @@ public class Inventory {
         registerMovement(StockMovementType.CONFIRM, -reservation.quantity(), null, at);
     }
 
+    /**
+     * Libera una reserva activa: devuelve el stock reservado.
+     *
+     * @param id identificador de la reserva.
+     * @param at momento de la operación.
+     * @throws ResourceNotFoundException si la reserva no existe.
+     * @throws BusinessRuleViolationException si la reserva no está activa.
+     */
     public void releaseReservation(StockReservationId id, Instant at) {
         StockReservation reservation = requireActive(id, "liberar");
         replace(reservation.withStatus(ReservationStatus.RELEASED));
@@ -177,6 +260,14 @@ public class Inventory {
         registerMovement(StockMovementType.RELEASE, -reservation.quantity(), null, at);
     }
 
+    /**
+     * Expira una reserva activa: devuelve el stock reservado.
+     *
+     * @param id identificador de la reserva.
+     * @param at momento de la operación.
+     * @throws ResourceNotFoundException si la reserva no existe.
+     * @throws BusinessRuleViolationException si la reserva no está activa.
+     */
     public void expireReservation(StockReservationId id, Instant at) {
         StockReservation reservation = requireActive(id, "expirar");
         replace(reservation.withStatus(ReservationStatus.EXPIRED));
@@ -184,6 +275,15 @@ public class Inventory {
         registerMovement(StockMovementType.EXPIRE, -reservation.quantity(), null, at);
     }
 
+    /**
+     * Busca una reserva activa por identificador.
+     *
+     * @param id        identificador de la reserva.
+     * @param operacion operación en curso (para el mensaje de error).
+     * @return la reserva activa.
+     * @throws ResourceNotFoundException   si la reserva no existe.
+     * @throws BusinessRuleViolationException si la reserva no está activa.
+     */
     private StockReservation requireActive(StockReservationId id, String operacion) {
         StockReservation reservation = reservations.stream()
                 .filter(r -> r.id().equals(id))
@@ -196,6 +296,11 @@ public class Inventory {
         return reservation;
     }
 
+    /**
+     * Reemplaza una reserva en la lista por su versión actualizada.
+     *
+     * @param updated reserva actualizada.
+     */
     private void replace(StockReservation updated) {
         for (int i = 0; i < reservations.size(); i++) {
             if (reservations.get(i).id().equals(updated.id())) {
@@ -205,16 +310,38 @@ public class Inventory {
         }
     }
 
+    /**
+     * Registra un movimiento de inventario.
+     *
+     * @param type     tipo de movimiento.
+     * @param quantity delta aplicado.
+     * @param reason   motivo (opcional).
+     * @param at       momento del movimiento.
+     */
     private void registerMovement(StockMovementType type, int quantity, String reason, Instant at) {
         movements.add(new StockMovement(type, quantity, reason, at));
     }
 
+    /**
+     * Valida que el valor sea positivo.
+     *
+     * @param value valor a validar.
+     * @param name  nombre del campo para el mensaje de error.
+     * @throws BusinessRuleViolationException si {@code value} es menor o igual a cero.
+     */
     private static void requirePositive(int value, String name) {
         if (value <= 0) {
             throw new BusinessRuleViolationException(name + " debe ser positivo");
         }
     }
 
+    /**
+     * Valida que el valor no sea negativo.
+     *
+     * @param value valor a validar.
+     * @param name  nombre del campo para el mensaje de error.
+     * @throws BusinessRuleViolationException si {@code value} es negativo.
+     */
     private static void requireNonNegative(int value, String name) {
         if (value < 0) {
             throw new BusinessRuleViolationException(name + " no puede ser negativo");

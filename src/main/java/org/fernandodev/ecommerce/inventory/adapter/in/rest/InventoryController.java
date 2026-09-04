@@ -39,6 +39,11 @@ public class InventoryController {
     private final InventoryUseCases inventoryUseCases;
     private final InventoryMapper mapper;
 
+    /**
+     * @param productId producto.
+     * @param variantId variante (null si el stock es a nivel producto).
+     * @return el inventario del producto/variante.
+     */
     @GetMapping
     public InventoryResponse get(@PathVariable UUID productId,
                                  @RequestParam(required = false) UUID variantId) {
@@ -46,6 +51,11 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId)));
     }
 
+    /**
+     * @param productId producto.
+     * @param variantId variante (null si el stock es a nivel producto).
+     * @return el stock disponible y si está por debajo del mínimo.
+     */
     @GetMapping("/available")
     public AvailableStockResponse available(@PathVariable UUID productId,
                                             @RequestParam(required = false) UUID variantId) {
@@ -53,6 +63,14 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId)));
     }
 
+    /**
+     * Incrementa el stock del producto/variante.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el stock es a nivel producto).
+     * @param request   datos del incremento.
+     * @return el inventario actualizado.
+     */
     @PostMapping("/stock/increase")
     public InventoryResponse increase(@PathVariable UUID productId,
                                       @RequestParam(required = false) UUID variantId,
@@ -61,6 +79,14 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId), mapper.toCommand(request)));
     }
 
+    /**
+     * Disminuye el stock del producto/variante.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el stock es a nivel producto).
+     * @param request   datos de la disminución.
+     * @return el inventario actualizado.
+     */
     @PostMapping("/stock/decrease")
     public InventoryResponse decrease(@PathVariable UUID productId,
                                       @RequestParam(required = false) UUID variantId,
@@ -69,6 +95,14 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId), mapper.toCommand(request)));
     }
 
+    /**
+     * Ajusta el stock a un valor objetivo.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el stock es a nivel producto).
+     * @param request   datos del ajuste.
+     * @return el inventario actualizado.
+     */
     @PutMapping("/stock")
     public InventoryResponse adjust(@PathVariable UUID productId,
                                     @RequestParam(required = false) UUID variantId,
@@ -77,6 +111,14 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId), mapper.toCommand(request)));
     }
 
+    /**
+     * Define el umbral de stock mínimo.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el stock es a nivel producto).
+     * @param request   datos del umbral.
+     * @return el inventario actualizado.
+     */
     @PatchMapping("/minimum-stock")
     public InventoryResponse setMinimumStock(@PathVariable UUID productId,
                                              @RequestParam(required = false) UUID variantId,
@@ -85,6 +127,11 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId), mapper.toCommand(request)));
     }
 
+    /**
+     * @param productId producto.
+     * @param variantId variante (null si el stock es a nivel producto).
+     * @return el historial de movimientos del inventario.
+     */
     @GetMapping("/movements")
     public java.util.List<InventoryResponse.StockMovementResponse> movements(
             @PathVariable UUID productId,
@@ -94,6 +141,14 @@ public class InventoryController {
                 .toList();
     }
 
+    /**
+     * Reserva stock de forma concurrente.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el stock es a nivel producto).
+     * @param request   datos de la reserva.
+     * @return la reserva creada.
+     */
     @PostMapping("/reservations")
     @ResponseStatus(HttpStatus.CREATED)
     public InventoryResponse.StockReservationResponse reserve(@PathVariable UUID productId,
@@ -103,6 +158,14 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId), mapper.toCommand(request)));
     }
 
+    /**
+     * Confirma una reserva (descuenta el stock).
+     *
+     * @param productId    producto.
+     * @param reservationId identificador de la reserva.
+     * @param variantId    variante (null si el stock es a nivel producto).
+     * @return el inventario actualizado.
+     */
     @PostMapping("/reservations/{reservationId}/confirm")
     public InventoryResponse confirmReservation(@PathVariable UUID productId,
                                                 @PathVariable UUID reservationId,
@@ -111,6 +174,14 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId), StockReservationId.of(reservationId)));
     }
 
+    /**
+     * Libera una reserva (devuelve el stock reservado).
+     *
+     * @param productId    producto.
+     * @param reservationId identificador de la reserva.
+     * @param variantId    variante (null si el stock es a nivel producto).
+     * @return el inventario actualizado.
+     */
     @PostMapping("/reservations/{reservationId}/release")
     public InventoryResponse releaseReservation(@PathVariable UUID productId,
                                                 @PathVariable UUID reservationId,
@@ -119,6 +190,14 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId), StockReservationId.of(reservationId)));
     }
 
+    /**
+     * Expira una reserva (devuelve el stock reservado).
+     *
+     * @param productId    producto.
+     * @param reservationId identificador de la reserva.
+     * @param variantId    variante (null si el stock es a nivel producto).
+     * @return el inventario actualizado.
+     */
     @PostMapping("/reservations/{reservationId}/expire")
     public InventoryResponse expireReservation(@PathVariable UUID productId,
                                                @PathVariable UUID reservationId,
@@ -127,6 +206,10 @@ public class InventoryController {
                 InventoryMapper.product(productId), variant(variantId), StockReservationId.of(reservationId)));
     }
 
+    /**
+     * @param variantId variante en texto, o {@code null}.
+     * @return la variante de dominio equivalente, o {@code null}.
+     */
     private static ProductVariantId variant(UUID variantId) {
         return variantId == null ? null : ProductVariantId.of(variantId);
     }
