@@ -46,11 +46,18 @@ public class ReturnController {
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public ReturnResponse get(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.getById(ReturnId.of(id)));
     }
 
     @GetMapping("/me")
+    /**
+     * Mine.
+     */
     public List<ReturnResponse> mine() {
         return returnUseCases.listByCustomer(SecurityUtils.requiredUserId()).stream()
                 .map(mapper::toResponse)
@@ -58,6 +65,10 @@ public class ReturnController {
     }
 
     @GetMapping
+    /**
+     * Get by order.
+     * @param orderId orderId.
+     */
     public ReturnResponse getByOrder(@RequestParam UUID orderId) {
         return returnUseCases.getByOrder(OrderId.of(orderId))
                 .map(mapper::toResponse)
@@ -66,43 +77,77 @@ public class ReturnController {
     }
 
     @PostMapping("/{id}/approve")
+    /**
+     * Approve.
+     * @param id id.
+     */
     public ReturnResponse approve(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.approve(ReturnId.of(id)));
     }
 
     @PostMapping("/{id}/reject")
+    /**
+     * Reject.
+     * @param id id.
+     */
     public ReturnResponse reject(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.reject(ReturnId.of(id)));
     }
 
     @PostMapping("/{id}/cancel")
+    /**
+     * Cancel.
+     * @param id id.
+     */
     public ReturnResponse cancel(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.cancel(ReturnId.of(id)));
     }
 
     @PostMapping("/{id}/return-shipment")
+    /**
+     * Register return shipment.
+     * @param id id.
+     * @param request request.
+     */
     public ReturnResponse registerReturnShipment(@PathVariable UUID id,
                                                  @Valid @RequestBody RegisterReturnShipmentRequest request) {
         return mapper.toResponse(returnUseCases.registerReturnShipment(ReturnId.of(id), request.trackingNumber()));
     }
 
     @PostMapping("/{id}/receive")
+    /**
+     * Receive.
+     * @param id id.
+     */
     public ReturnResponse receive(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.receive(ReturnId.of(id)));
     }
 
     @PostMapping("/{id}/inspect")
+    /**
+     * Inspect.
+     * @param id id.
+     * @param request request.
+     */
     public ReturnResponse inspect(@PathVariable UUID id, @Valid @RequestBody InspectReturnRequest request) {
         return mapper.toResponse(returnUseCases.inspect(ReturnId.of(id),
                 request.condition(), request.notes(), request.passed()));
     }
 
     @PostMapping("/{id}/complete")
+    /**
+     * Complete.
+     * @param id id.
+     */
     public ReturnResponse complete(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.complete(ReturnId.of(id)));
     }
 
     @PostMapping("/{id}/retry-refund")
+    /**
+     * Retry refund.
+     * @param id id.
+     */
     public ReturnResponse retryRefund(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.retryRefund(ReturnId.of(id)));
     }

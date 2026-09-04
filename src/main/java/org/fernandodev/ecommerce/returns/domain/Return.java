@@ -50,6 +50,9 @@ public class Return {
     private Instant createdAt;
     private Instant updatedAt;
 
+    /**
+     * Factoría del agregado.
+     */
     public static Return create(ReturnId id, OrderId orderId, UUID customerId, ReturnReason reason,
                                 List<ReturnItem> items, Instant at) {
         Return aReturn = new Return();
@@ -75,6 +78,9 @@ public class Return {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría del agregado.
      */
     public static Return crear(
             ReturnId id,

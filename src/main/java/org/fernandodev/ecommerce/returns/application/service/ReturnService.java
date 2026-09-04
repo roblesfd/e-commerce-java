@@ -43,6 +43,12 @@ public class ReturnService implements ReturnUseCases {
     private final OrderPort orders;
     private final PaymentPort payments;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Return create(OrderId orderId, CreateReturnCommand command) {
@@ -71,25 +77,55 @@ public class ReturnService implements ReturnUseCases {
         return returns.save(aReturn);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Return getById(ReturnId id) {
         return getExisting(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public List<Return> listByCustomer(UUID customerId) {
         return returns.findByCustomerId(customerId);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Optional<Return> getByOrder(OrderId orderId) {
         return returns.findByOrderId(orderId);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Return> listAll() {
         return returns.findAll();
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -103,6 +139,12 @@ public class ReturnService implements ReturnUseCases {
         return returns.save(aReturn);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Return reject(ReturnId id) {
@@ -110,6 +152,12 @@ public class ReturnService implements ReturnUseCases {
         aReturn.reject(Instant.now());
         return returns.save(aReturn);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -119,6 +167,12 @@ public class ReturnService implements ReturnUseCases {
         return returns.save(aReturn);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Return registerReturnShipment(ReturnId id, String trackingNumber) {
@@ -126,6 +180,12 @@ public class ReturnService implements ReturnUseCases {
         aReturn.registerReturnShipment(trackingNumber, Instant.now());
         return returns.save(aReturn);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -135,6 +195,12 @@ public class ReturnService implements ReturnUseCases {
         return returns.save(aReturn);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Return inspect(ReturnId id, String condition, String notes, boolean passed) {
@@ -142,6 +208,12 @@ public class ReturnService implements ReturnUseCases {
         aReturn.inspect(new InspectionResult(condition, notes, passed, Instant.now()), Instant.now());
         return returns.save(aReturn);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -153,6 +225,12 @@ public class ReturnService implements ReturnUseCases {
         }
         return returns.save(aReturn);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

@@ -8,14 +8,26 @@ import java.util.UUID;
  */
 public record ReturnPolicyId(UUID value) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code value} es {@code null}.
+     */
     public ReturnPolicyId {
         Objects.requireNonNull(value, "value no puede ser null");
     }
 
+    /**
+     * @return un nuevo identificador aleatorio.
+     */
     public static ReturnPolicyId generate() {
         return new ReturnPolicyId(UUID.randomUUID());
     }
 
+    /**
+     * @param value identificador.
+     * @return un {@link ReturnPolicyId} con el valor dado.
+     */
     public static ReturnPolicyId of(UUID value) {
         return new ReturnPolicyId(value);
     }

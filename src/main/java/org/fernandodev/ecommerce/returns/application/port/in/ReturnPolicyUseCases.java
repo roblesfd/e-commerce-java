@@ -11,13 +11,28 @@ import org.fernandodev.ecommerce.returns.domain.value_object.ReturnPolicyId;
  */
 public interface ReturnPolicyUseCases {
 
+    /**
+     * Crea una política de devoluciones.
+     */
     ReturnPolicy create(CreateReturnPolicyCommand command);
 
+    /**
+     * Lista todas las políticas.
+     */
     List<ReturnPolicy> list();
 
+    /**
+     * Consulta una política por identificador.
+     */
     ReturnPolicy getById(ReturnPolicyId id);
 
+    /**
+     * Activa una política.
+     */
     ReturnPolicy activate(ReturnPolicyId id);
 
+    /**
+     * Desactiva una política.
+     */
     ReturnPolicy deactivate(ReturnPolicyId id);
 }

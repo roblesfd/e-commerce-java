@@ -26,10 +26,16 @@ public class ReturnPolicy {
     @Getter(AccessLevel.NONE)
     private Set<ProductId> returnableProductIds;
 
+    /**
+     * Factoría del agregado.
+     */
     public static ReturnPolicy create(ReturnPolicyId id, int returnWindowDays, Set<ProductId> returnableProductIds) {
         return crear(id, returnWindowDays, true, returnableProductIds);
     }
 
+    /**
+     * Factoría del agregado.
+     */
     public static ReturnPolicy crear(ReturnPolicyId id, int returnWindowDays, boolean active,
                                      Set<ProductId> returnableProductIds) {
         ReturnPolicy policy = new ReturnPolicy();

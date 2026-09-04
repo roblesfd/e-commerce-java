@@ -18,6 +18,12 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
 
     private final ReturnPolicyRepository policies;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public ReturnPolicy create(CreateReturnPolicyCommand command) {
         ReturnPolicy policy = ReturnPolicy.create(
@@ -25,15 +31,33 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
         return policies.save(policy);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<ReturnPolicy> list() {
         return policies.findAll();
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public ReturnPolicy getById(ReturnPolicyId id) {
         return getExisting(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public ReturnPolicy activate(ReturnPolicyId id) {
@@ -41,6 +65,12 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
         policy.activate();
         return policies.save(policy);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public ReturnPolicy deactivate(ReturnPolicyId id) {

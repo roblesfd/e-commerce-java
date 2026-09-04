@@ -39,21 +39,36 @@ public class ReturnPolicyController {
     }
 
     @GetMapping
+    /**
+     * List.
+     */
     public List<ReturnPolicyResponse> list() {
         return returnPolicyUseCases.list().stream().map(mapper::toResponse).toList();
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public ReturnPolicyResponse get(@PathVariable UUID id) {
         return mapper.toResponse(returnPolicyUseCases.getById(ReturnPolicyId.of(id)));
     }
 
     @PatchMapping("/{id}/activate")
+    /**
+     * Activate.
+     * @param id id.
+     */
     public ReturnPolicyResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(returnPolicyUseCases.activate(ReturnPolicyId.of(id)));
     }
 
     @PatchMapping("/{id}/deactivate")
+    /**
+     * Deactivate.
+     * @param id id.
+     */
     public ReturnPolicyResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(returnPolicyUseCases.deactivate(ReturnPolicyId.of(id)));
     }
