@@ -19,6 +19,10 @@ public final class CartPersistenceMapper {
     private CartPersistenceMapper() {
     }
 
+    /**
+     * @param cart agregado de dominio.
+     * @return documento serializable equivalente.
+     */
     public static CartDocument toDocument(Cart cart) {
         return new CartDocument(
                 cart.getId().value(),
@@ -30,6 +34,10 @@ public final class CartPersistenceMapper {
                 cart.getCoupon() == null ? null : toCouponDocument(cart.getCoupon()));
     }
 
+    /**
+     * @param document documento serializable.
+     * @return agregado de dominio equivalente.
+     */
     public static Cart toDomain(CartDocument document) {
         return Cart.crear(
                 CartId.of(document.id()),

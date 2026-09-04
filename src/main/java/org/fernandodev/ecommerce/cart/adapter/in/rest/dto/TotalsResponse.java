@@ -11,6 +11,9 @@ public record TotalsResponse(
         CartResponse.MoneyResponse total
 ) {
 
+    /**
+     * @return totales vacíos (todos {@code null}) para un carrito sin moneda.
+     */
     public static TotalsResponse empty() {
         return new TotalsResponse(null, null, null);
     }

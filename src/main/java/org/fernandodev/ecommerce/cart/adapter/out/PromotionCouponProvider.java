@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Adaptador que implementa {@link CouponProvider} consultando el contexto
- * Promotions & Coupons (puerto de entrada de su capa de aplicación).
+ * Promotions &amp; Coupons (puerto de entrada de su capa de aplicación).
  */
 @Component
 @RequiredArgsConstructor

@@ -40,23 +40,44 @@ public class CartController {
     private final CartUseCases cartUseCases;
     private final CartMapper mapper;
 
+    /**
+     * Crea el carrito del usuario autenticado si no existe.
+     *
+     * @return el carrito.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CartResponse create() {
         return mapper.toResponse(cartUseCases.createCart(SecurityUtils.requiredUserId()));
     }
 
+    /**
+     * @return el carrito del usuario autenticado.
+     */
     @GetMapping("/me")
     public CartResponse me() {
         return mapper.toResponse(cartUseCases.getCart(SecurityUtils.requiredUserId()));
     }
 
+    /**
+     * Añade o incrementa un item en el carrito del usuario autenticado.
+     *
+     * @param request datos del item.
+     * @return el carrito actualizado.
+     */
     @PostMapping("/me/items")
     public CartResponse addItem(@Valid @RequestBody AddItemRequest request) {
         return mapper.toResponse(cartUseCases.addItem(
                 SecurityUtils.requiredUserId(), mapper.toCommand(request)));
     }
 
+    /**
+     * Actualiza la cantidad de un item del carrito.
+     *
+     * @param itemId  identificador del item.
+     * @param request nueva cantidad.
+     * @return el carrito actualizado.
+     */
     @PutMapping("/me/items/{itemId}")
     public CartResponse updateItemQuantity(@PathVariable UUID itemId,
                                            @Valid @RequestBody UpdateQuantityRequest request) {
@@ -64,17 +85,31 @@ public class CartController {
                 SecurityUtils.requiredUserId(), CartItemId.of(itemId), mapper.toCommand(request)));
     }
 
+    /**
+     * Elimina un item del carrito del usuario autenticado.
+     *
+     * @param itemId identificador del item.
+     * @return el carrito actualizado.
+     */
     @DeleteMapping("/me/items/{itemId}")
     public CartResponse removeItem(@PathVariable UUID itemId) {
         return mapper.toResponse(cartUseCases.removeItem(
                 SecurityUtils.requiredUserId(), CartItemId.of(itemId)));
     }
 
+    /**
+     * Vacía el carrito del usuario autenticado.
+     *
+     * @return el carrito vacío.
+     */
     @DeleteMapping("/me")
     public CartResponse clear() {
         return mapper.toResponse(cartUseCases.clearCart(SecurityUtils.requiredUserId()));
     }
 
+    /**
+     * @return subtotal, descuento y total del carrito del usuario autenticado.
+     */
     @GetMapping("/me/totals")
     public TotalsResponse totals() {
         UUID ownerId = SecurityUtils.requiredUserId();
@@ -84,22 +119,41 @@ public class CartController {
                 cartUseCases.total(ownerId));
     }
 
+    /**
+     * Aplica un cupón al carrito del usuario autenticado.
+     *
+     * @param request código del cupón.
+     * @return el carrito actualizado.
+     */
     @PostMapping("/me/coupons")
     public CartResponse applyCoupon(@Valid @RequestBody ApplyCouponRequest request) {
         return mapper.toResponse(cartUseCases.applyCoupon(
                 SecurityUtils.requiredUserId(), mapper.toCommand(request)));
     }
 
+    /**
+     * Elimina el cupón del carrito del usuario autenticado.
+     *
+     * @return el carrito actualizado.
+     */
     @DeleteMapping("/me/coupons")
     public CartResponse removeCoupon() {
         return mapper.toResponse(cartUseCases.removeCoupon(SecurityUtils.requiredUserId()));
     }
 
+    /**
+     * Revalida el carrito del usuario autenticado (precios, stock y cupón).
+     *
+     * @return el carrito validado.
+     */
     @PostMapping("/me/validate")
     public CartResponse validate() {
         return mapper.toResponse(cartUseCases.validateCart(SecurityUtils.requiredUserId()));
     }
 
+    /**
+     * Elimina el carrito del usuario autenticado (TTL vencido).
+     */
     @PostMapping("/me/expire")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void expire() {

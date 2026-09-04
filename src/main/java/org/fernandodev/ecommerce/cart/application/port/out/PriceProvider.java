@@ -9,5 +9,10 @@ import org.fernandodev.ecommerce.shared.domain.Money;
  */
 public interface PriceProvider {
 
+    /**
+     * @param productId producto.
+     * @param variantId variante (null si el item es a nivel producto).
+     * @return el precio vigente del producto/variante.
+     */
     Money currentPrice(ProductId productId, ProductVariantId variantId);
 }

@@ -47,11 +47,19 @@ public class CartService implements CartUseCases {
                 .orElseGet(() -> carts.save(Cart.create(CartId.generate(), ownerId, Instant.now())));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Cart getCart(UUID ownerId) {
         return createCart(ownerId);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws BusinessRuleViolationException si no hay stock suficiente para el item.
+     */
     @Override
     public Cart addItem(UUID ownerId, AddItemCommand command) {
         Cart cart = getCart(ownerId);
@@ -61,6 +69,12 @@ public class CartService implements CartUseCases {
         return carts.save(cart);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws BusinessRuleViolationException si no hay stock suficiente para la nueva cantidad.
+     * @throws ResourceNotFoundException      si el carrito o el item no existen.
+     */
     @Override
     public Cart updateItemQuantity(UUID ownerId, CartItemId itemId, UpdateQuantityCommand command) {
         Cart cart = getExisting(ownerId);
@@ -70,6 +84,11 @@ public class CartService implements CartUseCases {
         return carts.save(cart);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el carrito o el item no existen.
+     */
     @Override
     public Cart removeItem(UUID ownerId, CartItemId itemId) {
         Cart cart = getExisting(ownerId);
@@ -77,6 +96,11 @@ public class CartService implements CartUseCases {
         return carts.save(cart);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el carrito no existe.
+     */
     @Override
     public Cart clearCart(UUID ownerId) {
         Cart cart = getExisting(ownerId);
@@ -84,6 +108,12 @@ public class CartService implements CartUseCases {
         return carts.save(cart);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws BusinessRuleViolationException si el carrito está vacío o el cupón no es aplicable.
+     * @throws ResourceNotFoundException      si el carrito no existe.
+     */
     @Override
     public Cart applyCoupon(UUID ownerId, ApplyCouponCommand command) {
         Cart cart = getExisting(ownerId);
@@ -98,6 +128,11 @@ public class CartService implements CartUseCases {
         return carts.save(cart);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el carrito no existe.
+     */
     @Override
     public Cart removeCoupon(UUID ownerId) {
         Cart cart = getExisting(ownerId);
@@ -105,21 +140,42 @@ public class CartService implements CartUseCases {
         return carts.save(cart);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el carrito no existe.
+     */
     @Override
     public Optional<Money> subtotal(UUID ownerId) {
         return getExisting(ownerId).subtotal();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el carrito no existe.
+     */
     @Override
     public Optional<Money> discount(UUID ownerId) {
         return getExisting(ownerId).discount();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el carrito no existe.
+     */
     @Override
     public Optional<Money> total(UUID ownerId) {
         return getExisting(ownerId).total();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws BusinessRuleViolationException si algún item dejó de tener stock suficiente.
+     * @throws ResourceNotFoundException      si el carrito no existe.
+     */
     @Override
     public Cart validateCart(UUID ownerId) {
         Cart cart = getExisting(ownerId);
@@ -130,16 +186,30 @@ public class CartService implements CartUseCases {
         return carts.save(cart);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void expireCart(UUID ownerId) {
         carts.delete(ownerId);
     }
 
+    /**
+     * @param ownerId identificador del propietario (usuario IAM).
+     * @return el carrito existente del propietario.
+     * @throws ResourceNotFoundException si no existe.
+     */
     private Cart getExisting(UUID ownerId) {
         return carts.findByOwner(ownerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado"));
     }
 
+    /**
+     * @param cart   carrito.
+     * @param itemId identificador del item.
+     * @return el item del carrito.
+     * @throws ResourceNotFoundException si el item no pertenece al carrito.
+     */
     private CartItem findItem(Cart cart, CartItemId itemId) {
         return cart.getItems().stream()
                 .filter(item -> item.id().equals(itemId))
@@ -147,6 +217,14 @@ public class CartService implements CartUseCases {
                 .orElseThrow(() -> new ResourceNotFoundException("Item no encontrado en el carrito: " + itemId));
     }
 
+    /**
+     * Valida que haya stock disponible para la cantidad pedida.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el item es a nivel producto).
+     * @param quantity  cantidad solicitada.
+     * @throws BusinessRuleViolationException si el stock es insuficiente.
+     */
     private void assertAvailable(ProductId productId, ProductVariantId variantId, int quantity) {
         if (!availability.available(productId, variantId, quantity)) {
             throw new BusinessRuleViolationException("Stock insuficiente para el producto: " + productId);

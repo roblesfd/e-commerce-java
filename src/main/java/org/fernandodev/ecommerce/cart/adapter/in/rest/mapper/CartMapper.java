@@ -27,6 +27,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CartMapper {
 
+    /**
+     * @param request petición de alta de item.
+     * @return comando de aplicación equivalente.
+     */
     public AddItemCommand toCommand(AddItemRequest request) {
         return new AddItemCommand(
                 ProductId.of(request.productId()),
@@ -34,14 +38,26 @@ public class CartMapper {
                 request.quantity());
     }
 
+    /**
+     * @param request petición de actualización de cantidad.
+     * @return comando de aplicación equivalente.
+     */
     public UpdateQuantityCommand toCommand(UpdateQuantityRequest request) {
         return new UpdateQuantityCommand(request.quantity());
     }
 
+    /**
+     * @param request petición de aplicación de cupón.
+     * @return comando de aplicación equivalente.
+     */
     public ApplyCouponCommand toCommand(ApplyCouponRequest request) {
         return new ApplyCouponCommand(request.code());
     }
 
+    /**
+     * @param cart agregado de dominio.
+     * @return respuesta REST con el estado del carrito.
+     */
     public CartResponse toResponse(Cart cart) {
         return new CartResponse(
                 cart.getId().value(),
@@ -52,10 +68,20 @@ public class CartMapper {
                 toMoneyResponse(cart.total()));
     }
 
+    /**
+     * @param subtotal  subtotal del carrito.
+     * @param discounts descuento del carrito.
+     * @param total     total del carrito.
+     * @return respuesta REST con los totales.
+     */
     public TotalsResponse toTotalsResponse(Optional<Money> subtotal, Optional<Money> discounts, Optional<Money> total) {
         return new TotalsResponse(toMoneyResponse(subtotal), toMoneyResponse(discounts), toMoneyResponse(total));
     }
 
+    /**
+     * @param item item de dominio.
+     * @return respuesta REST con el item.
+     */
     private CartResponse.CartItemResponse toItemResponse(CartItem item) {
         return new CartResponse.CartItemResponse(
                 item.id().value(),
@@ -65,16 +91,28 @@ public class CartMapper {
                 toMoneyResponse(item.unitPrice()));
     }
 
+    /**
+     * @param coupon cupón de dominio.
+     * @return respuesta REST con el cupón aplicado.
+     */
     private static CartResponse.AppliedCouponResponse toCouponResponse(AppliedCoupon coupon) {
         return new CartResponse.AppliedCouponResponse(
                 coupon.code(),
                 toMoneyResponse(coupon.discount()));
     }
 
+    /**
+     * @param money importe, o {@code null} si no hay.
+     * @return respuesta REST con el importe, o {@code null}.
+     */
     private static CartResponse.MoneyResponse toMoneyResponse(Money money) {
         return money == null ? null : new CartResponse.MoneyResponse(money.amount(), money.currencyCode());
     }
 
+    /**
+     * @param money importe opcional.
+     * @return respuesta REST con el importe, o {@code null} si está vacío.
+     */
     private static CartResponse.MoneyResponse toMoneyResponse(Optional<Money> money) {
         return money.map(CartMapper::toMoneyResponse).orElse(null);
     }

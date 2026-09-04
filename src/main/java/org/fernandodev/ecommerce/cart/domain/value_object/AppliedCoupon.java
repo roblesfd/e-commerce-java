@@ -12,6 +12,11 @@ import org.fernandodev.ecommerce.shared.domain.Money;
  */
 public record AppliedCoupon(String code, Money discount) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code code} o {@code discount} son {@code null}.
+     */
     public AppliedCoupon {
         Objects.requireNonNull(code, "code no puede ser null");
         Objects.requireNonNull(discount, "discount no puede ser null");

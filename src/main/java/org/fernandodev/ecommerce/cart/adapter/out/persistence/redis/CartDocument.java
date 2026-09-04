@@ -16,6 +16,16 @@ public record CartDocument(
         Coupon coupon
 ) {
 
+    /**
+     * Item del carrito serializable.
+     *
+     * @param id        identificador del item.
+     * @param productId producto.
+     * @param variantId variante (null si el item es a nivel producto).
+     * @param quantity  cantidad.
+     * @param amount    precio unitario.
+     * @param currency  divisa ISO 4217.
+     */
     public record Item(
             UUID id,
             UUID productId,
@@ -26,6 +36,13 @@ public record CartDocument(
     ) {
     }
 
+    /**
+     * Cupón aplicado serializable.
+     *
+     * @param code     código del cupón.
+     * @param amount   descuento.
+     * @param currency divisa ISO 4217.
+     */
     public record Coupon(String code, BigDecimal amount, String currency) {
     }
 }

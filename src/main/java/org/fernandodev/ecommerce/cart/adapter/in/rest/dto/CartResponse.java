@@ -20,6 +20,15 @@ public record CartResponse(
         MoneyResponse total
 ) {
 
+    /**
+     * Item del carrito en la respuesta.
+     *
+     * @param id        identificador del item.
+     * @param productId producto.
+     * @param variantId variante (null si el item es a nivel producto).
+     * @param quantity  cantidad.
+     * @param unitPrice precio unitario capturado.
+     */
     public record CartItemResponse(
             UUID id,
             UUID productId,
@@ -29,9 +38,21 @@ public record CartResponse(
     ) {
     }
 
+    /**
+     * Cupón aplicado en la respuesta.
+     *
+     * @param code     código del cupón.
+     * @param discount descuento calculado.
+     */
     public record AppliedCouponResponse(String code, MoneyResponse discount) {
     }
 
+    /**
+     * Importe monetario en la respuesta.
+     *
+     * @param amount   cantidad.
+     * @param currency divisa ISO 4217.
+     */
     public record MoneyResponse(BigDecimal amount, String currency) {
     }
 }

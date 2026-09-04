@@ -16,6 +16,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CartConfig {
 
+    /**
+     * @param cartRepository puerto de persistencia del carrito (Redis).
+     * @param prices         proveedor de precios hacia Pricing.
+     * @param availability   proveedor de disponibilidad hacia Inventory.
+     * @param coupons        proveedor de cupones hacia Promotions.
+     * @return servicio de aplicación del contexto Shopping Cart.
+     */
     @Bean
     public CartUseCases cartUseCases(
             CartRepository cartRepository,
