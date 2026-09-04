@@ -20,15 +20,33 @@ public class AdminPaymentService implements AdminPaymentUseCases {
     private final PaymentUseCases payments;
     private final AuditService audit;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Payment> listAllPayments() {
         return payments.listAll();
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Payment getPayment(PaymentId id) {
         return payments.getById(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

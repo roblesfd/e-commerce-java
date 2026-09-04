@@ -24,6 +24,19 @@ public class AuditEntry {
     private String detail;
     private Instant createdAt;
 
+    /**
+     * Crea una entrada de auditoría.
+     *
+     * @param id         identificador de la entrada.
+     * @param actorId    identificador del usuario que ejecutó la acción.
+     * @param action     acción ejecutada (p. ej. {@code DELETE_PRODUCT}).
+     * @param targetType tipo de recurso afectado (p. ej. {@code product}).
+     * @param targetId   identificador del recurso afectado (opcional).
+     * @param detail     detalle de la acción.
+     * @param at         momento de la acción.
+     * @return la entrada creada.
+     * @throws NullPointerException si {@code id}, {@code actorId}, {@code action} o {@code at} son {@code null}.
+     */
     public static AuditEntry create(AuditEntryId id, UUID actorId, String action,
                                     String targetType, UUID targetId, String detail, Instant at) {
         AuditEntry entry = new AuditEntry();
@@ -37,6 +50,11 @@ public class AuditEntry {
         return entry;
     }
 
+    /**
+     * Alias de {@link #create(AuditEntryId, UUID, String, String, UUID, String, Instant)} usado por la persistencia.
+     *
+     * @return la entrada de auditoría creada.
+     */
     public static AuditEntry crear(AuditEntryId id, UUID actorId, String action,
                                    String targetType, UUID targetId, String detail, Instant createdAt) {
         return create(id, actorId, action, targetType, targetId, detail, createdAt);

@@ -29,11 +29,23 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     private final BrandUseCases brands;
     private final AuditService audit;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Product createProduct(ProductCommand command) {
         return products.create(command);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -41,11 +53,23 @@ public class AdminCatalogService implements AdminCatalogUseCases {
         return products.update(id, command);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Product activateProduct(ProductId id) {
         return products.activate(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -54,6 +78,12 @@ public class AdminCatalogService implements AdminCatalogUseCases {
         return products.deactivate(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public void deleteProduct(ProductId id) {
@@ -61,11 +91,23 @@ public class AdminCatalogService implements AdminCatalogUseCases {
         products.delete(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Category createCategory(CategoryCommand command) {
         return categories.create(command);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -73,11 +115,23 @@ public class AdminCatalogService implements AdminCatalogUseCases {
         return categories.update(id, command);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Category activateCategory(CategoryId id) {
         return categories.activate(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -86,6 +140,12 @@ public class AdminCatalogService implements AdminCatalogUseCases {
         return categories.deactivate(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public void deleteCategory(CategoryId id) {
@@ -93,11 +153,23 @@ public class AdminCatalogService implements AdminCatalogUseCases {
         categories.delete(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Brand createBrand(BrandCommand command) {
         return brands.create(command);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -105,11 +177,23 @@ public class AdminCatalogService implements AdminCatalogUseCases {
         return brands.update(id, command);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Brand activateBrand(BrandId id) {
         return brands.activate(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -117,6 +201,12 @@ public class AdminCatalogService implements AdminCatalogUseCases {
         audit.record("DEACTIVATE_BRAND", "brand", id.value(), "Marca desactivada");
         return brands.deactivate(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

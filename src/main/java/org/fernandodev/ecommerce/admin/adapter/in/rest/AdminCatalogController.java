@@ -49,6 +49,11 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/products/{id}")
+    /**
+     * Update product.
+     * @param id id.
+     * @param command command.
+     */
     public Product updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductCommand command) {
         return adminCatalog.updateProduct(ProductId.of(id), command);
     }
@@ -56,6 +61,10 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/products/{id}/activate")
+    /**
+     * Activate product.
+     * @param id id.
+     */
     public Product activateProduct(@PathVariable UUID id) {
         return adminCatalog.activateProduct(ProductId.of(id));
     }
@@ -63,6 +72,10 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/products/{id}/deactivate")
+    /**
+     * Deactivate product.
+     * @param id id.
+     */
     public Product deactivateProduct(@PathVariable UUID id) {
         return adminCatalog.deactivateProduct(ProductId.of(id));
     }
@@ -71,6 +84,10 @@ public class AdminCatalogController {
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @DeleteMapping("/products/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Delete product.
+     * @param id id.
+     */
     public void deleteProduct(@PathVariable UUID id) {
         adminCatalog.deleteProduct(ProductId.of(id));
     }
@@ -79,6 +96,10 @@ public class AdminCatalogController {
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
+    /**
+     * Create category.
+     * @param command command.
+     */
     public Category createCategory(@Valid @RequestBody CategoryCommand command) {
         return adminCatalog.createCategory(command);
     }
@@ -86,6 +107,11 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/categories/{id}")
+    /**
+     * Update category.
+     * @param id id.
+     * @param command command.
+     */
     public Category updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryCommand command) {
         return adminCatalog.updateCategory(CategoryId.of(id), command);
     }
@@ -93,6 +119,10 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/categories/{id}/activate")
+    /**
+     * Activate category.
+     * @param id id.
+     */
     public Category activateCategory(@PathVariable UUID id) {
         return adminCatalog.activateCategory(CategoryId.of(id));
     }
@@ -100,6 +130,10 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/categories/{id}/deactivate")
+    /**
+     * Deactivate category.
+     * @param id id.
+     */
     public Category deactivateCategory(@PathVariable UUID id) {
         return adminCatalog.deactivateCategory(CategoryId.of(id));
     }
@@ -108,6 +142,10 @@ public class AdminCatalogController {
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @DeleteMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Delete category.
+     * @param id id.
+     */
     public void deleteCategory(@PathVariable UUID id) {
         adminCatalog.deleteCategory(CategoryId.of(id));
     }
@@ -116,6 +154,10 @@ public class AdminCatalogController {
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/brands")
     @ResponseStatus(HttpStatus.CREATED)
+    /**
+     * Create brand.
+     * @param command command.
+     */
     public Brand createBrand(@Valid @RequestBody BrandCommand command) {
         return adminCatalog.createBrand(command);
     }
@@ -123,6 +165,11 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/brands/{id}")
+    /**
+     * Update brand.
+     * @param id id.
+     * @param command command.
+     */
     public Brand updateBrand(@PathVariable UUID id, @Valid @RequestBody BrandCommand command) {
         return adminCatalog.updateBrand(BrandId.of(id), command);
     }
@@ -130,6 +177,10 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/brands/{id}/activate")
+    /**
+     * Activate brand.
+     * @param id id.
+     */
     public Brand activateBrand(@PathVariable UUID id) {
         return adminCatalog.activateBrand(BrandId.of(id));
     }
@@ -137,6 +188,10 @@ public class AdminCatalogController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/brands/{id}/deactivate")
+    /**
+     * Deactivate brand.
+     * @param id id.
+     */
     public Brand deactivateBrand(@PathVariable UUID id) {
         return adminCatalog.deactivateBrand(BrandId.of(id));
     }
@@ -145,6 +200,10 @@ public class AdminCatalogController {
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @DeleteMapping("/brands/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Delete brand.
+     * @param id id.
+     */
     public void deleteBrand(@PathVariable UUID id) {
         adminCatalog.deleteBrand(BrandId.of(id));
     }

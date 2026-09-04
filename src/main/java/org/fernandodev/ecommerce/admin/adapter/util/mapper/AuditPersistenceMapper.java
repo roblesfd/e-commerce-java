@@ -12,6 +12,10 @@ public final class AuditPersistenceMapper {
     private AuditPersistenceMapper() {
     }
 
+    /**
+     * @param entry entrada de auditoría de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static AuditJpaEntity toEntity(AuditEntry entry) {
         AuditJpaEntity entity = new AuditJpaEntity();
         entity.setId(entry.getId().value());
@@ -24,6 +28,10 @@ public final class AuditPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return entrada de auditoría de dominio equivalente.
+     */
     public static AuditEntry toDomain(AuditJpaEntity entity) {
         return AuditEntry.crear(AuditEntryId.of(entity.getId()), entity.getActorId(), entity.getAction(),
                 entity.getTargetType(), entity.getTargetId(), entity.getDetail(), entity.getCreatedAt());

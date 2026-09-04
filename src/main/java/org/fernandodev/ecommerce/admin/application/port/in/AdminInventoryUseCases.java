@@ -15,15 +15,33 @@ import org.fernandodev.ecommerce.inventory.domain.value_object.StockMovement;
  */
 public interface AdminInventoryUseCases {
 
+/**
+     * Consulta el inventario de un producto/variante.
+     */
     Inventory getInventory(ProductId productId, ProductVariantId variantId);
 
+/**
+     * Incrementa el stock y lo registra en auditoría.
+     */
     Inventory increaseStock(ProductId productId, ProductVariantId variantId, IncreaseStockCommand command);
 
+/**
+     * Disminuye el stock y lo registra en auditoría.
+     */
     Inventory decreaseStock(ProductId productId, ProductVariantId variantId, DecreaseStockCommand command);
 
+/**
+     * Ajusta el stock a un objetivo y lo registra en auditoría.
+     */
     Inventory adjustStock(ProductId productId, ProductVariantId variantId, AdjustStockCommand command);
 
+/**
+     * Consulta el historial de movimientos.
+     */
     List<StockMovement> movementHistory(ProductId productId, ProductVariantId variantId);
 
+/**
+     * Indica si el stock está por debajo del mínimo.
+     */
     boolean isLowStock(ProductId productId, ProductVariantId variantId);
 }

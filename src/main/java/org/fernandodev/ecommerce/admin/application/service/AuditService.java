@@ -21,6 +21,14 @@ public class AuditService {
         this.actor = actor;
     }
 
+    /**
+     * Registra una acción administrativa en el trail de auditoría con el actor actual.
+     *
+     * @param action     acción ejecutada.
+     * @param targetType tipo de recurso afectado.
+     * @param targetId   identificador del recurso afectado (opcional).
+     * @param detail     detalle de la acción.
+     */
     public void record(String action, String targetType, UUID targetId, String detail) {
         audit.save(AuditEntry.create(AuditEntryId.generate(), actor.actorId(), action,
                 targetType, targetId, detail, Instant.now()));

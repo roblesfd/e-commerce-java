@@ -46,6 +46,12 @@ public class AdminInventoryController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{productId}/increase")
+    /**
+     * Increase.
+     * @param productId productId.
+     * @param variantId variantId.
+     * @param command command.
+     */
     public Inventory increase(@PathVariable UUID productId, @RequestParam(required = false) UUID variantId,
                               @Valid @RequestBody IncreaseStockCommand command) {
         return adminInventory.increaseStock(ProductId.of(productId),
@@ -55,6 +61,12 @@ public class AdminInventoryController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{productId}/decrease")
+    /**
+     * Decrease.
+     * @param productId productId.
+     * @param variantId variantId.
+     * @param command command.
+     */
     public Inventory decrease(@PathVariable UUID productId, @RequestParam(required = false) UUID variantId,
                               @Valid @RequestBody DecreaseStockCommand command) {
         return adminInventory.decreaseStock(ProductId.of(productId),
@@ -64,6 +76,12 @@ public class AdminInventoryController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{productId}/adjust")
+    /**
+     * Adjust.
+     * @param productId productId.
+     * @param variantId variantId.
+     * @param command command.
+     */
     public Inventory adjust(@PathVariable UUID productId, @RequestParam(required = false) UUID variantId,
                             @Valid @RequestBody AdjustStockCommand command) {
         return adminInventory.adjustStock(ProductId.of(productId),
@@ -73,6 +91,11 @@ public class AdminInventoryController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{productId}/movements")
+    /**
+     * Movements.
+     * @param productId productId.
+     * @param variantId variantId.
+     */
     public List<StockMovement> movements(@PathVariable UUID productId,
                                          @RequestParam(required = false) UUID variantId) {
         return adminInventory.movementHistory(ProductId.of(productId),

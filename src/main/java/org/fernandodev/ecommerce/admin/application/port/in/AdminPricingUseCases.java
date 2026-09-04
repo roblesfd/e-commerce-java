@@ -14,13 +14,28 @@ import org.fernandodev.ecommerce.pricing.domain.value_object.PriceOverrideId;
  */
 public interface AdminPricingUseCases {
 
+/**
+     * Define el precio base y lo registra en auditoría.
+     */
     Price defineBasePrice(DefinePriceCommand command);
 
+/**
+     * Actualiza el precio base y lo registra en auditoría.
+     */
     Price updateBasePrice(PriceId id, UpdatePriceCommand command);
 
+/**
+     * Añade un override de precio y lo registra en auditoría.
+     */
     Price addOverride(PriceId id, AddPriceOverrideCommand command);
 
+/**
+     * Elimina un override de precio y lo registra en auditoría.
+     */
     Price removeOverride(PriceId id, PriceOverrideId overrideId);
 
+/**
+     * Consulta el precio y su historial por producto/variante.
+     */
     Price getPriceByProduct(ProductId productId, ProductVariantId variantId);
 }

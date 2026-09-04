@@ -35,6 +35,10 @@ public class AdminCustomerController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{iamUserId}")
+    /**
+     * Get.
+     * @param iamUserId iamUserId.
+     */
     public Customer get(@PathVariable UUID iamUserId) {
         return adminCustomer.getCustomerByIamUserId(iamUserId);
     }

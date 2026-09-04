@@ -19,15 +19,33 @@ public class AdminOrderService implements AdminOrderUseCases {
     private final OrderUseCases orders;
     private final AuditService audit;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Order> listAllOrders() {
         return orders.listAll();
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Order getOrder(OrderId id) {
         return orders.getById(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -36,12 +54,24 @@ public class AdminOrderService implements AdminOrderUseCases {
         return orders.cancel(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Order markOrderShipped(OrderId id) {
         audit.record("MARK_ORDER_SHIPPED", "order", id.value(), "Orden marcada como enviada");
         return orders.markShipped(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

@@ -42,6 +42,10 @@ public class AdminPaymentController {
         return adminPayment.listAllPayments();
     }
 
+    /**
+     * @param id identificador del pago.
+     * @return el pago y su estado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{id}")
@@ -49,6 +53,13 @@ public class AdminPaymentController {
         return adminPayment.getPayment(PaymentId.of(id));
     }
 
+    /**
+     * Reembolsa un pago por un monto.
+     *
+     * @param id      identificador del pago.
+     * @param request monto y divisa del reembolso.
+     * @return el pago reembolsado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/refund")
@@ -56,6 +67,12 @@ public class AdminPaymentController {
         return adminPayment.refundPayment(PaymentId.of(id), Money.of(request.amount(), request.currency()));
     }
 
+    /**
+     * Petición para reembolsar un pago.
+     *
+     * @param amount   monto a reembolsar.
+     * @param currency divisa ISO 4217.
+     */
     public record RefundRequest(
             @NotNull @Positive BigDecimal amount,
             @NotBlank @Size(min = 3, max = 3) String currency

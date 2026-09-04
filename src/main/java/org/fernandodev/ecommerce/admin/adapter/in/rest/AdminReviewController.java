@@ -37,6 +37,10 @@ public class AdminReviewController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/approve")
+    /**
+     * Approve.
+     * @param id id.
+     */
     public Review approve(@PathVariable UUID id) {
         return adminReview.approveReview(ReviewId.of(id));
     }
@@ -44,6 +48,10 @@ public class AdminReviewController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/reject")
+    /**
+     * Reject.
+     * @param id id.
+     */
     public Review reject(@PathVariable UUID id) {
         return adminReview.rejectReview(ReviewId.of(id));
     }
@@ -51,6 +59,10 @@ public class AdminReviewController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/hide")
+    /**
+     * Hide.
+     * @param id id.
+     */
     public Review hide(@PathVariable UUID id) {
         return adminReview.hideReview(ReviewId.of(id));
     }
@@ -58,6 +70,10 @@ public class AdminReviewController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/restore")
+    /**
+     * Restore.
+     * @param id id.
+     */
     public Review restore(@PathVariable UUID id) {
         return adminReview.restoreReview(ReviewId.of(id));
     }

@@ -37,6 +37,10 @@ public class AdminOrderController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public Order get(@PathVariable UUID id) {
         return adminOrder.getOrder(OrderId.of(id));
     }
@@ -44,6 +48,10 @@ public class AdminOrderController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/cancel")
+    /**
+     * Cancel.
+     * @param id id.
+     */
     public Order cancel(@PathVariable UUID id) {
         return adminOrder.cancelOrder(OrderId.of(id));
     }
@@ -51,6 +59,10 @@ public class AdminOrderController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/shipped")
+    /**
+     * Shipped.
+     * @param id id.
+     */
     public Order shipped(@PathVariable UUID id) {
         return adminOrder.markOrderShipped(OrderId.of(id));
     }
@@ -58,6 +70,10 @@ public class AdminOrderController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/delivered")
+    /**
+     * Delivered.
+     * @param id id.
+     */
     public Order delivered(@PathVariable UUID id) {
         return adminOrder.markOrderDelivered(OrderId.of(id));
     }

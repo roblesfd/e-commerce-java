@@ -10,13 +10,28 @@ import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
  */
 public interface AdminOrderUseCases {
 
+/**
+     * Lista todas las órdenes.
+     */
     List<Order> listAllOrders();
 
+/**
+     * Consulta el detalle de una orden.
+     */
     Order getOrder(OrderId id);
 
+/**
+     * Cancela una orden y lo registra en auditoría.
+     */
     Order cancelOrder(OrderId id);
 
+/**
+     * Marca la orden como enviada y lo registra en auditoría.
+     */
     Order markOrderShipped(OrderId id);
 
+/**
+     * Marca la orden como entregada y lo registra en auditoría.
+     */
     Order markOrderDelivered(OrderId id);
 }

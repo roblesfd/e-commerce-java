@@ -45,6 +45,11 @@ public class AdminPromotionController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/promotions/{id}")
+    /**
+     * Update promotion.
+     * @param id id.
+     * @param command command.
+     */
     public Promotion updatePromotion(@PathVariable UUID id, @Valid @RequestBody UpdatePromotionCommand command) {
         return adminPromotion.updatePromotion(PromotionId.of(id), command);
     }
@@ -52,6 +57,10 @@ public class AdminPromotionController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/promotions/{id}/activate")
+    /**
+     * Activate promotion.
+     * @param id id.
+     */
     public Promotion activatePromotion(@PathVariable UUID id) {
         return adminPromotion.activatePromotion(PromotionId.of(id));
     }
@@ -59,6 +68,10 @@ public class AdminPromotionController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/promotions/{id}/deactivate")
+    /**
+     * Deactivate promotion.
+     * @param id id.
+     */
     public Promotion deactivatePromotion(@PathVariable UUID id) {
         return adminPromotion.deactivatePromotion(PromotionId.of(id));
     }
@@ -66,6 +79,11 @@ public class AdminPromotionController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/promotions/{id}/products/{productId}")
+    /**
+     * Add product to promotion.
+     * @param id id.
+     * @param productId productId.
+     */
     public Promotion addProductToPromotion(@PathVariable UUID id, @PathVariable UUID productId) {
         return adminPromotion.addProductToPromotion(PromotionId.of(id), ProductId.of(productId));
     }
@@ -73,6 +91,10 @@ public class AdminPromotionController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/coupons")
+    /**
+     * Create coupon.
+     * @param command command.
+     */
     public Coupon createCoupon(@Valid @RequestBody CreateCouponCommand command) {
         return adminPromotion.createCoupon(command);
     }
@@ -80,6 +102,11 @@ public class AdminPromotionController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/coupons/{id}")
+    /**
+     * Update coupon.
+     * @param id id.
+     * @param command command.
+     */
     public Coupon updateCoupon(@PathVariable UUID id, @Valid @RequestBody UpdateCouponCommand command) {
         return adminPromotion.updateCoupon(CouponId.of(id), command);
     }
@@ -87,6 +114,10 @@ public class AdminPromotionController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/coupons/{id}/activate")
+    /**
+     * Activate coupon.
+     * @param id id.
+     */
     public Coupon activateCoupon(@PathVariable UUID id) {
         return adminPromotion.activateCoupon(CouponId.of(id));
     }
@@ -94,6 +125,10 @@ public class AdminPromotionController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/coupons/{id}/deactivate")
+    /**
+     * Deactivate coupon.
+     * @param id id.
+     */
     public Coupon deactivateCoupon(@PathVariable UUID id) {
         return adminPromotion.deactivateCoupon(CouponId.of(id));
     }

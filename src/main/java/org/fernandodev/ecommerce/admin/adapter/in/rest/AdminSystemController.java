@@ -43,6 +43,10 @@ public class AdminSystemController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/config/{key}")
+    /**
+     * Get config.
+     * @param key key.
+     */
     public SystemConfig getConfig(@PathVariable String key) {
         return adminSystem.getConfig(key)
                 .orElseThrow(() -> new ResourceNotFoundException("Configuración no encontrada: " + key));
@@ -51,6 +55,9 @@ public class AdminSystemController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/config")
+    /**
+     * List config.
+     */
     public List<SystemConfig> listConfig() {
         return adminSystem.listConfig();
     }
@@ -58,6 +65,11 @@ public class AdminSystemController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/audit")
+    /**
+     * List audit.
+     * @param action action.
+     * @param actorId actorId.
+     */
     public List<AuditEntry> listAudit(@RequestParam(required = false) String action,
                                       @RequestParam(required = false) UUID actorId) {
         return adminSystem.listAudit(action, actorId);
@@ -66,6 +78,9 @@ public class AdminSystemController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/operations/metrics")
+    /**
+     * Metrics.
+     */
     public AdminSystemUseCases.Metrics metrics() {
         return adminSystem.metrics();
     }
@@ -73,12 +88,31 @@ public class AdminSystemController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/operations/integration-failures")
+    /**
+     * Integration failures.
+     */
     public IntegrationFailures integrationFailures() {
         return new IntegrationFailures(adminSystem.integrationFailures());
     }
 
+    /**
+
+     * Config value.
+
+     * @param value value.
+
+     */
+
     public record ConfigValue(String value) {
     }
+
+    /**
+
+     * Integration failures.
+
+     * @param count count.
+
+     */
 
     public record IntegrationFailures(int count) {
     }

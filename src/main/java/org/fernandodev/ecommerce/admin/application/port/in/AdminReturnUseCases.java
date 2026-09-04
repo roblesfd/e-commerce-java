@@ -10,11 +10,23 @@ import org.fernandodev.ecommerce.returns.domain.value_object.ReturnId;
  */
 public interface AdminReturnUseCases {
 
+/**
+     * Lista todas las devoluciones.
+     */
     List<Return> listAllReturns();
 
+/**
+     * Consulta una devolución.
+     */
     Return getReturn(ReturnId id);
 
+/**
+     * Aprueba una devolución y lo registra en auditoría.
+     */
     Return approveReturn(ReturnId id);
 
+/**
+     * Rechaza una devolución y lo registra en auditoría.
+     */
     Return rejectReturn(ReturnId id);
 }

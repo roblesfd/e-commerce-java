@@ -46,6 +46,11 @@ public class AdminPricingController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/{id}")
+    /**
+     * Update base price.
+     * @param id id.
+     * @param command command.
+     */
     public Price updateBasePrice(@PathVariable UUID id, @Valid @RequestBody UpdatePriceCommand command) {
         return adminPricing.updateBasePrice(PriceId.of(id), command);
     }
@@ -53,6 +58,11 @@ public class AdminPricingController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/overrides")
+    /**
+     * Add override.
+     * @param id id.
+     * @param command command.
+     */
     public Price addOverride(@PathVariable UUID id, @Valid @RequestBody AddPriceOverrideCommand command) {
         return adminPricing.addOverride(PriceId.of(id), command);
     }
@@ -60,6 +70,11 @@ public class AdminPricingController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/overrides/{overrideId}/remove")
+    /**
+     * Remove override.
+     * @param id id.
+     * @param overrideId overrideId.
+     */
     public Price removeOverride(@PathVariable UUID id, @PathVariable UUID overrideId) {
         return adminPricing.removeOverride(PriceId.of(id), PriceOverrideId.of(overrideId));
     }
@@ -67,6 +82,11 @@ public class AdminPricingController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/by-product")
+    /**
+     * Get by product.
+     * @param productId productId.
+     * @param variantId variantId.
+     */
     public Price getByProduct(@RequestParam UUID productId, @RequestParam(required = false) UUID variantId) {
         return adminPricing.getPriceByProduct(ProductId.of(productId),
                 variantId == null ? null : ProductVariantId.of(variantId));

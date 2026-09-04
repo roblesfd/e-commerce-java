@@ -7,5 +7,8 @@ import java.util.UUID;
  */
 public interface CurrentActorPort {
 
+    /**
+     * @return el identificador del usuario autenticado en la petición actual.
+     */
     UUID actorId();
 }

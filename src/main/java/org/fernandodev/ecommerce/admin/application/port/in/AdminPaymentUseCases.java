@@ -11,9 +11,18 @@ import org.fernandodev.ecommerce.shared.domain.Money;
  */
 public interface AdminPaymentUseCases {
 
+/**
+     * Lista todos los pagos.
+     */
     List<Payment> listAllPayments();
 
+/**
+     * Consulta un pago y su estado.
+     */
     Payment getPayment(PaymentId id);
 
+/**
+     * Reembolsa un pago por un monto y lo registra en auditoría.
+     */
     Payment refundPayment(PaymentId id, Money amount);
 }

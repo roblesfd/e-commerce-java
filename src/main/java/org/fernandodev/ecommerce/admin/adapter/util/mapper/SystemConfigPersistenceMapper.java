@@ -11,6 +11,10 @@ public final class SystemConfigPersistenceMapper {
     private SystemConfigPersistenceMapper() {
     }
 
+    /**
+     * @param config configuración de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static SystemConfigJpaEntity toEntity(SystemConfig config) {
         SystemConfigJpaEntity entity = new SystemConfigJpaEntity();
         entity.setKey(config.getKey());
@@ -18,6 +22,10 @@ public final class SystemConfigPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return configuración de dominio equivalente.
+     */
     public static SystemConfig toDomain(SystemConfigJpaEntity entity) {
         return SystemConfig.crear(entity.getKey(), entity.getValue(),
                 entity.getUpdatedAt() == null ? java.time.Instant.now() : entity.getUpdatedAt());

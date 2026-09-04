@@ -26,11 +26,23 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     private final CouponUseCases coupons;
     private final AuditService audit;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Promotion createPromotion(CreatePromotionCommand command) {
         return promotions.create(command);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -38,11 +50,23 @@ public class AdminPromotionService implements AdminPromotionUseCases {
         return promotions.update(id, command);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Promotion activatePromotion(PromotionId id) {
         return promotions.activate(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -51,11 +75,23 @@ public class AdminPromotionService implements AdminPromotionUseCases {
         return promotions.deactivate(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Promotion addProductToPromotion(PromotionId id, ProductId productId) {
         return promotions.addProduct(id, productId);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -63,17 +99,35 @@ public class AdminPromotionService implements AdminPromotionUseCases {
         return coupons.create(command);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Coupon updateCoupon(CouponId id, UpdateCouponCommand command) {
         return coupons.update(id, command);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Coupon activateCoupon(CouponId id) {
         return coupons.activate(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

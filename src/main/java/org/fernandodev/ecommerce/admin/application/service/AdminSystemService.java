@@ -44,6 +44,12 @@ public class AdminSystemService implements AdminSystemUseCases {
     private final ReviewUseCases reviews;
     private final IndexUseCases index;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public SystemConfig setConfig(String key, String value) {
@@ -56,15 +62,33 @@ public class AdminSystemService implements AdminSystemUseCases {
         return configs.save(config);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Optional<SystemConfig> getConfig(String key) {
         return configs.findById(key);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<SystemConfig> listConfig() {
         return configs.findAll();
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public List<AuditEntry> listAudit(String action, UUID actorId) {
@@ -76,6 +100,12 @@ public class AdminSystemService implements AdminSystemUseCases {
         }
         return audit.findAll();
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Metrics metrics() {
@@ -89,6 +119,12 @@ public class AdminSystemService implements AdminSystemUseCases {
                 returns.listAll().size(),
                 reviews.listForModeration().size());
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public int integrationFailures() {

@@ -37,6 +37,10 @@ public class AdminReturnController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public Return get(@PathVariable UUID id) {
         return adminReturn.getReturn(ReturnId.of(id));
     }
@@ -44,6 +48,10 @@ public class AdminReturnController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/approve")
+    /**
+     * Approve.
+     * @param id id.
+     */
     public Return approve(@PathVariable UUID id) {
         return adminReturn.approveReturn(ReturnId.of(id));
     }
@@ -51,6 +59,10 @@ public class AdminReturnController {
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/reject")
+    /**
+     * Reject.
+     * @param id id.
+     */
     public Return reject(@PathVariable UUID id) {
         return adminReturn.rejectReturn(ReturnId.of(id));
     }

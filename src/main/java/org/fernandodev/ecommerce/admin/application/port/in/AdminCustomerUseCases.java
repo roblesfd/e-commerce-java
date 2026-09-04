@@ -10,7 +10,13 @@ import org.fernandodev.ecommerce.customer.domain.Customer;
  */
 public interface AdminCustomerUseCases {
 
+/**
+     * Lista todos los clientes.
+     */
     List<Customer> listAllCustomers();
 
+/**
+     * Consulta un cliente por su usuario IAM.
+     */
     Customer getCustomerByIamUserId(UUID iamUserId);
 }

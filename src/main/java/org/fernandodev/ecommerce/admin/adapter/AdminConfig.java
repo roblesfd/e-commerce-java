@@ -46,10 +46,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AdminConfig {
 
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
+
     @Bean
     public AuditService auditService(AuditRepository audit, CurrentActorPort actor) {
         return new AuditService(audit, actor);
     }
+
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
 
     @Bean
     public AdminCatalogUseCases adminCatalogUseCases(ProductUseCases products, CategoryUseCases categories,
@@ -57,10 +69,22 @@ public class AdminConfig {
         return new AdminCatalogService(products, categories, brands, auditService);
     }
 
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
+
     @Bean
     public AdminPricingUseCases adminPricingUseCases(PricingUseCases pricing, AuditService auditService) {
         return new AdminPricingService(pricing, auditService);
     }
+
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
 
     @Bean
     public AdminPromotionUseCases adminPromotionUseCases(PromotionUseCases promotions, CouponUseCases coupons,
@@ -68,35 +92,77 @@ public class AdminConfig {
         return new AdminPromotionService(promotions, coupons, auditService);
     }
 
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
+
     @Bean
     public AdminInventoryUseCases adminInventoryUseCases(InventoryUseCases inventory, AuditService auditService) {
         return new AdminInventoryService(inventory, auditService);
     }
+
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
 
     @Bean
     public AdminCustomerUseCases adminCustomerUseCases(CustomerUseCases customers) {
         return new AdminCustomerService(customers);
     }
 
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
+
     @Bean
     public AdminOrderUseCases adminOrderUseCases(OrderUseCases orders, AuditService auditService) {
         return new AdminOrderService(orders, auditService);
     }
+
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
 
     @Bean
     public AdminPaymentUseCases adminPaymentUseCases(PaymentUseCases payments, AuditService auditService) {
         return new AdminPaymentService(payments, auditService);
     }
 
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
+
     @Bean
     public AdminReturnUseCases adminReturnUseCases(ReturnUseCases returns, AuditService auditService) {
         return new AdminReturnService(returns, auditService);
     }
 
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
+
     @Bean
     public AdminReviewUseCases adminReviewUseCases(ReviewUseCases reviews, AuditService auditService) {
         return new AdminReviewService(reviews, auditService);
     }
+
+    /**
+
+     * Configura un bean de servicio de orquestación administrativa.
+
+     */
 
     @Bean
     public AdminSystemUseCases adminSystemUseCases(

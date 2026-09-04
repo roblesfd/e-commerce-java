@@ -24,10 +24,22 @@ public class AdminInventoryService implements AdminInventoryUseCases {
     private final InventoryUseCases inventory;
     private final AuditService audit;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Inventory getInventory(ProductId productId, ProductVariantId variantId) {
         return inventory.getByProduct(productId, variantId);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -37,6 +49,12 @@ public class AdminInventoryService implements AdminInventoryUseCases {
         return inventory.increaseStock(productId, variantId, command);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Inventory decreaseStock(ProductId productId, ProductVariantId variantId, DecreaseStockCommand command) {
@@ -44,6 +62,12 @@ public class AdminInventoryService implements AdminInventoryUseCases {
                 "Salida de stock: " + command.quantity());
         return inventory.decreaseStock(productId, variantId, command);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -53,10 +77,22 @@ public class AdminInventoryService implements AdminInventoryUseCases {
         return inventory.adjustStock(productId, variantId, command);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<StockMovement> movementHistory(ProductId productId, ProductVariantId variantId) {
         return inventory.movementHistory(productId, variantId);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public boolean isLowStock(ProductId productId, ProductVariantId variantId) {
