@@ -9,5 +9,8 @@ import org.fernandodev.ecommerce.catalog.domain.value_object.ProductVariantId;
  */
 public interface InventoryPort {
 
+    /**
+     * Devuelve el stock disponible del producto/variante.
+     */
     int availableStock(ProductId productId, ProductVariantId variantId);
 }

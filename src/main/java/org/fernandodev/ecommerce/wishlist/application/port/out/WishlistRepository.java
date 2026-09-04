@@ -15,11 +15,23 @@ import org.fernandodev.ecommerce.wishlist.domain.value_object.WishlistId;
  */
 public interface WishlistRepository {
 
+    /**
+     * Persiste la wishlist.
+     */
     Wishlist save(Wishlist wishlist);
 
+    /**
+     * Consulta una wishlist por identificador.
+     */
     Optional<Wishlist> findById(WishlistId id);
 
+    /**
+     * Lista las wishlists de un cliente.
+     */
     List<Wishlist> findByCustomerId(UUID customerId);
 
+    /**
+     * Elimina la wishlist.
+     */
     void delete(WishlistId id);
 }

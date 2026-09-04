@@ -45,6 +45,9 @@ public class WishlistController {
     }
 
     @GetMapping
+    /**
+     * Mine.
+     */
     public List<WishlistResponse> mine() {
         return wishlistUseCases.listByCustomer(SecurityUtils.requiredUserId()).stream()
                 .map(mapper::toResponse)
@@ -52,29 +55,53 @@ public class WishlistController {
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public WishlistResponse get(@PathVariable UUID id) {
         return mapper.toResponse(wishlistUseCases.getById(WishlistId.of(id)));
     }
 
     @PatchMapping("/{id}")
+    /**
+     * Rename.
+     * @param id id.
+     * @param request request.
+     */
     public WishlistResponse rename(@PathVariable UUID id, @Valid @RequestBody CreateWishlistRequest request) {
         return mapper.toResponse(wishlistUseCases.rename(WishlistId.of(id), request.name()));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Delete.
+     * @param id id.
+     */
     public void delete(@PathVariable UUID id) {
         wishlistUseCases.delete(WishlistId.of(id));
     }
 
     @PostMapping("/{id}/items")
     @ResponseStatus(HttpStatus.CREATED)
+    /**
+     * Add item.
+     * @param id id.
+     * @param request request.
+     */
     public WishlistResponse addItem(@PathVariable UUID id, @Valid @RequestBody AddItemRequest request) {
         return mapper.toResponse(wishlistUseCases.addItem(WishlistId.of(id), mapper.toCommand(request)));
     }
 
     @DeleteMapping("/{id}/items/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Remove item.
+     * @param id id.
+     * @param productId productId.
+     * @param variantId variantId.
+     */
     public void removeItem(@PathVariable UUID id, @PathVariable UUID productId,
                            @RequestParam(required = false) UUID variantId) {
         wishlistUseCases.removeItem(WishlistId.of(id), ProductId.of(productId),
@@ -83,6 +110,10 @@ public class WishlistController {
 
     @DeleteMapping("/{id}/items")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Clear.
+     * @param id id.
+     */
     public void clear(@PathVariable UUID id) {
         wishlistUseCases.clear(WishlistId.of(id));
     }

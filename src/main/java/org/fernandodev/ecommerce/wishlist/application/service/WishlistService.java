@@ -34,6 +34,12 @@ public class WishlistService implements WishlistUseCases {
     private final CatalogPort catalog;
     private final InventoryPort inventory;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Wishlist create(UUID customerId, String name) {
@@ -41,15 +47,33 @@ public class WishlistService implements WishlistUseCases {
         return wishlists.save(wishlist);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Wishlist getById(WishlistId id) {
         return getExisting(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Wishlist> listByCustomer(UUID customerId) {
         return wishlists.findByCustomerId(customerId);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -59,12 +83,24 @@ public class WishlistService implements WishlistUseCases {
         return wishlists.save(wishlist);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public void delete(WishlistId id) {
         getExisting(id);
         wishlists.delete(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -75,6 +111,12 @@ public class WishlistService implements WishlistUseCases {
         return wishlists.save(wishlist);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Wishlist removeItem(WishlistId id, ProductId productId, ProductVariantId variantId) {
@@ -82,6 +124,12 @@ public class WishlistService implements WishlistUseCases {
         wishlist.removeItem(productId, variantId, Instant.now());
         return wishlists.save(wishlist);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

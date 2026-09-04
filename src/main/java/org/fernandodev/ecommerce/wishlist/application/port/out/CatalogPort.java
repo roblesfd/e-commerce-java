@@ -12,6 +12,9 @@ import org.fernandodev.ecommerce.catalog.domain.value_object.ProductVariantId;
  */
 public interface CatalogPort {
 
+    /**
+     * Consulta el producto (activo y variantes) para validar el item.
+     */
     Optional<ProductInfo> findProduct(ProductId productId);
 
     record ProductInfo(ProductId id, boolean active, Set<ProductVariantId> variantIds) {

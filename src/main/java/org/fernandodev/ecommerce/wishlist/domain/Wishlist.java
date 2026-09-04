@@ -36,6 +36,9 @@ public class Wishlist {
     private Instant createdAt;
     private Instant updatedAt;
 
+    /**
+     * Factoría del agregado.
+     */
     public static Wishlist create(WishlistId id, UUID customerId, String name, Instant at) {
         Wishlist wishlist = new Wishlist();
         wishlist.id = Objects.requireNonNull(id, "id no puede ser null");
@@ -49,6 +52,9 @@ public class Wishlist {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría completa usada por la persistencia.
      */
     public static Wishlist crear(
             WishlistId id,
