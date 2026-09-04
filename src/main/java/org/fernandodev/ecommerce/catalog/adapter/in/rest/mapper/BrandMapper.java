@@ -12,10 +12,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class BrandMapper {
 
+    /**
+     * @param request petición de marca.
+     * @return comando de aplicación equivalente.
+     */
     public BrandCommand toCommand(BrandRequest request) {
         return new BrandCommand(request.name());
     }
 
+    /**
+     * @param brand agregado de dominio.
+     * @return respuesta REST con la marca.
+     */
     public BrandResponse toResponse(Brand brand) {
         return new BrandResponse(brand.getId().value(), brand.getName(), brand.isActive());
     }

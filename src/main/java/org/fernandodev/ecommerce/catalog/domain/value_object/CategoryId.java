@@ -8,14 +8,26 @@ import java.util.UUID;
  */
 public record CategoryId(UUID value) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code value} es {@code null}.
+     */
     public CategoryId {
         Objects.requireNonNull(value, "value no puede ser null");
     }
 
+    /**
+     * @return un nuevo identificador aleatorio.
+     */
     public static CategoryId generate() {
         return new CategoryId(UUID.randomUUID());
     }
 
+    /**
+     * @param value identificador.
+     * @return un {@link CategoryId} con el valor dado.
+     */
     public static CategoryId of(UUID value) {
         return new CategoryId(value);
     }

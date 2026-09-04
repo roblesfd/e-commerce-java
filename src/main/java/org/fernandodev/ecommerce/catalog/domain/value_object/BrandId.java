@@ -8,14 +8,26 @@ import java.util.UUID;
  */
 public record BrandId(UUID value) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code value} es {@code null}.
+     */
     public BrandId {
         Objects.requireNonNull(value, "value no puede ser null");
     }
 
+    /**
+     * @return un nuevo identificador aleatorio.
+     */
     public static BrandId generate() {
         return new BrandId(UUID.randomUUID());
     }
 
+    /**
+     * @param value identificador.
+     * @return un {@link BrandId} con el valor dado.
+     */
     public static BrandId of(UUID value) {
         return new BrandId(value);
     }

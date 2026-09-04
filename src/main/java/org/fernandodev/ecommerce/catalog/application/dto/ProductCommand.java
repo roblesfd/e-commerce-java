@@ -33,6 +33,9 @@ public record ProductCommand(
         List<String> images
 ) {
 
+    /**
+     * Constructor compacto que normaliza las colecciones opcionales a listas vacías.
+     */
     public ProductCommand {
         categoryIds = categoryIds == null ? Set.of() : categoryIds;
         variants = variants == null ? List.of() : variants;
@@ -42,9 +45,16 @@ public record ProductCommand(
 
     /**
      * Variante de producto (su SKU y barcode son opcionales).
+     *
+     * @param sku        SKU de la variante (opcional).
+     * @param barcode    barcode de la variante (opcional).
+     * @param attributes atributos de la variante.
      */
     public record VariantCommand(String sku, String barcode, List<AttributeCommand> attributes) {
 
+        /**
+         * Constructor compacto que normaliza los atributos a lista vacía.
+         */
         public VariantCommand {
             attributes = attributes == null ? List.of() : attributes;
         }
@@ -52,6 +62,9 @@ public record ProductCommand(
 
     /**
      * Atributo de producto o variante.
+     *
+     * @param name  nombre del atributo.
+     * @param value valor del atributo.
      */
     public record AttributeCommand(String name, String value) {
     }

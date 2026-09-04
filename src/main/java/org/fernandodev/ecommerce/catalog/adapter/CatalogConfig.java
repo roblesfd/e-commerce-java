@@ -19,6 +19,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CatalogConfig {
 
+    /**
+     * @param products  puerto de persistencia de productos.
+     * @param brands    puerto de persistencia de marcas.
+     * @param categories puerto de persistencia de categorías.
+     * @return servicio de aplicación de productos.
+     */
     @Bean
     public ProductUseCases productUseCases(
             ProductRepository products,
@@ -28,6 +34,11 @@ public class CatalogConfig {
         return new ProductService(products, brands, categories);
     }
 
+    /**
+     * @param categories puerto de persistencia de categorías.
+     * @param products   puerto de persistencia de productos.
+     * @return servicio de aplicación de categorías.
+     */
     @Bean
     public CategoryUseCases categoryUseCases(
             CategoryRepository categories,
@@ -36,6 +47,11 @@ public class CatalogConfig {
         return new CategoryService(categories, products);
     }
 
+    /**
+     * @param brands   puerto de persistencia de marcas.
+     * @param products puerto de persistencia de productos.
+     * @return servicio de aplicación de marcas.
+     */
     @Bean
     public BrandUseCases brandUseCases(
             BrandRepository brands,

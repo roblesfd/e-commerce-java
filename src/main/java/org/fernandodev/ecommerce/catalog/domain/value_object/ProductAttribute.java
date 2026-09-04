@@ -7,6 +7,13 @@ import java.util.Objects;
  */
 public record ProductAttribute(String name, String value) {
 
+    /**
+     * Constructor compacto que valida los invariantes del atributo.
+     *
+     * @throws NullPointerException     si {@code name} o {@code value} son {@code null}.
+     * @throws IllegalArgumentException si el nombre está vacío o excede 100 caracteres,
+     *                                  o el valor excede 500 caracteres.
+     */
     public ProductAttribute {
         Objects.requireNonNull(name, "name no puede ser null");
         if (name.isBlank()) {

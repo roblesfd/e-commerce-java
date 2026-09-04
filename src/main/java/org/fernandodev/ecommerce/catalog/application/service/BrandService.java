@@ -21,21 +21,37 @@ public class BrandService implements BrandUseCases {
     private final BrandRepository brands;
     private final ProductRepository products;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Brand create(BrandCommand command) {
         return brands.save(Brand.create(BrandId.generate(), command.name()));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si la marca no existe o está eliminada.
+     */
     @Override
     public Brand getById(BrandId id) {
         return getExisting(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Brand> list() {
         return brands.findAll();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si la marca no existe o está eliminada.
+     */
     @Override
     public Brand update(BrandId id, BrandCommand command) {
         Brand brand = getExisting(id);
@@ -43,6 +59,11 @@ public class BrandService implements BrandUseCases {
         return brands.save(brand);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si la marca no existe o está eliminada.
+     */
     @Override
     public Brand activate(BrandId id) {
         Brand brand = getExisting(id);
@@ -50,6 +71,11 @@ public class BrandService implements BrandUseCases {
         return brands.save(brand);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si la marca no existe o está eliminada.
+     */
     @Override
     public Brand deactivate(BrandId id) {
         Brand brand = getExisting(id);
@@ -57,6 +83,12 @@ public class BrandService implements BrandUseCases {
         return brands.save(brand);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws BusinessRuleViolationException si la marca tiene productos asociados.
+     * @throws ResourceNotFoundException      si la marca no existe o está eliminada.
+     */
     @Override
     public void delete(BrandId id) {
         Brand brand = getExisting(id);
@@ -67,6 +99,11 @@ public class BrandService implements BrandUseCases {
         brands.save(brand);
     }
 
+    /**
+     * @param id identificador de la marca.
+     * @return la marca no eliminada.
+     * @throws ResourceNotFoundException si no existe o está eliminada.
+     */
     private Brand getExisting(BrandId id) {
         Brand brand = brands.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Marca no encontrada: " + id));

@@ -23,6 +23,11 @@ public record ProductVariant(
         List<ProductAttribute> attributes
 ) {
 
+    /**
+     * Constructor compacto que valida el identificador y copia los atributos.
+     *
+     * @throws NullPointerException si {@code id} es {@code null}.
+     */
     public ProductVariant {
         Objects.requireNonNull(id, "id no puede ser null");
         attributes = attributes == null ? List.of() : List.copyOf(attributes);

@@ -14,12 +14,28 @@ import org.springframework.data.repository.query.Param;
 public interface ProductSpringDataRepository
         extends JpaRepository<ProductJpaEntity, UUID>, JpaSpecificationExecutor<ProductJpaEntity> {
 
+    /**
+     * @param sku SKU.
+     * @return {@code true} si ya existe un producto no eliminado con ese SKU.
+     */
     boolean existsBySkuAndDeletedAtIsNull(String sku);
 
+    /**
+     * @param barcode código de barras.
+     * @return {@code true} si ya existe un producto no eliminado con ese barcode.
+     */
     boolean existsByBarcodeAndDeletedAtIsNull(String barcode);
 
+    /**
+     * @param brandId identificador de la marca.
+     * @return {@code true} si existe algún producto no eliminado asociado a la marca.
+     */
     boolean existsByBrandIdAndDeletedAtIsNull(UUID brandId);
 
+    /**
+     * @param categoryId identificador de la categoría.
+     * @return {@code true} si existe algún producto no eliminado asociado a la categoría.
+     */
     @Query("select case when count(p) > 0 then true else false end "
             + "from ProductJpaEntity p join p.categoryIds c "
             + "where c = :categoryId and p.deletedAt is null")

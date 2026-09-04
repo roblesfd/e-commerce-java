@@ -23,6 +23,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductMapper {
 
+    /**
+     * @param request petición de producto.
+     * @return comando de aplicación equivalente.
+     */
     public ProductCommand toCommand(ProductRequest request) {
         return new ProductCommand(
                 request.sku(),
@@ -47,6 +51,10 @@ public class ProductMapper {
                 request.images());
     }
 
+    /**
+     * @param product agregado de dominio.
+     * @return respuesta REST con el detalle completo del producto.
+     */
     public ProductResponse toResponse(Product product) {
         return new ProductResponse(
                 product.getId().value(),
@@ -62,6 +70,10 @@ public class ProductMapper {
                 product.getImages().stream().map(image -> image.url()).toList());
     }
 
+    /**
+     * @param product agregado de dominio.
+     * @return resumen del producto para listados.
+     */
     public ProductSummaryResponse toSummaryResponse(Product product) {
         return new ProductSummaryResponse(
                 product.getId().value(),
@@ -70,6 +82,10 @@ public class ProductMapper {
                 product.isActive());
     }
 
+    /**
+     * @param page página de productos de dominio.
+     * @return respuesta REST paginada de resúmenes.
+     */
     public PageResponse<ProductSummaryResponse> toPageResponse(PageResult<Product> page) {
         return new PageResponse<>(
                 page.content().stream().map(this::toSummaryResponse).toList(),
@@ -79,6 +95,10 @@ public class ProductMapper {
                 page.totalPages());
     }
 
+    /**
+     * @param variant variante de dominio.
+     * @return respuesta REST con la variante.
+     */
     private ProductResponse.VariantResponse toVariantResponse(ProductVariant variant) {
         return new ProductResponse.VariantResponse(
                 variant.id().value(),
@@ -87,6 +107,10 @@ public class ProductMapper {
                 variant.attributes().stream().map(this::toAttributeResponse).toList());
     }
 
+    /**
+     * @param attribute atributo de dominio.
+     * @return respuesta REST con el atributo.
+     */
     private ProductResponse.AttributeResponse toAttributeResponse(ProductAttribute attribute) {
         return new ProductResponse.AttributeResponse(attribute.name(), attribute.value());
     }

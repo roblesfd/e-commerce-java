@@ -26,6 +26,10 @@ public final class ProductPersistenceMapper {
     private ProductPersistenceMapper() {
     }
 
+    /**
+     * @param product agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static ProductJpaEntity toEntity(Product product) {
         ProductJpaEntity entity = new ProductJpaEntity();
         entity.setId(product.getId().value());
@@ -46,6 +50,10 @@ public final class ProductPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Product toDomain(ProductJpaEntity entity) {
         return Product.crear(
                 ProductId.of(entity.getId()),

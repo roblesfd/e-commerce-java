@@ -12,10 +12,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryMapper {
 
+    /**
+     * @param request petición de categoría.
+     * @return comando de aplicación equivalente.
+     */
     public CategoryCommand toCommand(CategoryRequest request) {
         return new CategoryCommand(request.name(), request.parentId());
     }
 
+    /**
+     * @param category agregado de dominio.
+     * @return respuesta REST con la categoría.
+     */
     public CategoryResponse toResponse(Category category) {
         return new CategoryResponse(
                 category.getId().value(),

@@ -60,16 +60,30 @@ public class ProductService implements ProductUseCases {
         return products.save(product);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el producto no existe o está eliminado.
+     */
     @Override
     public Product getById(ProductId id) {
         return getExisting(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResult<Product> list(ProductSearch search, PageQuery query) {
         return products.search(search, query);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ConflictException          si el SKU o el barcode pertenecen a otro producto.
+     * @throws ResourceNotFoundException  si el producto, la marca o alguna categoría no existen.
+     */
     @Override
     public Product update(ProductId id, ProductCommand command) {
         Product product = getExisting(id);
@@ -90,6 +104,11 @@ public class ProductService implements ProductUseCases {
         return products.save(product);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el producto no existe o está eliminado.
+     */
     @Override
     public Product activate(ProductId id) {
         Product product = getExisting(id);
@@ -97,6 +116,11 @@ public class ProductService implements ProductUseCases {
         return products.save(product);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el producto no existe o está eliminado.
+     */
     @Override
     public Product deactivate(ProductId id) {
         Product product = getExisting(id);
@@ -104,6 +128,11 @@ public class ProductService implements ProductUseCases {
         return products.save(product);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el producto no existe o está eliminado.
+     */
     @Override
     public void delete(ProductId id) {
         Product product = getExisting(id);
@@ -111,6 +140,11 @@ public class ProductService implements ProductUseCases {
         products.save(product);
     }
 
+    /**
+     * @param id identificador del producto.
+     * @return el producto no eliminado.
+     * @throws ResourceNotFoundException si no existe o está eliminado.
+     */
     private Product getExisting(ProductId id) {
         Product product = products.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado: " + id));
@@ -120,6 +154,12 @@ public class ProductService implements ProductUseCases {
         return product;
     }
 
+    /**
+     * Aplica atributos, imágenes y variantes del comando al producto.
+     *
+     * @param product producto a actualizar.
+     * @param command datos del producto.
+     */
     private void applyDetails(Product product, ProductCommand command) {
         product.setAttributes(command.attributes().stream()
                 .map(attribute -> new ProductAttribute(attribute.name(), attribute.value()))
@@ -138,11 +178,24 @@ public class ProductService implements ProductUseCases {
                 .toList());
     }
 
+    /**
+     * Reemplaza las categorías asociadas al producto.
+     *
+     * @param product     producto a actualizar.
+     * @param categoryIds nuevas categorías.
+     */
     private void replaceCategories(Product product, Set<CategoryId> categoryIds) {
         product.getCategoryIds().forEach(product::disassociateCategory);
         categoryIds.forEach(product::associateCategory);
     }
 
+    /**
+     * Valida que el SKU no esté en uso por otro producto.
+     *
+     * @param sku     SKU a validar.
+     * @param current SKU actual del producto (se excluye).
+     * @throws ConflictException si el SKU ya pertenece a otro producto.
+     */
     private void assertSkuAvailable(String sku, Sku current) {
         Sku normalized = new Sku(sku);
         if (normalized.equals(current)) {
@@ -153,6 +206,13 @@ public class ProductService implements ProductUseCases {
         }
     }
 
+    /**
+     * Valida que el barcode no esté en uso por otro producto.
+     *
+     * @param barcode barcode a validar (opcional).
+     * @param current barcode actual del producto (se excluye).
+     * @throws ConflictException si el barcode ya pertenece a otro producto.
+     */
     private void assertBarcodeAvailable(String barcode, Barcode current) {
         if (barcode == null) {
             return;
@@ -166,6 +226,13 @@ public class ProductService implements ProductUseCases {
         }
     }
 
+    /**
+     * Valida que la marca exista.
+     *
+     * @param brandId identificador de la marca (opcional).
+     * @return el identificador validado, o {@code null} si no se indicó.
+     * @throws ResourceNotFoundException si la marca no existe.
+     */
     private BrandId validateBrand(UUID brandId) {
         if (brandId == null) {
             return null;
@@ -177,6 +244,13 @@ public class ProductService implements ProductUseCases {
         return id;
     }
 
+    /**
+     * Valida que las categorías existan.
+     *
+     * @param categoryIds identificadores de categorías.
+     * @return el conjunto de categorías validadas.
+     * @throws ResourceNotFoundException si alguna categoría no existe.
+     */
     private Set<CategoryId> validateCategories(Set<UUID> categoryIds) {
         Set<CategoryId> result = new HashSet<>();
         for (UUID categoryId : categoryIds) {
@@ -189,6 +263,10 @@ public class ProductService implements ProductUseCases {
         return result;
     }
 
+    /**
+     * @param value barcode en texto, o {@code null}.
+     * @return el {@link Barcode} equivalente, o {@code null}.
+     */
     private static Barcode barcode(String value) {
         return value == null ? null : new Barcode(value);
     }

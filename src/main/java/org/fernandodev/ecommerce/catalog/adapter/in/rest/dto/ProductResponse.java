@@ -21,9 +21,23 @@ public record ProductResponse(
         List<String> images
 ) {
 
+    /**
+     * Variante del producto en la respuesta.
+     *
+     * @param id         identificador de la variante.
+     * @param sku        SKU de la variante (opcional).
+     * @param barcode    barcode de la variante (opcional).
+     * @param attributes atributos de la variante.
+     */
     public record VariantResponse(UUID id, String sku, String barcode, List<AttributeResponse> attributes) {
     }
 
+    /**
+     * Atributo del producto o variante en la respuesta.
+     *
+     * @param name  nombre del atributo.
+     * @param value valor del atributo.
+     */
     public record AttributeResponse(String name, String value) {
     }
 }

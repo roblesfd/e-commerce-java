@@ -22,22 +22,42 @@ public class CategoryService implements CategoryUseCases {
     private final CategoryRepository categories;
     private final ProductRepository products;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si la categoría padre no existe.
+     * @throws BusinessRuleViolationException si intenta ser su propio padre.
+     */
     @Override
     public Category create(CategoryCommand command) {
         CategoryId parentId = requireParent(command.parentId(), null);
         return categories.save(Category.create(CategoryId.generate(), command.name(), parentId));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si la categoría no existe o está eliminada.
+     */
     @Override
     public Category getById(CategoryId id) {
         return getExisting(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Category> list() {
         return categories.findAll();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException     si la categoría o su padre no existen.
+     * @throws BusinessRuleViolationException si intenta ser su propio padre.
+     */
     @Override
     public Category update(CategoryId id, CategoryCommand command) {
         Category category = getExisting(id);
@@ -47,6 +67,11 @@ public class CategoryService implements CategoryUseCases {
         return categories.save(category);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si la categoría no existe o está eliminada.
+     */
     @Override
     public Category activate(CategoryId id) {
         Category category = getExisting(id);
@@ -54,6 +79,11 @@ public class CategoryService implements CategoryUseCases {
         return categories.save(category);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si la categoría no existe o está eliminada.
+     */
     @Override
     public Category deactivate(CategoryId id) {
         Category category = getExisting(id);
@@ -61,6 +91,12 @@ public class CategoryService implements CategoryUseCases {
         return categories.save(category);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws BusinessRuleViolationException si la categoría tiene subcategorías o productos asociados.
+     * @throws ResourceNotFoundException      si la categoría no existe o está eliminada.
+     */
     @Override
     public void delete(CategoryId id) {
         Category category = getExisting(id);
@@ -74,6 +110,11 @@ public class CategoryService implements CategoryUseCases {
         categories.save(category);
     }
 
+    /**
+     * @param id identificador de la categoría.
+     * @return la categoría no eliminada.
+     * @throws ResourceNotFoundException si no existe o está eliminada.
+     */
     private Category getExisting(CategoryId id) {
         Category category = categories.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada: " + id));
@@ -83,6 +124,15 @@ public class CategoryService implements CategoryUseCases {
         return category;
     }
 
+    /**
+     * Valida el padre de una categoría (existente, no eliminado y distinto de sí misma).
+     *
+     * @param parentId  identificador del padre (opcional).
+     * @param currentId categoría que se está creando/actualizando.
+     * @return el identificador validado, o {@code null} si no se indicó.
+     * @throws BusinessRuleViolationException si intenta ser su propio padre.
+     * @throws ResourceNotFoundException      si el padre no existe o está eliminado.
+     */
     private CategoryId requireParent(UUID parentId, CategoryId currentId) {
         if (parentId == null) {
             return null;

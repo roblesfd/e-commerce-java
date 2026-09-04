@@ -40,17 +40,40 @@ public class ProductController {
     private final ProductUseCases productUseCases;
     private final ProductMapper mapper;
 
+    /**
+     * Crea un producto.
+     *
+     * @param request datos del producto.
+     * @return el producto creado.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse create(@Valid @RequestBody ProductRequest request) {
         return mapper.toResponse(productUseCases.create(mapper.toCommand(request)));
     }
 
+    /**
+     * @param id identificador del producto.
+     * @return el producto.
+     */
     @GetMapping("/{id}")
     public ProductResponse get(@PathVariable UUID id) {
         return mapper.toResponse(productUseCases.getById(ProductId.of(id)));
     }
 
+    /**
+     * Busca productos con filtros, ordenación y paginación.
+     *
+     * @param active        estado activo (null = sin filtrar).
+     * @param categoryId    categoría (null = sin filtrar).
+     * @param brandId       marca (null = sin filtrar).
+     * @param q             texto por nombre/SKU (null = sin filtrar).
+     * @param page          índice de página (base 0).
+     * @param size          tamaño de página.
+     * @param sortBy        campo de ordenación.
+     * @param sortDirection dirección de ordenación.
+     * @return página de resúmenes de producto.
+     */
     @GetMapping
     public PageResponse<ProductSummaryResponse> list(
             @RequestParam(required = false) Boolean active,
@@ -71,21 +94,45 @@ public class ProductController {
         return mapper.toPageResponse(productUseCases.list(search, query));
     }
 
+    /**
+     * Actualiza el producto (semántica PUT).
+     *
+     * @param id      identificador del producto.
+     * @param request nuevos datos del producto.
+     * @return el producto actualizado.
+     */
     @PutMapping("/{id}")
     public ProductResponse update(@PathVariable UUID id, @Valid @RequestBody ProductRequest request) {
         return mapper.toResponse(productUseCases.update(ProductId.of(id), mapper.toCommand(request)));
     }
 
+    /**
+     * Activa el producto.
+     *
+     * @param id identificador del producto.
+     * @return el producto activado.
+     */
     @PatchMapping("/{id}/activate")
     public ProductResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(productUseCases.activate(ProductId.of(id)));
     }
 
+    /**
+     * Desactiva el producto.
+     *
+     * @param id identificador del producto.
+     * @return el producto desactivado.
+     */
     @PatchMapping("/{id}/deactivate")
     public ProductResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(productUseCases.deactivate(ProductId.of(id)));
     }
 
+    /**
+     * Elimina el producto (soft delete).
+     *
+     * @param id identificador del producto.
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id) {

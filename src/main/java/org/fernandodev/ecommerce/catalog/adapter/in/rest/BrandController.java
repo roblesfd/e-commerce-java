@@ -34,37 +34,74 @@ public class BrandController {
     private final BrandUseCases brandUseCases;
     private final BrandMapper mapper;
 
+    /**
+     * Crea una marca.
+     *
+     * @param request datos de la marca.
+     * @return la marca creada.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BrandResponse create(@Valid @RequestBody BrandRequest request) {
         return mapper.toResponse(brandUseCases.create(mapper.toCommand(request)));
     }
 
+    /**
+     * @param id identificador de la marca.
+     * @return la marca.
+     */
     @GetMapping("/{id}")
     public BrandResponse get(@PathVariable UUID id) {
         return mapper.toResponse(brandUseCases.getById(BrandId.of(id)));
     }
 
+    /**
+     * @return todas las marcas.
+     */
     @GetMapping
     public List<BrandResponse> list() {
         return brandUseCases.list().stream().map(mapper::toResponse).toList();
     }
 
+    /**
+     * Actualiza la marca.
+     *
+     * @param id      identificador de la marca.
+     * @param request nuevos datos de la marca.
+     * @return la marca actualizada.
+     */
     @PutMapping("/{id}")
     public BrandResponse update(@PathVariable UUID id, @Valid @RequestBody BrandRequest request) {
         return mapper.toResponse(brandUseCases.update(BrandId.of(id), mapper.toCommand(request)));
     }
 
+    /**
+     * Activa la marca.
+     *
+     * @param id identificador de la marca.
+     * @return la marca activada.
+     */
     @PatchMapping("/{id}/activate")
     public BrandResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(brandUseCases.activate(BrandId.of(id)));
     }
 
+    /**
+     * Desactiva la marca.
+     *
+     * @param id identificador de la marca.
+     * @return la marca desactivada.
+     */
     @PatchMapping("/{id}/deactivate")
     public BrandResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(brandUseCases.deactivate(BrandId.of(id)));
     }
 
+    /**
+     * Elimina la marca (soft delete).
+     *
+     * @param id identificador de la marca.
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id) {

@@ -11,6 +11,12 @@ import java.util.Objects;
  */
 public record Sku(String value) {
 
+    /**
+     * Constructor compacto que normaliza y valida el SKU.
+     *
+     * @throws NullPointerException     si {@code value} es {@code null}.
+     * @throws IllegalArgumentException si el SKU está vacío o excede 64 caracteres.
+     */
     public Sku {
         Objects.requireNonNull(value, "sku no puede ser null");
         value = value.trim().toUpperCase(Locale.ROOT);

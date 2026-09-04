@@ -7,6 +7,12 @@ import java.util.Objects;
  */
 public record Barcode(String value) {
 
+    /**
+     * Constructor compacto que normaliza y valida el barcode.
+     *
+     * @throws NullPointerException     si {@code value} es {@code null}.
+     * @throws IllegalArgumentException si el barcode está vacío o excede 64 caracteres.
+     */
     public Barcode {
         Objects.requireNonNull(value, "barcode no puede ser null");
         value = value.trim();

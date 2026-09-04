@@ -13,6 +13,9 @@ import org.fernandodev.ecommerce.catalog.domain.value_object.CategoryId;
  */
 public record ProductSearch(Boolean active, CategoryId categoryId, BrandId brandId, String query) {
 
+    /**
+     * @return una búsqueda sin filtros.
+     */
     public static ProductSearch all() {
         return new ProductSearch(null, null, null, null);
     }

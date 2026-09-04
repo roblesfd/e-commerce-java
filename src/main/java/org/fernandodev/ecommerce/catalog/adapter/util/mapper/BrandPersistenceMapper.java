@@ -13,6 +13,10 @@ public final class BrandPersistenceMapper {
     private BrandPersistenceMapper() {
     }
 
+    /**
+     * @param brand agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static BrandJpaEntity toEntity(Brand brand) {
         BrandJpaEntity entity = new BrandJpaEntity();
         entity.setId(brand.getId().value());
@@ -22,6 +26,10 @@ public final class BrandPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Brand toDomain(BrandJpaEntity entity) {
         return Brand.crear(
                 BrandId.of(entity.getId()),

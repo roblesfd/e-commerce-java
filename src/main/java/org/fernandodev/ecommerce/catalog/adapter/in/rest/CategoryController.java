@@ -34,37 +34,74 @@ public class CategoryController {
     private final CategoryUseCases categoryUseCases;
     private final CategoryMapper mapper;
 
+    /**
+     * Crea una categoría.
+     *
+     * @param request datos de la categoría.
+     * @return la categoría creada.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponse create(@Valid @RequestBody CategoryRequest request) {
         return mapper.toResponse(categoryUseCases.create(mapper.toCommand(request)));
     }
 
+    /**
+     * @param id identificador de la categoría.
+     * @return la categoría.
+     */
     @GetMapping("/{id}")
     public CategoryResponse get(@PathVariable UUID id) {
         return mapper.toResponse(categoryUseCases.getById(CategoryId.of(id)));
     }
 
+    /**
+     * @return todas las categorías.
+     */
     @GetMapping
     public List<CategoryResponse> list() {
         return categoryUseCases.list().stream().map(mapper::toResponse).toList();
     }
 
+    /**
+     * Actualiza la categoría (nombre y padre).
+     *
+     * @param id      identificador de la categoría.
+     * @param request nuevos datos de la categoría.
+     * @return la categoría actualizada.
+     */
     @PutMapping("/{id}")
     public CategoryResponse update(@PathVariable UUID id, @Valid @RequestBody CategoryRequest request) {
         return mapper.toResponse(categoryUseCases.update(CategoryId.of(id), mapper.toCommand(request)));
     }
 
+    /**
+     * Activa la categoría.
+     *
+     * @param id identificador de la categoría.
+     * @return la categoría activada.
+     */
     @PatchMapping("/{id}/activate")
     public CategoryResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(categoryUseCases.activate(CategoryId.of(id)));
     }
 
+    /**
+     * Desactiva la categoría.
+     *
+     * @param id identificador de la categoría.
+     * @return la categoría desactivada.
+     */
     @PatchMapping("/{id}/deactivate")
     public CategoryResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(categoryUseCases.deactivate(CategoryId.of(id)));
     }
 
+    /**
+     * Elimina la categoría (soft delete).
+     *
+     * @param id identificador de la categoría.
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id) {

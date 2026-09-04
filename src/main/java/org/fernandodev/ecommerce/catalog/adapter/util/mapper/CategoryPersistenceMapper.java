@@ -13,6 +13,10 @@ public final class CategoryPersistenceMapper {
     private CategoryPersistenceMapper() {
     }
 
+    /**
+     * @param category agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static CategoryJpaEntity toEntity(Category category) {
         CategoryJpaEntity entity = new CategoryJpaEntity();
         entity.setId(category.getId().value());
@@ -23,6 +27,10 @@ public final class CategoryPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Category toDomain(CategoryJpaEntity entity) {
         return Category.crear(
                 CategoryId.of(entity.getId()),

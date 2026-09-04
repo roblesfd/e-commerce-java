@@ -11,7 +11,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface BrandSpringDataRepository extends JpaRepository<BrandJpaEntity, UUID> {
 
+    /**
+     * @param id identificador de la marca.
+     * @return {@code true} si existe la marca (no eliminada).
+     */
     boolean existsByIdAndDeletedAtIsNull(UUID id);
 
+    /**
+     * @return todas las marcas no eliminadas.
+     */
     List<BrandJpaEntity> findAllByDeletedAtIsNull();
 }

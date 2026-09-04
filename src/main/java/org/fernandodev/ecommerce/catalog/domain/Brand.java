@@ -24,6 +24,13 @@ public class Brand {
 
     /**
      * Factoría completa con invariantes. Usada por la persistencia.
+     *
+     * @param id        identificador de la marca.
+     * @param name      nombre de la marca.
+     * @param active    si está activa.
+     * @param deletedAt fecha de baja (null si no está eliminada).
+     * @return la marca reconstruida.
+     * @throws BusinessRuleViolationException si el nombre es inválido.
      */
     public static Brand crear(BrandId id, String name, boolean active, Instant deletedAt) {
         Brand brand = new Brand();
@@ -36,33 +43,56 @@ public class Brand {
 
     /**
      * Crea una marca activa nueva.
+     *
+     * @param id   identificador de la marca.
+     * @param name nombre de la marca.
+     * @return la marca creada.
+     * @throws BusinessRuleViolationException si el nombre es inválido.
      */
     public static Brand create(BrandId id, String name) {
         return crear(id, name, true, null);
     }
 
+    /**
+     * @return la fecha de baja, o {@code Optional.empty()} si no está eliminada.
+     */
     public Optional<Instant> getDeletedAt() {
         return Optional.ofNullable(deletedAt);
     }
 
+    /**
+     * @return {@code true} si la marca fue eliminada (soft delete).
+     */
     public boolean isDeleted() {
         return deletedAt != null;
     }
 
+    /**
+     * @param name nuevo nombre de la marca.
+     * @throws BusinessRuleViolationException si el nombre es inválido.
+     */
     public void updateName(String name) {
         this.name = requireName(name);
     }
 
+    /**
+     * Activa la marca.
+     */
     public void activate() {
         this.active = true;
     }
 
+    /**
+     * Desactiva la marca.
+     */
     public void deactivate() {
         this.active = false;
     }
 
     /**
      * Marca la marca como eliminada (soft delete).
+     *
+     * @throws BusinessRuleViolationException si la marca ya estaba eliminada.
      */
     public void delete() {
         if (isDeleted()) {
@@ -71,6 +101,13 @@ public class Brand {
         this.deletedAt = Instant.now();
     }
 
+    /**
+     * Valida que el nombre sea obligatorio y no exceda 120 caracteres.
+     *
+     * @param name nombre a validar.
+     * @return el nombre si es válido.
+     * @throws BusinessRuleViolationException si el nombre está vacío o es demasiado largo.
+     */
     private static String requireName(String name) {
         if (name == null || name.isBlank()) {
             throw new BusinessRuleViolationException("El nombre de la marca es obligatorio");

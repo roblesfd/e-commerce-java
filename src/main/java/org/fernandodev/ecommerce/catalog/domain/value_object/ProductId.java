@@ -8,14 +8,26 @@ import java.util.UUID;
  */
 public record ProductId(UUID value) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code value} es {@code null}.
+     */
     public ProductId {
         Objects.requireNonNull(value, "value no puede ser null");
     }
 
+    /**
+     * @return un nuevo identificador aleatorio.
+     */
     public static ProductId generate() {
         return new ProductId(UUID.randomUUID());
     }
 
+    /**
+     * @param value identificador.
+     * @return un {@link ProductId} con el valor dado.
+     */
     public static ProductId of(UUID value) {
         return new ProductId(value);
     }
