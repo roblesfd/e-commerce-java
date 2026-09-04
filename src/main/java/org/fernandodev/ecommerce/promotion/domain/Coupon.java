@@ -25,11 +25,17 @@ public class Coupon {
     private Instant validFrom;
     private Instant validTo;
 
+    /**
+     * Factoría del agregado.
+     */
     public static Coupon create(CouponId id, String code, PromotionId promotionId,
                                 Instant validFrom, Instant validTo) {
         return crear(id, code, promotionId, true, validFrom, validTo);
     }
 
+    /**
+     * Factoría del agregado.
+     */
     public static Coupon crear(CouponId id, String code, PromotionId promotionId,
                                boolean active, Instant validFrom, Instant validTo) {
         Coupon coupon = new Coupon();

@@ -8,14 +8,26 @@ import java.util.UUID;
  */
 public record PromotionId(UUID value) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code value} es {@code null}.
+     */
     public PromotionId {
         Objects.requireNonNull(value, "value no puede ser null");
     }
 
+    /**
+     * @return un nuevo identificador aleatorio.
+     */
     public static PromotionId generate() {
         return new PromotionId(UUID.randomUUID());
     }
 
+    /**
+     * @param value identificador.
+     * @return un {@link PromotionId} con el valor dado.
+     */
     public static PromotionId of(UUID value) {
         return new PromotionId(value);
     }

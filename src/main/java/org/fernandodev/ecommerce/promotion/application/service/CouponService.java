@@ -41,6 +41,12 @@ public class CouponService implements CouponUseCases {
     private final PromotionRepository promotions;
     private final ProductCategoryProvider categories;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Coupon create(CreateCouponCommand command) {
         if (!promotions.existsById(command.promotionId())) {
@@ -54,15 +60,33 @@ public class CouponService implements CouponUseCases {
         return coupons.save(coupon);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Coupon getById(CouponId id) {
         return getExisting(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Coupon> list() {
         return coupons.findAll();
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Coupon update(CouponId id, UpdateCouponCommand command) {
@@ -71,6 +95,12 @@ public class CouponService implements CouponUseCases {
         return coupons.save(coupon);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Coupon activate(CouponId id) {
         Coupon coupon = getExisting(id);
@@ -78,12 +108,24 @@ public class CouponService implements CouponUseCases {
         return coupons.save(coupon);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Coupon deactivate(CouponId id) {
         Coupon coupon = getExisting(id);
         coupon.deactivate();
         return coupons.save(coupon);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public CouponValidationResult validateCoupon(String code, UUID customerId, ApplyCouponCommand command) {
@@ -100,6 +142,12 @@ public class CouponService implements CouponUseCases {
                 .<CouponValidationResult>map(CouponValidationResult::invalid)
                 .orElseGet(() -> CouponValidationResult.valid(promotion.computeDiscount(cart, Instant.now())));
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public CouponApplication applyCoupon(String code, UUID customerId, ApplyCouponCommand command) {

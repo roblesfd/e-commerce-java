@@ -64,6 +64,9 @@ public class Promotion {
     @Getter(AccessLevel.NONE)
     private List<CustomerUsage> usageByCustomer;
 
+    /**
+     * Factoría del agregado.
+     */
     public static Promotion create(
             PromotionId id,
             String name,
@@ -89,6 +92,9 @@ public class Promotion {
 
     /**
      * Factoría completa con copia defensiva e invariantes. Usada por la persistencia.
+     */
+    /**
+     * Factoría del agregado.
      */
     public static Promotion crear(
             PromotionId id,

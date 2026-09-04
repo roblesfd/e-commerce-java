@@ -25,6 +25,18 @@ public class PromotionService implements PromotionUseCases {
 
     private final PromotionRepository promotions;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Promotion create(CreatePromotionCommand command) {
         Promotion promotion = Promotion.create(
@@ -47,15 +59,51 @@ public class PromotionService implements PromotionUseCases {
         return promotions.save(promotion);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Promotion getById(PromotionId id) {
         return getExisting(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Promotion> list() {
         return promotions.findAll();
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Promotion update(PromotionId id, UpdatePromotionCommand command) {
@@ -68,12 +116,36 @@ public class PromotionService implements PromotionUseCases {
         return promotions.save(promotion);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Promotion activate(PromotionId id) {
         Promotion promotion = getExisting(id);
         promotion.activate();
         return promotions.save(promotion);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Promotion deactivate(PromotionId id) {
@@ -82,12 +154,36 @@ public class PromotionService implements PromotionUseCases {
         return promotions.save(promotion);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Promotion addProduct(PromotionId id, ProductId productId) {
         Promotion promotion = getExisting(id);
         promotion.addProduct(productId);
         return promotions.save(promotion);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Promotion removeProduct(PromotionId id, ProductId productId) {
@@ -96,6 +192,18 @@ public class PromotionService implements PromotionUseCases {
         return promotions.save(promotion);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Promotion addCategory(PromotionId id, CategoryId categoryId) {
         Promotion promotion = getExisting(id);
@@ -103,12 +211,36 @@ public class PromotionService implements PromotionUseCases {
         return promotions.save(promotion);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Promotion removeCategory(PromotionId id, CategoryId categoryId) {
         Promotion promotion = getExisting(id);
         promotion.removeCategory(categoryId);
         return promotions.save(promotion);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

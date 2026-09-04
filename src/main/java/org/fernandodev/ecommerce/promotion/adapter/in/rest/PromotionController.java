@@ -45,51 +45,95 @@ public class PromotionController {
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public PromotionResponse get(@PathVariable UUID id) {
         return mapper.toResponse(promotionUseCases.getById(PromotionId.of(id)));
     }
 
     @GetMapping
+    /**
+     * List.
+     */
     public List<PromotionResponse> list() {
         return promotionUseCases.list().stream().map(mapper::toResponse).toList();
     }
 
     @PutMapping("/{id}")
+    /**
+     * Update.
+     * @param id id.
+     * @param request request.
+     */
     public PromotionResponse update(@PathVariable UUID id, @Valid @RequestBody UpdatePromotionRequest request) {
         return mapper.toResponse(promotionUseCases.update(PromotionId.of(id), mapper.toUpdateCommand(request)));
     }
 
     @PatchMapping("/{id}/activate")
+    /**
+     * Activate.
+     * @param id id.
+     */
     public PromotionResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(promotionUseCases.activate(PromotionId.of(id)));
     }
 
     @PatchMapping("/{id}/deactivate")
+    /**
+     * Deactivate.
+     * @param id id.
+     */
     public PromotionResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(promotionUseCases.deactivate(PromotionId.of(id)));
     }
 
     @PostMapping("/{id}/products")
+    /**
+     * Add product.
+     * @param id id.
+     * @param productId productId.
+     */
     public PromotionResponse addProduct(@PathVariable UUID id, @RequestBody UUID productId) {
         return mapper.toResponse(promotionUseCases.addProduct(PromotionId.of(id), ProductId.of(productId)));
     }
 
     @DeleteMapping("/{id}/products/{productId}")
+    /**
+     * Remove product.
+     * @param id id.
+     * @param productId productId.
+     */
     public PromotionResponse removeProduct(@PathVariable UUID id, @PathVariable UUID productId) {
         return mapper.toResponse(promotionUseCases.removeProduct(PromotionId.of(id), ProductId.of(productId)));
     }
 
     @PostMapping("/{id}/categories")
+    /**
+     * Add category.
+     * @param id id.
+     * @param categoryId categoryId.
+     */
     public PromotionResponse addCategory(@PathVariable UUID id, @RequestBody UUID categoryId) {
         return mapper.toResponse(promotionUseCases.addCategory(PromotionId.of(id), CategoryId.of(categoryId)));
     }
 
     @DeleteMapping("/{id}/categories/{categoryId}")
+    /**
+     * Remove category.
+     * @param id id.
+     * @param categoryId categoryId.
+     */
     public PromotionResponse removeCategory(@PathVariable UUID id, @PathVariable UUID categoryId) {
         return mapper.toResponse(promotionUseCases.removeCategory(PromotionId.of(id), CategoryId.of(categoryId)));
     }
 
     @PostMapping("/{id}/usage")
+    /**
+     * Record usage.
+     * @param id id.
+     */
     public PromotionResponse recordUsage(@PathVariable UUID id) {
         return mapper.toResponse(promotionUseCases.recordUsage(PromotionId.of(id), SecurityUtils.requiredUserId()));
     }

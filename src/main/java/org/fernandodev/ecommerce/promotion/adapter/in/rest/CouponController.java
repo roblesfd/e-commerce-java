@@ -45,37 +45,65 @@ public class CouponController {
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public CouponResponse get(@PathVariable UUID id) {
         return mapper.toResponse(couponUseCases.getById(CouponId.of(id)));
     }
 
     @GetMapping
+    /**
+     * List.
+     */
     public List<CouponResponse> list() {
         return couponUseCases.list().stream().map(mapper::toResponse).toList();
     }
 
     @PutMapping("/{id}")
+    /**
+     * Update.
+     * @param id id.
+     * @param request request.
+     */
     public CouponResponse update(@PathVariable UUID id, @Valid @RequestBody UpdateCouponRequest request) {
         return mapper.toResponse(couponUseCases.update(CouponId.of(id), mapper.toUpdateCommand(request)));
     }
 
     @PatchMapping("/{id}/activate")
+    /**
+     * Activate.
+     * @param id id.
+     */
     public CouponResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(couponUseCases.activate(CouponId.of(id)));
     }
 
     @PatchMapping("/{id}/deactivate")
+    /**
+     * Deactivate.
+     * @param id id.
+     */
     public CouponResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(couponUseCases.deactivate(CouponId.of(id)));
     }
 
     @PostMapping("/validate")
+    /**
+     * Validate.
+     * @param request request.
+     */
     public CouponValidationResponse validate(@Valid @RequestBody ApplyCouponRequest request) {
         return mapper.toValidationResponse(couponUseCases.validateCoupon(
                 request.code(), SecurityUtils.requiredUserId(), mapper.toApplyCommand(request)));
     }
 
     @PostMapping("/apply")
+    /**
+     * Apply.
+     * @param request request.
+     */
     public CouponApplicationResponse apply(@Valid @RequestBody ApplyCouponRequest request) {
         return mapper.toApplicationResponse(couponUseCases.applyCoupon(
                 request.code(), SecurityUtils.requiredUserId(), mapper.toApplyCommand(request)));

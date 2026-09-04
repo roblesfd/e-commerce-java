@@ -16,19 +16,43 @@ import org.fernandodev.ecommerce.promotion.domain.value_object.CouponId;
  */
 public interface CouponUseCases {
 
+    /**
+     * Crea un cupón.
+     */
     Coupon create(CreateCouponCommand command);
 
+    /**
+     * Consulta un cupón por identificador.
+     */
     Coupon getById(CouponId id);
 
+    /**
+     * Lista todos los cupones.
+     */
     List<Coupon> list();
 
+    /**
+     * Actualiza un cupón.
+     */
     Coupon update(CouponId id, UpdateCouponCommand command);
 
+    /**
+     * Activa un cupón.
+     */
     Coupon activate(CouponId id);
 
+    /**
+     * Desactiva un cupón.
+     */
     Coupon deactivate(CouponId id);
 
+    /**
+     * Valida si un cupón es aplicable al cliente.
+     */
     CouponValidationResult validateCoupon(String code, UUID customerId, ApplyCouponCommand command);
 
+    /**
+     * Aplica un cupón y devuelve el descuento.
+     */
     CouponApplication applyCoupon(String code, UUID customerId, ApplyCouponCommand command);
 }
