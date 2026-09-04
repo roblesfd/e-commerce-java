@@ -11,7 +11,23 @@ import org.fernandodev.ecommerce.catalog.domain.value_object.ProductVariantId;
  */
 public interface InventoryReservationPort {
 
+/**
+     * Reserva stock del producto/variante.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si es a nivel producto).
+     * @param quantity  cantidad a reservar.
+     * @param expiresAt momento de vencimiento de la reserva.
+     * @return el identificador de la reserva.
+     */
     UUID reserve(ProductId productId, ProductVariantId variantId, int quantity, Instant expiresAt);
 
+/**
+     * Libera una reserva de stock.
+     *
+     * @param productId     producto.
+     * @param variantId     variante (null si es a nivel producto).
+     * @param reservationId identificador de la reserva.
+     */
     void release(ProductId productId, ProductVariantId variantId, UUID reservationId);
 }

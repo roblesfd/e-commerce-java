@@ -8,14 +8,26 @@ import java.util.UUID;
  */
 public record CheckoutId(UUID value) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code value} es {@code null}.
+     */
     public CheckoutId {
         Objects.requireNonNull(value, "value no puede ser null");
     }
 
+    /**
+     * @return un nuevo identificador aleatorio.
+     */
     public static CheckoutId generate() {
         return new CheckoutId(UUID.randomUUID());
     }
 
+    /**
+     * @param value identificador.
+     * @return un {@link CheckoutId} con el valor dado.
+     */
     public static CheckoutId of(UUID value) {
         return new CheckoutId(value);
     }

@@ -10,8 +10,16 @@ import org.fernandodev.ecommerce.checkout.domain.value_object.CheckoutId;
  */
 public interface CheckoutRepository {
 
+/**
+     * @param idempotencyKey clave de idempotencia.
+     * @return el checkout asociado a la clave, o {@code Optional.empty()} si no existe.
+     */
     Optional<Checkout> findByIdempotencyKey(String idempotencyKey);
 
+/**
+     * @param id identificador del checkout.
+     * @return el checkout, o {@code Optional.empty()} si no existe.
+     */
     Optional<Checkout> findById(CheckoutId id);
 
     /**
@@ -20,5 +28,11 @@ public interface CheckoutRepository {
      */
     Optional<Checkout> saveIfAbsent(Checkout checkout);
 
+/**
+     * Persiste el checkout.
+     *
+     * @param checkout checkout a guardar.
+     * @return el checkout persistido.
+     */
     Checkout save(Checkout checkout);
 }

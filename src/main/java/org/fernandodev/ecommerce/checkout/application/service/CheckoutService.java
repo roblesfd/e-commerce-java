@@ -58,6 +58,11 @@ public class CheckoutService implements CheckoutUseCases {
     private final OrderPort orders;
     private final PaymentPort payments;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws BusinessRuleViolationException si el carrito está vacío.
+     */
     @Override
     public Checkout start(UUID customerId, String idempotencyKey, StartCheckoutCommand command) {
         Optional<Checkout> existing = checkouts.findByIdempotencyKey(idempotencyKey);
@@ -120,11 +125,22 @@ public class CheckoutService implements CheckoutUseCases {
         return checkout;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el checkout no existe o no pertenece al cliente.
+     */
     @Override
     public Checkout getById(UUID customerId, CheckoutId id) {
         return getOwned(customerId, id);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException   si el checkout no existe o no pertenece al cliente.
+     * @throws BusinessRuleViolationException si el checkout no está {@code PENDING}.
+     */
     @Override
     public Checkout confirm(UUID customerId, CheckoutId id) {
         Checkout checkout = getOwned(customerId, id);
@@ -169,6 +185,12 @@ public class CheckoutService implements CheckoutUseCases {
         return checkouts.save(checkout);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException   si el checkout no existe o no pertenece al cliente.
+     * @throws BusinessRuleViolationException si el checkout no está {@code PENDING}.
+     */
     @Override
     public Checkout cancel(UUID customerId, CheckoutId id) {
         Checkout checkout = getOwned(customerId, id);
@@ -180,6 +202,12 @@ public class CheckoutService implements CheckoutUseCases {
         return checkouts.save(checkout);
     }
 
+    /**
+     * @param customerId identificador del cliente (propiedad).
+     * @param id         identificador del checkout.
+     * @return el checkout del cliente.
+     * @throws ResourceNotFoundException si no existe o no pertenece al cliente.
+     */
     private Checkout getOwned(UUID customerId, CheckoutId id) {
         Checkout checkout = checkouts.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Checkout no encontrado: " + id));
@@ -189,6 +217,11 @@ public class CheckoutService implements CheckoutUseCases {
         return checkout;
     }
 
+    /**
+     * Libera las reservas de inventario (best-effort).
+     *
+     * @param reservations reservas a liberar.
+     */
     private void releaseAll(List<ReservationReference> reservations) {
         for (ReservationReference reservation : reservations) {
             try {

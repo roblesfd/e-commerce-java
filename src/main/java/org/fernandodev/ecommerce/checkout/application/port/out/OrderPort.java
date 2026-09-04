@@ -8,9 +8,25 @@ import org.fernandodev.ecommerce.order.domain.value_object.OrderId;
  */
 public interface OrderPort {
 
+/**
+     * Crea una orden en estado {@code PENDING}.
+     *
+     * @param data datos de la orden.
+     * @return el identificador de la orden creada.
+     */
     OrderId createOrder(OrderData data);
 
+/**
+     * Confirma la orden.
+     *
+     * @param orderId identificador de la orden.
+     */
     void confirm(OrderId orderId);
 
+/**
+     * Cancela la orden.
+     *
+     * @param orderId identificador de la orden.
+     */
     void cancel(OrderId orderId);
 }

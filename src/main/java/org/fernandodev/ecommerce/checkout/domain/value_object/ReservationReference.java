@@ -19,6 +19,11 @@ public record ReservationReference(
         UUID reservationId
 ) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code productId} o {@code reservationId} son {@code null}.
+     */
     public ReservationReference {
         Objects.requireNonNull(productId, "productId no puede ser null");
         Objects.requireNonNull(reservationId, "reservationId no puede ser null");

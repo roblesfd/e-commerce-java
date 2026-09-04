@@ -21,6 +21,16 @@ public record OrderData(
         Money total
 ) {
 
+    /**
+     * Item de la orden a crear.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el item es a nivel producto).
+     * @param sku       snapshot del SKU.
+     * @param name      snapshot del nombre.
+     * @param quantity  cantidad.
+     * @param unitPrice snapshot del precio unitario.
+     */
     public record OrderItemData(
             ProductId productId,
             ProductVariantId variantId,

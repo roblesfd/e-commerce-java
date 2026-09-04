@@ -9,5 +9,9 @@ import org.fernandodev.ecommerce.checkout.application.dto.CartData;
  */
 public interface CartProvider {
 
+/**
+     * @param customerId identificador del cliente.
+     * @return el carrito del cliente.
+     */
     CartData getCart(UUID customerId);
 }

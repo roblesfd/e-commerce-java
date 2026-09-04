@@ -9,5 +9,13 @@ import org.fernandodev.ecommerce.checkout.application.dto.ProductInfo;
  */
 public interface ProductProvider {
 
+/**
+     * Valida la existencia del producto y aporta su snapshot.
+     *
+     * @param productId producto.
+     * @return SKU y nombre del producto.
+     * @throws org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundException
+     *         si el producto no existe.
+     */
     ProductInfo productInfoOf(ProductId productId);
 }

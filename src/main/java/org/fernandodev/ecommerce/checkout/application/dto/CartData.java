@@ -12,6 +12,14 @@ import org.fernandodev.ecommerce.shared.domain.Money;
  */
 public record CartData(UUID cartId, List<CartItemData> items, AppliedCouponData coupon) {
 
+    /**
+     * Item del carrito.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el item es a nivel producto).
+     * @param quantity  cantidad.
+     * @param unitPrice precio unitario vigente.
+     */
     public record CartItemData(
             ProductId productId,
             ProductVariantId variantId,
@@ -20,6 +28,12 @@ public record CartData(UUID cartId, List<CartItemData> items, AppliedCouponData 
     ) {
     }
 
+    /**
+     * Cupón aplicado al carrito.
+     *
+     * @param code     código del cupón.
+     * @param discount descuento calculado.
+     */
     public record AppliedCouponData(String code, Money discount) {
     }
 }

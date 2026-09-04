@@ -32,6 +32,14 @@ public class CheckoutController {
     private final CheckoutUseCases checkoutUseCases;
     private final CheckoutMapper mapper;
 
+    /**
+     * Inicia un checkout (valida carrito, reserva inventario y aplica cupón).
+     * Idempotente por el header {@code Idempotency-Key}.
+     *
+     * @param idempotencyKey clave de idempotencia.
+     * @param request        dirección de envío.
+     * @return el checkout en estado {@code PENDING}.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CheckoutResponse start(@RequestHeader("Idempotency-Key") String idempotencyKey,
@@ -40,16 +48,32 @@ public class CheckoutController {
                 SecurityUtils.requiredUserId(), idempotencyKey, mapper.toCommand(request)));
     }
 
+    /**
+     * @param id identificador del checkout.
+     * @return el checkout del usuario autenticado.
+     */
     @GetMapping("/{id}")
     public CheckoutResponse get(@PathVariable UUID id) {
         return mapper.toResponse(checkoutUseCases.getById(SecurityUtils.requiredUserId(), CheckoutId.of(id)));
     }
 
+    /**
+     * Confirma el checkout (crea la orden e inicia el pago).
+     *
+     * @param id identificador del checkout.
+     * @return el checkout en estado final.
+     */
     @PostMapping("/{id}/confirm")
     public CheckoutResponse confirm(@PathVariable UUID id) {
         return mapper.toResponse(checkoutUseCases.confirm(SecurityUtils.requiredUserId(), CheckoutId.of(id)));
     }
 
+    /**
+     * Cancela el checkout en {@code PENDING}.
+     *
+     * @param id identificador del checkout.
+     * @return el checkout cancelado.
+     */
     @PostMapping("/{id}/cancel")
     public CheckoutResponse cancel(@PathVariable UUID id) {
         return mapper.toResponse(checkoutUseCases.cancel(SecurityUtils.requiredUserId(), CheckoutId.of(id)));

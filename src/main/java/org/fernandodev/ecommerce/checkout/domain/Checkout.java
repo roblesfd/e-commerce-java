@@ -51,6 +51,23 @@ public class Checkout {
     private Instant createdAt;
     private Instant updatedAt;
 
+    /**
+     * Inicia un checkout a partir del carrito validado.
+     *
+     * @param id               identificador del checkout.
+     * @param customerId       identificador del cliente.
+     * @param idempotencyKey   clave de idempotencia del retry.
+     * @param cartId           identificador del carrito.
+     * @param items            items con precio vigente.
+     * @param reservations     reservas de inventario realizadas.
+     * @param couponCode       cupón aplicado (opcional).
+     * @param couponDiscount   descuento del cupón (opcional).
+     * @param subtotal         subtotal del carrito.
+     * @param addressId        identificador de la dirección de envío.
+     * @param addressSnapshot  copia de la dirección de envío.
+     * @param at               momento de inicio.
+     * @return el checkout en estado {@code PENDING}.
+     */
     public static Checkout start(
             CheckoutId id,
             UUID customerId,
@@ -74,6 +91,28 @@ public class Checkout {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     *
+     * @param id              identificador del checkout.
+     * @param customerId      identificador del cliente.
+     * @param idempotencyKey  clave de idempotencia.
+     * @param cartId          identificador del carrito.
+     * @param addressId       identificador de la dirección de envío.
+     * @param addressSnapshot copia de la dirección de envío.
+     * @param items           items del checkout.
+     * @param reservations    reservas de inventario.
+     * @param couponCode      cupón aplicado (opcional).
+     * @param couponDiscount  descuento del cupón (opcional).
+     * @param subtotal        subtotal.
+     * @param discounts       descuentos aplicados.
+     * @param total           total.
+     * @param status          estado del checkout.
+     * @param orderId         orden creada (null si aún no).
+     * @param paymentId       pago iniciado (null si aún no).
+     * @param createdAt       momento de creación.
+     * @param updatedAt       momento de última modificación.
+     * @return el checkout reconstruido.
+     * @throws BusinessRuleViolationException si el checkout no tiene items.
+     * @throws NullPointerException           si algún campo obligatorio es {@code null}.
      */
     public static Checkout crear(
             CheckoutId id,
@@ -120,14 +159,28 @@ public class Checkout {
         return checkout;
     }
 
+    /**
+     * @return los items del checkout como lista inmutable.
+     */
     public List<CheckoutItem> getItems() {
         return Collections.unmodifiableList(items);
     }
 
+    /**
+     * @return las reservas de inventario como lista inmutable.
+     */
     public List<ReservationReference> getReservations() {
         return Collections.unmodifiableList(reservations);
     }
 
+    /**
+     * Registra la creación de la orden asociada.
+     *
+     * @param orderId identificador de la orden creada.
+     * @param at      momento de la operación.
+     * @throws BusinessRuleViolationException si el checkout no está {@code PENDING}.
+     * @throws NullPointerException           si {@code orderId} es {@code null}.
+     */
     public void markOrderCreated(OrderId orderId, Instant at) {
         requireTransition(CheckoutStatus.ORDER_CREATED, "crear la orden");
         this.orderId = Objects.requireNonNull(orderId, "orderId no puede ser null");
@@ -135,6 +188,14 @@ public class Checkout {
         this.updatedAt = at;
     }
 
+    /**
+     * Registra el inicio del pago.
+     *
+     * @param paymentId identificador del pago iniciado.
+     * @param at        momento de la operación.
+     * @throws BusinessRuleViolationException si el checkout no está {@code ORDER_CREATED}.
+     * @throws NullPointerException           si {@code paymentId} es {@code null}.
+     */
     public void markPaymentInitiated(UUID paymentId, Instant at) {
         requireTransition(CheckoutStatus.PAYMENT_PENDING, "iniciar el pago");
         this.paymentId = Objects.requireNonNull(paymentId, "paymentId no puede ser null");
@@ -142,12 +203,24 @@ public class Checkout {
         this.updatedAt = at;
     }
 
+    /**
+     * Confirma el checkout (pago aprobado y orden confirmada).
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si el checkout no está {@code PAYMENT_PENDING}.
+     */
     public void confirm(Instant at) {
         requireTransition(CheckoutStatus.CONFIRMED, "confirmar el checkout");
         this.status = CheckoutStatus.CONFIRMED;
         this.updatedAt = at;
     }
 
+    /**
+     * Marca el checkout como fallido (pago rechazado).
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si el checkout no está {@code PENDING} o {@code PAYMENT_PENDING}.
+     */
     public void fail(Instant at) {
         if (status != CheckoutStatus.PAYMENT_PENDING && status != CheckoutStatus.PENDING) {
             throw new BusinessRuleViolationException("No se puede marcar como fallido un checkout en estado " + status);
@@ -156,6 +229,12 @@ public class Checkout {
         this.updatedAt = at;
     }
 
+    /**
+     * Cancela el checkout (solo en {@code PENDING}).
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si el checkout no está {@code PENDING}.
+     */
     public void cancel(Instant at) {
         if (status != CheckoutStatus.PENDING) {
             throw new BusinessRuleViolationException("Solo se puede cancelar un checkout PENDING");
@@ -164,12 +243,22 @@ public class Checkout {
         this.updatedAt = at;
     }
 
+    /**
+     * @return {@code true} si el checkout está en un estado terminal.
+     */
     public boolean isTerminal() {
         return status == CheckoutStatus.CONFIRMED
                 || status == CheckoutStatus.FAILED
                 || status == CheckoutStatus.CANCELLED;
     }
 
+    /**
+     * Valida la transición permitida al estado objetivo.
+     *
+     * @param target    estado destino.
+     * @param operacion operación en curso (para el mensaje de error).
+     * @throws BusinessRuleViolationException si la transición no está permitida.
+     */
     private void requireTransition(CheckoutStatus target, String operacion) {
         boolean valid = switch (target) {
             case ORDER_CREATED -> status == CheckoutStatus.PENDING;

@@ -31,9 +31,25 @@ public record CheckoutDocument(
         Instant updatedAt
 ) {
 
+    /**
+     * Item del checkout serializable.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el item es a nivel producto).
+     * @param quantity  cantidad.
+     * @param amount    precio unitario.
+     * @param currency  divisa ISO 4217.
+     */
     public record Item(UUID productId, UUID variantId, int quantity, BigDecimal amount, String currency) {
     }
 
+    /**
+     * Reserva de inventario serializable.
+     *
+     * @param productId     producto reservado.
+     * @param variantId     variante reservada (null si es a nivel producto).
+     * @param reservationId identificador de la reserva.
+     */
     public record Reservation(UUID productId, UUID variantId, UUID reservationId) {
     }
 }

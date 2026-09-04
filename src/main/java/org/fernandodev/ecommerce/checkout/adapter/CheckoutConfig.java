@@ -21,6 +21,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CheckoutConfig {
 
+    /**
+     * @param checkoutRepository puerto de persistencia del checkout (Redis).
+     * @param carts              proveedor del carrito.
+     * @param products           proveedor de productos.
+     * @param prices             proveedor de precios.
+     * @param inventory          puerto de reserva de inventario.
+     * @param customers          proveedor de la dirección del cliente.
+     * @param coupons            proveedor de cupones.
+     * @param orders             puerto hacia Order Management.
+     * @param payments           puerta de pago.
+     * @return servicio de aplicación del contexto Checkout.
+     */
     @Bean
     public CheckoutUseCases checkoutUseCases(
             CheckoutRepository checkoutRepository,

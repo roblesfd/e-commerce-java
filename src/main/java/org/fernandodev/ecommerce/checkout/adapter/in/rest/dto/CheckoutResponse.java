@@ -26,6 +26,14 @@ public record CheckoutResponse(
         Instant updatedAt
 ) {
 
+    /**
+     * Item del checkout en la respuesta.
+     *
+     * @param productId producto.
+     * @param variantId variante (null si el item es a nivel producto).
+     * @param quantity  cantidad.
+     * @param unitPrice precio unitario vigente.
+     */
     public record CheckoutItemResponse(
             UUID productId,
             UUID variantId,
@@ -34,6 +42,12 @@ public record CheckoutResponse(
     ) {
     }
 
+    /**
+     * Importe monetario en la respuesta.
+     *
+     * @param amount   cantidad.
+     * @param currency divisa ISO 4217.
+     */
     public record MoneyResponse(BigDecimal amount, String currency) {
     }
 }

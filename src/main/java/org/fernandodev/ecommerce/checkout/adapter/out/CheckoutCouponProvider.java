@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Adaptador que implementa {@link CouponProvider} consultando el contexto
- * Promotions & Coupons.
+ * Promotions &amp; Coupons.
  */
 @Component
 @RequiredArgsConstructor

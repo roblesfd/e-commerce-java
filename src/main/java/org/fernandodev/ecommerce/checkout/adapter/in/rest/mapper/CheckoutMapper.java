@@ -16,10 +16,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class CheckoutMapper {
 
+    /**
+     * @param request petición de inicio de checkout.
+     * @return comando de aplicación equivalente.
+     */
     public StartCheckoutCommand toCommand(StartCheckoutRequest request) {
         return new StartCheckoutCommand(request.addressId());
     }
 
+    /**
+     * @param checkout agregado de dominio.
+     * @return respuesta REST con el estado del checkout.
+     */
     public CheckoutResponse toResponse(Checkout checkout) {
         return new CheckoutResponse(
                 checkout.getId().value(),
@@ -39,6 +47,10 @@ public class CheckoutMapper {
                 checkout.getUpdatedAt());
     }
 
+    /**
+     * @param item item de dominio.
+     * @return respuesta REST con el item.
+     */
     private CheckoutResponse.CheckoutItemResponse toItemResponse(CheckoutItem item) {
         return new CheckoutResponse.CheckoutItemResponse(
                 item.productId().value(),
@@ -47,6 +59,10 @@ public class CheckoutMapper {
                 toMoney(item.unitPrice()));
     }
 
+    /**
+     * @param money importe de dominio.
+     * @return respuesta REST con el importe.
+     */
     private static CheckoutResponse.MoneyResponse toMoney(Money money) {
         return new CheckoutResponse.MoneyResponse(money.amount(), money.currencyCode());
     }

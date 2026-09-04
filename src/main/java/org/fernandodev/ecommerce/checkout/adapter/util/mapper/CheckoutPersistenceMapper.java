@@ -19,6 +19,10 @@ public final class CheckoutPersistenceMapper {
     private CheckoutPersistenceMapper() {
     }
 
+    /**
+     * @param checkout agregado de dominio.
+     * @return documento serializable equivalente.
+     */
     public static CheckoutDocument toDocument(Checkout checkout) {
         return new CheckoutDocument(
                 checkout.getId().value(),
@@ -43,6 +47,10 @@ public final class CheckoutPersistenceMapper {
                 checkout.getUpdatedAt());
     }
 
+    /**
+     * @param document documento serializable.
+     * @return agregado de dominio equivalente.
+     */
     public static Checkout toDomain(CheckoutDocument document) {
         return Checkout.crear(
                 CheckoutId.of(document.id()),

@@ -11,5 +11,13 @@ import org.fernandodev.ecommerce.shared.domain.Money;
  */
 public interface CouponProvider {
 
+/**
+     * Valida el cupón y calcula su descuento sobre los items.
+     *
+     * @param customerId identificador del cliente.
+     * @param code       código del cupón.
+     * @param items      items del checkout.
+     * @return el descuento calculado.
+     */
     Money discountFor(UUID customerId, String code, List<CouponItemDto> items);
 }
