@@ -27,6 +27,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class PricingMapper {
 
+    /**
+     * Convierte la petición en un comando de aplicación equivalente.
+     */
     public DefinePriceCommand toCommand(UUID productId, DefinePriceRequest request) {
         return new DefinePriceCommand(
                 ProductId.of(productId),
@@ -35,10 +38,16 @@ public class PricingMapper {
                 request.currency());
     }
 
+    /**
+     * Convierte la petición en un comando de aplicación equivalente.
+     */
     public UpdatePriceCommand toCommand(UpdatePriceRequest request) {
         return new UpdatePriceCommand(request.amount(), request.currency());
     }
 
+    /**
+     * Convierte la petición en un comando de aplicación equivalente.
+     */
     public AddPriceOverrideCommand toCommand(AddOverrideRequest request) {
         return new AddPriceOverrideCommand(
                 request.amount(),
@@ -48,6 +57,9 @@ public class PricingMapper {
                 request.type());
     }
 
+    /**
+     * @return respuesta REST con el precio.
+     */
     public PriceResponse toResponse(Price price) {
         return new PriceResponse(
                 price.getId().value(),
@@ -63,10 +75,16 @@ public class PricingMapper {
                 price.getOverrides().stream().map(this::toOverrideResponse).toList());
     }
 
+    /**
+     * @return respuesta REST con el precio vigente.
+     */
     public CurrentPriceResponse toCurrentPriceResponse(Money price, Instant at) {
         return new CurrentPriceResponse(price.amount(), price.currencyCode(), at);
     }
 
+    /**
+     * @return respuesta REST con la instantánea.
+     */
     public PriceSnapshotResponse toSnapshotResponse(PriceSnapshot snapshot) {
         return new PriceSnapshotResponse(
                 snapshot.productId().value(),

@@ -16,6 +16,12 @@ public record PriceSnapshotResponse(
         Instant at
 ) {
 
+    /**
+     * Importe monetario en la instantánea.
+     *
+     * @param amount   cantidad.
+     * @param currency divisa ISO 4217.
+     */
     public record Money(BigDecimal amount, String currency) {
     }
 }

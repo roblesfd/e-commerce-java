@@ -21,6 +21,10 @@ public final class PricePersistenceMapper {
     private PricePersistenceMapper() {
     }
 
+    /**
+     * @param price agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static PriceJpaEntity toEntity(Price price) {
         PriceJpaEntity entity = new PriceJpaEntity();
         entity.setId(price.getId().value());
@@ -33,6 +37,10 @@ public final class PricePersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Price toDomain(PriceJpaEntity entity) {
         return Price.crear(
                 PriceId.of(entity.getId()),

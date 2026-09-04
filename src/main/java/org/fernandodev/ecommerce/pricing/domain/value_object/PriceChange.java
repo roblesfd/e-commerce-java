@@ -14,6 +14,11 @@ import org.fernandodev.ecommerce.shared.domain.Money;
  */
 public record PriceChange(Money amount, Instant effectiveAt) {
 
+    /**
+     * Constructor compacto.
+     *
+     * @throws NullPointerException si {@code amount} o {@code effectiveAt} son {@code null}.
+     */
     public PriceChange {
         Objects.requireNonNull(amount, "amount no puede ser null");
         Objects.requireNonNull(effectiveAt, "effectiveAt no puede ser null");

@@ -18,21 +18,48 @@ import org.fernandodev.ecommerce.shared.domain.Money;
  */
 public interface PricingUseCases {
 
+    /**
+     * Define el precio base de un producto/variante.
+     */
     Price defineBasePrice(DefinePriceCommand command);
 
+    /**
+     * Actualiza el precio base y registra el anterior en el historial.
+     */
     Price updateBasePrice(PriceId id, UpdatePriceCommand command);
 
+    /**
+     * Consulta un precio por identificador.
+     */
     Price getById(PriceId id);
 
+    /**
+     * Consulta el precio de un producto/variante (con historial).
+     */
     Price getByProduct(ProductId productId, ProductVariantId variantId);
 
+    /**
+     * Añade un override de precio.
+     */
     Price addOverride(PriceId id, AddPriceOverrideCommand command);
 
+    /**
+     * Elimina un override de precio.
+     */
     Price removeOverride(PriceId id, PriceOverrideId overrideId);
 
+    /**
+     * Devuelve el precio vigente en el instante dado.
+     */
     Money currentPrice(ProductId productId, ProductVariantId variantId, Instant at);
 
+    /**
+     * Devuelve el descuento aplicado en el instante dado.
+     */
     Money discount(ProductId productId, ProductVariantId variantId, Instant at);
 
+    /**
+     * Devuelve la instantánea del precio en el instante dado (para capturas de orden).
+     */
     PriceSnapshot priceSnapshot(ProductId productId, ProductVariantId variantId, Instant at);
 }

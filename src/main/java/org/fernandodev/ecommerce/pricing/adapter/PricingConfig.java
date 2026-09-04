@@ -14,6 +14,10 @@ import org.springframework.context.annotation.Configuration;
 public class PricingConfig {
 
     @Bean
+    /**
+     * @param priceRepository puerto de persistencia de precios.
+     * @return servicio de aplicación del contexto Pricing.
+     */
     public PricingUseCases pricingUseCases(PriceRepository priceRepository) {
         return new PricingService(priceRepository);
     }

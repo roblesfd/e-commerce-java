@@ -23,6 +23,12 @@ public record PriceOverride(
         PriceType type
 ) {
 
+    /**
+     * Constructor compacto que valida los invariantes del override.
+     *
+     * @throws NullPointerException     si algún campo es {@code null}.
+     * @throws IllegalArgumentException si {@code validFrom} no es anterior a {@code validTo}.
+     */
     public PriceOverride {
         Objects.requireNonNull(id, "id no puede ser null");
         Objects.requireNonNull(amount, "amount no puede ser null");
@@ -36,6 +42,13 @@ public record PriceOverride(
 
     /**
      * Indica si esta ventana se solapa con el intervalo {@code [from, to)}.
+     */
+    /**
+     * Indica si esta ventana se solapa con el intervalo {@code [from, to)}.
+     *
+     * @param from inicio del intervalo.
+     * @param to   fin del intervalo.
+     * @return {@code true} si hay solapamiento.
      */
     public boolean overlaps(Instant from, Instant to) {
         return validFrom.isBefore(to) && from.isBefore(validTo);

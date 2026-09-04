@@ -46,12 +46,27 @@ public class Price {
     /**
      * Define el precio base de un producto o variante.
      */
+    /**
+     * Define el precio base de un producto o variante.
+     *
+     * @param id        identificador del precio.
+     * @param productId producto.
+     * @param variantId variante (null si es a nivel producto).
+     * @param basePrice precio base.
+     * @return el precio definido.
+     * @throws BusinessRuleViolationException si el precio base no es positivo.
+     */
     public static Price define(PriceId id, ProductId productId, ProductVariantId variantId, Money basePrice) {
         return crear(id, productId, variantId, basePrice, List.of(), List.of());
     }
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría completa con copia defensiva. Usada por la persistencia.
+     *
+     * @return el precio reconstruido.
      */
     public static Price crear(
             PriceId id,
@@ -72,20 +87,36 @@ public class Price {
         return price;
     }
 
+    /**
+     * @return la variante, o {@code Optional.empty()} si es a nivel producto.
+     */
     public Optional<ProductVariantId> getVariantId() {
         return Optional.ofNullable(variantId);
     }
 
+    /**
+     * @return el historial de cambios del precio base como lista inmutable.
+     */
     public List<PriceChange> getHistory() {
         return Collections.unmodifiableList(history);
     }
 
+    /**
+     * @return los overrides del precio como lista inmutable.
+     */
     public List<PriceOverride> getOverrides() {
         return Collections.unmodifiableList(overrides);
     }
 
     /**
      * Actualiza el precio base registrando el valor anterior en el historial.
+     */
+    /**
+     * Actualiza el precio base registrando el valor anterior en el historial.
+     *
+     * @param newPrice nuevo precio base.
+     * @param at       momento del cambio.
+     * @throws BusinessRuleViolationException si el precio no es positivo o la divisa difiere.
      */
     public void updateBasePrice(Money newPrice, Instant at) {
         Objects.requireNonNull(newPrice, "newPrice no puede ser null");
@@ -102,6 +133,18 @@ public class Price {
      * solapamiento y, si es promocional, menor que el precio base.
      *
      * @return el override creado.
+     */
+    /**
+     * Añade un override (promocional o por tiempo) validando las reglas de
+     * negocio: importe positivo, divisa consistente, rango válido, sin
+     * solapamiento y, si es promocional, menor que el precio base.
+     *
+     * @param amount    importe del override.
+     * @param validFrom inicio de la ventana.
+     * @param validTo   fin de la ventana.
+     * @param type      tipo de override.
+     * @return el override creado.
+     * @throws BusinessRuleViolationException si alguna regla de negocio se incumple.
      */
     public PriceOverride addOverride(Money amount, Instant validFrom, Instant validTo, PriceType type) {
         Objects.requireNonNull(amount, "amount no puede ser null");
@@ -125,6 +168,12 @@ public class Price {
         return override;
     }
 
+    /**
+     * Elimina un override por identificador.
+     *
+     * @param id identificador del override.
+     * @throws ResourceNotFoundException si el override no existe.
+     */
     public void removeOverride(PriceOverrideId id) {
         Objects.requireNonNull(id, "id no puede ser null");
         for (int i = 0; i < overrides.size(); i++) {
@@ -136,6 +185,10 @@ public class Price {
         throw new ResourceNotFoundException("Override no encontrado: " + id);
     }
 
+    /**
+     * @param at instante.
+     * @return el override aplicable en {@code at}, o {@code Optional.empty()} si no hay.
+     */
     public Optional<PriceOverride> applicableOverride(Instant at) {
         Objects.requireNonNull(at, "at no puede ser null");
         return overrides.stream()
@@ -146,6 +199,12 @@ public class Price {
     /**
      * Precio vigente en el instante dado.
      */
+    /**
+     * Precio vigente en el instante dado (override aplicable o precio base).
+     *
+     * @param at instante.
+     * @return el precio vigente.
+     */
     public Money currentPrice(Instant at) {
         return applicableOverride(at).map(PriceOverride::amount).orElse(basePrice);
     }
@@ -153,16 +212,34 @@ public class Price {
     /**
      * Descuento aplicado en el instante dado: precio base menos precio vigente.
      */
+    /**
+     * Descuento aplicado en el instante dado: precio base menos precio vigente.
+     *
+     * @param at instante.
+     * @return el descuento.
+     */
     public Money discountAt(Instant at) {
         return basePrice.subtract(currentPrice(at));
     }
 
+    /**
+     * Valida que el importe sea positivo.
+     *
+     * @param money importe a validar.
+     * @throws BusinessRuleViolationException si no es positivo.
+     */
     private static void requirePositive(Money money) {
         if (!money.isPositive()) {
             throw new BusinessRuleViolationException("El importe debe ser positivo");
         }
     }
 
+    /**
+     * Valida que la divisa coincida con la del precio base.
+     *
+     * @param money importe a validar.
+     * @throws BusinessRuleViolationException si la divisa difiere.
+     */
     private void requireSameCurrency(Money money) {
         if (!money.currency().equals(basePrice.currency())) {
             throw new BusinessRuleViolationException(

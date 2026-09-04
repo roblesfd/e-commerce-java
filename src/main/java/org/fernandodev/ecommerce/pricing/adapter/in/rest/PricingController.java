@@ -53,6 +53,11 @@ public class PricingController {
     }
 
     @GetMapping("/products/{productId}/prices/current")
+    /**
+     * Current price.
+     * @param productId productId.
+     * @param variantId variantId.
+     */
     public CurrentPriceResponse currentPrice(@PathVariable UUID productId,
                                              @RequestParam(required = false) UUID variantId) {
         Instant at = Instant.now();
@@ -67,6 +72,11 @@ public class PricingController {
     }
 
     @GetMapping("/products/{productId}/prices/snapshot")
+    /**
+     * Price snapshot.
+     * @param productId productId.
+     * @param variantId variantId.
+     */
     public PriceSnapshotResponse priceSnapshot(@PathVariable UUID productId,
                                                @RequestParam(required = false) UUID variantId) {
         return mapper.toSnapshotResponse(
@@ -79,6 +89,10 @@ public class PricingController {
     }
 
     @GetMapping("/prices/{priceId}")
+    /**
+     * Get by id.
+     * @param priceId priceId.
+     */
     public PriceResponse getById(@PathVariable UUID priceId) {
         return mapper.toResponse(
                 pricingUseCases.getById(PriceId.of(priceId))
@@ -86,6 +100,11 @@ public class PricingController {
     }
 
     @PutMapping("/prices/{priceId}")
+    /**
+     * Update base price.
+     * @param priceId priceId.
+     * @param request request.
+     */
     public PriceResponse updateBasePrice(@PathVariable UUID priceId,
                                          @Valid @RequestBody UpdatePriceRequest request) {
         return mapper.toResponse(
@@ -98,6 +117,11 @@ public class PricingController {
 
     @PostMapping("/prices/{priceId}/overrides")
     @ResponseStatus(HttpStatus.CREATED)
+    /**
+     * Add override.
+     * @param priceId priceId.
+     * @param request request.
+     */
     public PriceResponse addOverride(@PathVariable UUID priceId,
                                      @Valid @RequestBody AddOverrideRequest request) {
         return mapper.toResponse(
@@ -109,6 +133,11 @@ public class PricingController {
 
     @DeleteMapping("/prices/{priceId}/overrides/{overrideId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Remove override.
+     * @param priceId priceId.
+     * @param overrideId overrideId.
+     */
     public void removeOverride(@PathVariable UUID priceId, @PathVariable UUID overrideId) {
         pricingUseCases.removeOverride(
                 PriceId.of(priceId),

@@ -32,6 +32,12 @@ public class PricingService implements PricingUseCases {
 
     private final PriceRepository prices;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Price defineBasePrice(DefinePriceCommand command) {
         if (prices.existsByProductAndVariant(command.productId(), command.variantId())) {
@@ -46,6 +52,12 @@ public class PricingService implements PricingUseCases {
         return prices.save(price);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Price updateBasePrice(PriceId id, UpdatePriceCommand command) {
         Price price = getExisting(id);
@@ -53,10 +65,22 @@ public class PricingService implements PricingUseCases {
         return prices.save(price);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Price getById(PriceId id) {
         return getExisting(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Price addOverride(PriceId id, AddPriceOverrideCommand command) {
@@ -69,6 +93,12 @@ public class PricingService implements PricingUseCases {
         return prices.save(price);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Price removeOverride(PriceId id, PriceOverrideId overrideId) {
         Price price = getExisting(id);
@@ -76,15 +106,33 @@ public class PricingService implements PricingUseCases {
         return prices.save(price);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Money currentPrice(ProductId productId, ProductVariantId variantId, Instant at) {
         return resolve(productId, variantId).currentPrice(at);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Money discount(ProductId productId, ProductVariantId variantId, Instant at) {
         return resolve(productId, variantId).discountAt(at);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public PriceSnapshot priceSnapshot(ProductId productId, ProductVariantId variantId, Instant at) {
@@ -103,6 +151,12 @@ public class PricingService implements PricingUseCases {
         return prices.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Precio no encontrado: " + id));
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Price getByProduct(ProductId productId, ProductVariantId variantId) {
