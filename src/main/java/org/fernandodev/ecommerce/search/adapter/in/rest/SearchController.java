@@ -49,12 +49,24 @@ public class SearchController {
     }
 
     @GetMapping("/autocomplete")
+    /**
+     * Autocomplete.
+     * @param q q.
+     * @param false false.
+     * @param limit limit.
+     */
     public List<String> autocomplete(@RequestParam String q,
                                      @RequestParam(required = false, defaultValue = "8") int limit) {
         return searchUseCases.autocomplete(q, limit <= 0 ? DEFAULT_LIMIT : Math.min(limit, 20));
     }
 
     @GetMapping("/suggest")
+    /**
+     * Suggest.
+     * @param q q.
+     * @param false false.
+     * @param limit limit.
+     */
     public List<String> suggest(@RequestParam String q,
                                 @RequestParam(required = false, defaultValue = "8") int limit) {
         return searchUseCases.suggest(q, limit <= 0 ? DEFAULT_LIMIT : Math.min(limit, 20));

@@ -41,21 +41,35 @@ public class IndexController {
 
     @DeleteMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Remove.
+     * @param productId productId.
+     */
     public void remove(@PathVariable UUID productId) {
         indexUseCases.removeProduct(ProductId.of(productId));
     }
 
     @PostMapping("/rebuild")
+    /**
+     * Rebuild.
+     */
     public void rebuild() {
         indexUseCases.rebuild();
     }
 
     @PostMapping("/products/{productId}/retry")
+    /**
+     * Retry.
+     * @param productId productId.
+     */
     public IndexResponse retry(@PathVariable UUID productId) {
         return mapper.toIndexResponse(indexUseCases.retryIndexing(ProductId.of(productId)));
     }
 
     @GetMapping("/failures")
+    /**
+     * Failures.
+     */
     public List<IndexResponse> failures() {
         return indexUseCases.listIndexFailures().stream()
                 .map(mapper::toIndexResponse)

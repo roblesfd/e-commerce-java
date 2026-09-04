@@ -11,9 +11,18 @@ import org.fernandodev.ecommerce.search.application.dto.SearchResults;
  */
 public interface SearchUseCases {
 
+    /**
+     * Busca productos con filtros, orden y paginación.
+     */
     SearchResults<SearchResult> search(SearchQuery query);
 
+    /**
+     * Devuelve sugerencias por prefijo del término.
+     */
     List<String> autocomplete(String q, int limit);
 
+    /**
+     * Devuelve sugerencias por coincidencia del término.
+     */
     List<String> suggest(String q, int limit);
 }

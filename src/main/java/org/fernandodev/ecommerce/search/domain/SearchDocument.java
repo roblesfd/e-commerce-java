@@ -45,6 +45,9 @@ public class SearchDocument {
     private int attempts;
     private Instant updatedAt;
 
+    /**
+     * Factoría del agregado.
+     */
     public static SearchDocument create(
             ProductId productId,
             String name,
@@ -82,6 +85,9 @@ public class SearchDocument {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría completa usada por la persistencia.
      */
     public static SearchDocument crear(
             ProductId productId,

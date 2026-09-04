@@ -10,13 +10,28 @@ import org.fernandodev.ecommerce.search.domain.SearchDocument;
  */
 public interface IndexUseCases {
 
+    /**
+     * Indexa un producto leyendo Catalog, Pricing e Inventory.
+     */
     SearchDocument indexProduct(ProductId productId);
 
+    /**
+     * Elimina un producto del índice.
+     */
     void removeProduct(ProductId productId);
 
+    /**
+     * Reindexa todos los productos del catálogo.
+     */
     void rebuild();
 
+    /**
+     * Reintenta la indexación de un documento fallido.
+     */
     SearchDocument retryIndexing(ProductId productId);
 
+    /**
+     * Lista los documentos con indexación fallida.
+     */
     List<SearchDocument> listIndexFailures();
 }

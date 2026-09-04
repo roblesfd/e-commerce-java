@@ -37,6 +37,12 @@ public class IndexService implements IndexUseCases {
     private final PricingPort pricing;
     private final InventoryPort inventory;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public SearchDocument indexProduct(ProductId productId) {
@@ -68,17 +74,35 @@ public class IndexService implements IndexUseCases {
         }
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public void removeProduct(ProductId productId) {
         index.delete(productId);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public void rebuild() {
         catalog.listAllProductIds().forEach(this::indexProduct);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -90,6 +114,12 @@ public class IndexService implements IndexUseCases {
         }
         return indexProduct(productId);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public List<SearchDocument> listIndexFailures() {
