@@ -28,7 +28,7 @@ public final class TemplatePersistenceMapper {
     }
 
     /**
-     * @param notificationTemplateJpaEntity entidad JPA.
+     * @param entity entidad JPA.
      * @return agregado de dominio equivalente.
      */
     public static NotificationTemplate toDomain(NotificationTemplateJpaEntity entity) {

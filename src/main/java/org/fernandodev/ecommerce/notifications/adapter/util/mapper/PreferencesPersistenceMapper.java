@@ -26,7 +26,7 @@ public final class PreferencesPersistenceMapper {
     }
 
     /**
-     * @param notificationPreferencesJpaEntity entidad JPA.
+     * @param entity entidad JPA.
      * @return agregado de dominio equivalente.
      */
     public static NotificationPreferences toDomain(NotificationPreferencesJpaEntity entity) {

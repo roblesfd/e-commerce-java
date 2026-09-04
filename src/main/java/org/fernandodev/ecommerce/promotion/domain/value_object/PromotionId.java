@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Identificador de una promoción dentro del contexto Promotions & Coupons.
+ * Identificador de una promoción dentro del contexto Promotions &amp; Coupons.
  */
 public record PromotionId(UUID value) {
 

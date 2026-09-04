@@ -36,7 +36,7 @@ public final class NotificationPersistenceMapper {
     }
 
     /**
-     * @param notificationJpaEntity entidad JPA.
+     * @param entity entidad JPA.
      * @return agregado de dominio equivalente.
      */
     public static Notification toDomain(NotificationJpaEntity entity) {

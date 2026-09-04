@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 
 /**
- * Controlador REST del contexto Promotions & Coupons encargado de exponer
+ * Controlador REST del contexto Promotions &amp; Coupons encargado de exponer
  * las operaciones relacionadas con la gestión de promociones.
  *
  * <p>Permite crear, consultar, actualizar, activar, desactivar promociones,

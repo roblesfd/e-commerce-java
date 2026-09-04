@@ -26,7 +26,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 /**
- * Agregado raíz del contexto {@code Promotions & Coupons} que representa una
+ * Agregado raíz del contexto {@code Promotions &amp; Coupons} que representa una
  * promoción y las reglas asociadas a la aplicación de un descuento.
  *
  * <p>El agregado encapsula las reglas de elegibilidad, configuración del

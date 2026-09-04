@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Ensambla los servicios de aplicación del contexto Returns & Refunds.
+ * Ensambla los servicios de aplicación del contexto Returns &amp; Refunds.
  */
 @Configuration
 public class ReturnConfig {

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Cablea los servicios de aplicación (independientes de Spring) del contexto
- * Promotions & Coupons con sus puertos de persistencia.
+ * Promotions &amp; Coupons con sus puertos de persistencia.
  */
 @Configuration
 public class PromotionConfig {
