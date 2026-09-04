@@ -15,11 +15,24 @@ public abstract class DomainException extends RuntimeException {
 
     private final ErrorCode errorCode;
 
+    /**
+     * Constructor.
+     *
+     * @param errorCode código de error.
+     * @param message   mensaje.
+     */
     protected DomainException(ErrorCode errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
     }
 
+    /**
+     * Constructor con causa.
+     *
+     * @param errorCode código de error.
+     * @param message   mensaje.
+     * @param cause     causa raíz.
+     */
     protected DomainException(ErrorCode errorCode, String message, Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;

@@ -20,6 +20,16 @@ public record ApiError(
         String correlationId
 ) {
 
+    /**
+     * Construye una respuesta de error.
+     *
+     * @param status        código HTTP.
+     * @param title         título del error.
+     * @param detail        detalle.
+     * @param instance      URI de la petición.
+     * @param correlationId identificador de correlación (opcional).
+     * @return la respuesta de error.
+     */
     public static ApiError of(int status, String title, String detail, String instance, String correlationId) {
         return new ApiError("about:blank", title, status, detail, instance, correlationId);
     }

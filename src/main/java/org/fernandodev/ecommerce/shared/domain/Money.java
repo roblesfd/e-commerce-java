@@ -26,18 +26,30 @@ public final class Money {
         this.currency = Objects.requireNonNull(currency, "currency must not be null");
     }
 
+    /**
+     * Crea un {@link Money} a partir de un importe en texto y una divisa.
+     */
     public static Money of(String amount, String currencyCode) {
         return new Money(new BigDecimal(amount), Currency.getInstance(currencyCode));
     }
 
+    /**
+     * Crea un {@link Money} a partir de un importe y una divisa.
+     */
     public static Money of(BigDecimal amount, String currencyCode) {
         return new Money(amount, Currency.getInstance(currencyCode));
     }
 
+    /**
+     * Crea un {@link Money} a partir de un importe y una divisa.
+     */
     public static Money of(BigDecimal amount, Currency currency) {
         return new Money(amount, currency);
     }
 
+    /**
+     * Devuelve un {@link Money} de importe cero en la divisa dada.
+     */
     public static Money zero(String currencyCode) {
         return Money.of(BigDecimal.ZERO, currencyCode);
     }
@@ -48,6 +60,9 @@ public final class Money {
      * @param other valor a sumar.
      * @return nueva cantidad resultante de la suma.
      * @throws IllegalArgumentException si las divisas difieren.
+     */
+    /**
+     * Suma otro importe de la misma divisa.
      */
     public Money add(Money other) {
         requireSameCurrency(other);
@@ -61,6 +76,9 @@ public final class Money {
      * @return nueva cantidad resultante de la resta.
      * @throws IllegalArgumentException si las divisas difieren.
      */
+    /**
+     * Resta otro importe de la misma divisa.
+     */
     public Money subtract(Money other) {
         requireSameCurrency(other);
         return new Money(amount.subtract(other.amount), currency);
@@ -72,22 +90,37 @@ public final class Money {
      * @param factor factor de multiplicación.
      * @return nueva cantidad resultante de la multiplicación.
      */
+    /**
+     * Multiplica el importe por un factor.
+     */
     public Money multiply(BigDecimal factor) {
         return new Money(amount.multiply(Objects.requireNonNull(factor, "factor must not be null")), currency);
     }
 
+    /**
+     * Devuelve el importe negado.
+     */
     public Money negate() {
         return new Money(amount.negate(), currency);
     }
 
+    /**
+     * Indica si el importe es negativo o cero.
+     */
     public boolean isNegativeOrZero() {
         return amount.signum() <= 0;
     }
 
+    /**
+     * Indica si el importe es positivo.
+     */
     public boolean isPositive() {
         return amount.signum() > 0;
     }
 
+    /**
+     * Indica si el importe es cero.
+     */
     public boolean isZero() {
         return amount.signum() == 0;
     }
@@ -98,6 +131,9 @@ public final class Money {
      * @param other valor a comparar.
      * @return {@code true} si esta cantidad es mayor.
      * @throws IllegalArgumentException si las divisas difieren.
+     */
+    /**
+     * Indica si el importe es mayor que {@code other}.
      */
     public boolean isGreaterThan(Money other) {
         requireSameCurrency(other);
@@ -111,23 +147,38 @@ public final class Money {
      * @return {@code true} si esta cantidad es menor.
      * @throws IllegalArgumentException si las divisas difieren.
      */
+    /**
+     * Indica si el importe es menor que {@code other}.
+     */
     public boolean isLessThan(Money other) {
         requireSameCurrency(other);
         return amount.compareTo(other.amount) < 0;
     }
 
+    /**
+     * @return el importe con escala normalizada.
+     */
     public BigDecimal amount() {
         return amount;
     }
 
+    /**
+     * @return la divisa.
+     */
     public Currency currency() {
         return currency;
     }
 
+    /**
+     * @return el código ISO 4217 de la divisa.
+     */
     public String currencyCode() {
         return currency.getCurrencyCode();
     }
 
+    /**
+     * Valida que la divisa coincida con {@code other}.
+     */
     private void requireSameCurrency(Money other) {
         if (!currency.equals(other.currency)) {
             throw new IllegalArgumentException(
