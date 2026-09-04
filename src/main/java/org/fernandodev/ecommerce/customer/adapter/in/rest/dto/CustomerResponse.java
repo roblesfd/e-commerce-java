@@ -16,6 +16,12 @@ public record CustomerResponse(
         UUID defaultAddressId,
         PreferencesResponse preferences
 ) {
+    /**
+     * Preferencias del cliente en la respuesta.
+     *
+     * @param newsletterEnabled     si desea recibir novedades.
+     * @param preferredCurrencyCode divisa preferida (ISO 4217).
+     */
     public record PreferencesResponse(boolean newsletterEnabled, String preferredCurrencyCode) {
     }
 }

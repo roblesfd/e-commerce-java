@@ -47,12 +47,22 @@ public class CustomerService implements CustomerUseCases {
         return repository.save(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si no existe un cliente para el usuario.
+     */
     @Override
     public Customer getByIamUserId(UUID iamUserId) {
         return repository.findByIamUserId(iamUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado para el usuario: " + iamUserId));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ConflictException si el nuevo correo pertenece a otro cliente.
+     */
     @Override
     public Customer updateProfile(UUID iamUserId, Profile profile) {
         Customer customer = getByIamUserId(iamUserId);
@@ -68,6 +78,11 @@ public class CustomerService implements CustomerUseCases {
         return repository.save(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si no existe un cliente para el usuario.
+     */
     @Override
     public Customer addAddress(UUID iamUserId, AddressCommand address) {
         Customer customer = getByIamUserId(iamUserId);
@@ -75,6 +90,11 @@ public class CustomerService implements CustomerUseCases {
         return repository.save(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el cliente o la dirección no existen.
+     */
     @Override
     public Customer updateAddress(UUID iamUserId, UUID addressId, AddressCommand address) {
         Customer customer = getByIamUserId(iamUserId);
@@ -83,6 +103,11 @@ public class CustomerService implements CustomerUseCases {
         return repository.save(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el cliente o la dirección no existen.
+     */
     @Override
     public Customer removeAddress(UUID iamUserId, UUID addressId) {
         Customer customer = getByIamUserId(iamUserId);
@@ -90,6 +115,11 @@ public class CustomerService implements CustomerUseCases {
         return repository.save(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si el cliente o la dirección no existen.
+     */
     @Override
     public Customer setDefaultAddress(UUID iamUserId, UUID addressId) {
         Customer customer = getByIamUserId(iamUserId);
@@ -97,6 +127,11 @@ public class CustomerService implements CustomerUseCases {
         return repository.save(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si no existe un cliente para el usuario.
+     */
     @Override
     public Customer updatePreferences(UUID iamUserId, PreferencesCommand preferences) {
         Customer customer = getByIamUserId(iamUserId);
@@ -104,6 +139,11 @@ public class CustomerService implements CustomerUseCases {
         return repository.save(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ResourceNotFoundException si no existe un cliente para el usuario.
+     */
     @Override
     public List<Address> listAddresses(UUID iamUserId) {
         return getByIamUserId(iamUserId).getAddresses();

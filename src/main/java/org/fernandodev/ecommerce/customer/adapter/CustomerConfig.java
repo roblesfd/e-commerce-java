@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CustomerConfig {
 
+    /**
+     * @param customerRepository puerto de persistencia del cliente.
+     * @return servicio de aplicación del contexto Customer.
+     */
     @Bean
     public CustomerUseCases customerUseCases(CustomerRepository customerRepository) {
         return new CustomerService(customerRepository);

@@ -12,7 +12,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CustomerSpringDataRepository extends JpaRepository<CustomerJpaEntity, UUID> {
 
+    /**
+     * @param iamUserId identificador del usuario IAM.
+     * @return la entidad del cliente vinculado, o {@code Optional.empty()} si no existe.
+     */
     Optional<CustomerJpaEntity> findByIamUserId(UUID iamUserId);
 
+    /**
+     * @param email correo electrónico.
+     * @return {@code true} si ya existe un cliente con ese correo.
+     */
     boolean existsByEmail(String email);
 }

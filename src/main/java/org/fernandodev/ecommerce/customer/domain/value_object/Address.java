@@ -22,6 +22,13 @@ public record Address(
         String country
 ) {
 
+    /**
+     * Constructor compacto que valida los invariantes de la dirección.
+     *
+     * @throws NullPointerException     si {@code id} es {@code null}.
+     * @throws IllegalArgumentException si {@code street}, {@code city},
+     *                                  {@code postalCode} o {@code country} están en blanco.
+     */
     public Address {
         Objects.requireNonNull(id, "id no puede ser null");
         requireNotBlank(street, "street");

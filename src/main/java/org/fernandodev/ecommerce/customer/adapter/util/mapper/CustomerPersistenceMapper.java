@@ -19,6 +19,10 @@ public final class CustomerPersistenceMapper {
     private CustomerPersistenceMapper() {
     }
 
+    /**
+     * @param customer agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static CustomerJpaEntity toEntity(Customer customer) {
         CustomerJpaEntity entity = new CustomerJpaEntity();
         entity.setId(customer.getId().value());
@@ -34,6 +38,10 @@ public final class CustomerPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param entity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Customer toDomain(CustomerJpaEntity entity) {
         return Customer.crear(
                 CustomerId.of(entity.getId()),

@@ -22,22 +22,42 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerMapper {
 
+    /**
+     * @param request petición de alta.
+     * @return perfil de aplicación equivalente.
+     */
     public Profile toProfile(CreateCustomerRequest request) {
         return new Profile(request.firstName(), request.lastName(), request.email(), request.phoneNumber());
     }
 
+    /**
+     * @param request petición de actualización.
+     * @return perfil de aplicación equivalente.
+     */
     public Profile toProfile(UpdateProfileRequest request) {
         return new Profile(request.firstName(), request.lastName(), request.email(), request.phoneNumber());
     }
 
+    /**
+     * @param request petición de dirección.
+     * @return comando de aplicación equivalente.
+     */
     public AddressCommand toAddressCommand(AddressRequest request) {
         return new AddressCommand(request.street(), request.city(), request.state(), request.postalCode(), request.country());
     }
 
+    /**
+     * @param request petición de preferencias.
+     * @return comando de aplicación equivalente.
+     */
     public PreferencesCommand toPreferencesCommand(PreferencesRequest request) {
         return new PreferencesCommand(request.newsletterEnabled(), request.preferredCurrencyCode());
     }
 
+    /**
+     * @param customer agregado de dominio.
+     * @return respuesta REST con el perfil del cliente.
+     */
     public CustomerResponse toResponse(Customer customer) {
         return new CustomerResponse(
                 customer.getId().value(),
@@ -52,6 +72,10 @@ public class CustomerMapper {
                         customer.getPreferences().preferredCurrencyCode()));
     }
 
+    /**
+     * @param address dirección de dominio.
+     * @return respuesta REST con la dirección.
+     */
     public AddressResponse toAddressResponse(Address address) {
         return new AddressResponse(
                 address.id().value(),
@@ -62,6 +86,10 @@ public class CustomerMapper {
                 address.country());
     }
 
+    /**
+     * @param addresses lista de direcciones de dominio.
+     * @return respuestas REST equivalentes.
+     */
     public List<AddressResponse> toAddressesResponse(List<Address> addresses) {
         return addresses.stream().map(this::toAddressResponse).toList();
     }
