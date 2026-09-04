@@ -12,6 +12,10 @@ public final class TemplatePersistenceMapper {
     private TemplatePersistenceMapper() {
     }
 
+    /**
+     * @param template agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static NotificationTemplateJpaEntity toEntity(NotificationTemplate template) {
         NotificationTemplateJpaEntity entity = new NotificationTemplateJpaEntity();
         entity.setId(template.getId().value());
@@ -23,6 +27,10 @@ public final class TemplatePersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param notificationTemplateJpaEntity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static NotificationTemplate toDomain(NotificationTemplateJpaEntity entity) {
         return NotificationTemplate.crear(
                 NotificationTemplateId.of(entity.getId()),

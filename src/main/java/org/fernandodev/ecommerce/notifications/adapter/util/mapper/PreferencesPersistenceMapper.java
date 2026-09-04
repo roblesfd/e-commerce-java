@@ -11,6 +11,10 @@ public final class PreferencesPersistenceMapper {
     private PreferencesPersistenceMapper() {
     }
 
+    /**
+     * @param preferences agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static NotificationPreferencesJpaEntity toEntity(NotificationPreferences preferences) {
         NotificationPreferencesJpaEntity entity = new NotificationPreferencesJpaEntity();
         entity.setCustomerId(preferences.getCustomerId());
@@ -21,6 +25,10 @@ public final class PreferencesPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param notificationPreferencesJpaEntity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static NotificationPreferences toDomain(NotificationPreferencesJpaEntity entity) {
         return NotificationPreferences.crear(
                 entity.getCustomerId(),

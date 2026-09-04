@@ -14,10 +14,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class NotificationMapper {
 
+    /**
+     * @param request petición de creación.
+     * @return comando de aplicación equivalente.
+     */
     public CreateNotificationCommand toCommand(CreateNotificationRequest request) {
         return new CreateNotificationCommand(request.channel(), request.title(), request.body(), request.dedupKey());
     }
 
+    /**
+     * @param notification agregado de dominio.
+     * @return respuesta REST con la notificación.
+     */
     public NotificationResponse toResponse(Notification notification) {
         return new NotificationResponse(
                 notification.getId().value(),

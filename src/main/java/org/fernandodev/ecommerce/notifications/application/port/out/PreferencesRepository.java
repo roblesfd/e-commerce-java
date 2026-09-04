@@ -10,7 +10,13 @@ import org.fernandodev.ecommerce.notifications.domain.NotificationPreferences;
  */
 public interface PreferencesRepository {
 
+    /**
+     * Persiste las preferencias.
+     */
     NotificationPreferences save(NotificationPreferences preferences);
 
+    /**
+     * Consulta las preferencias del cliente.
+     */
     Optional<NotificationPreferences> findByCustomerId(UUID customerId);
 }

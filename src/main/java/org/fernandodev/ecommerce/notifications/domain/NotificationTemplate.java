@@ -24,6 +24,17 @@ public class NotificationTemplate {
     private Instant createdAt;
     private Instant updatedAt;
 
+    /**
+     * Crea una plantilla activa.
+     *
+     * @param id    identificador de la plantilla.
+     * @param code  código de la plantilla.
+     * @param title título.
+     * @param body  cuerpo.
+     * @param at    momento de creación.
+     * @return la plantilla creada.
+     * @throws BusinessRuleViolationException si el código está vacío.
+     */
     public static NotificationTemplate create(NotificationTemplateId id, String code, String title, String body,
                                               Instant at) {
         NotificationTemplate template = new NotificationTemplate();
@@ -37,6 +48,11 @@ public class NotificationTemplate {
         return template;
     }
 
+    /**
+     * Factoría completa. Usada por la persistencia.
+     *
+     * @return la plantilla reconstruida.
+     */
     public static NotificationTemplate crear(NotificationTemplateId id, String code, String title, String body,
                                              boolean active, Instant createdAt, Instant updatedAt) {
         NotificationTemplate template = new NotificationTemplate();
@@ -50,20 +66,41 @@ public class NotificationTemplate {
         return template;
     }
 
+    /**
+     * Actualiza título y cuerpo de la plantilla.
+     *
+     * @param title nuevo título.
+     * @param body  nuevo cuerpo.
+     * @param at    momento de la actualización.
+     * @throws NullPointerException si título o cuerpo son {@code null}.
+     */
     public void update(String title, String body, Instant at) {
         this.title = Objects.requireNonNull(title, "title no puede ser null");
         this.body = Objects.requireNonNull(body, "body no puede ser null");
         this.updatedAt = at;
     }
 
+    /**
+     * Activa la plantilla.
+     */
     public void activate() {
         this.active = true;
     }
 
+    /**
+     * Desactiva la plantilla.
+     */
     public void deactivate() {
         this.active = false;
     }
 
+    /**
+     * Valida que el código no esté vacío.
+     *
+     * @param code código a validar.
+     * @return el código normalizado.
+     * @throws BusinessRuleViolationException si el código está vacío.
+     */
     private static String validateCode(String code) {
         Objects.requireNonNull(code, "code no puede ser null");
         if (code.isBlank()) {

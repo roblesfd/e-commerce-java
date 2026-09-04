@@ -23,10 +23,22 @@ public class NotificationPreferences {
     private boolean inAppEnabled;
     private Instant updatedAt;
 
+    /**
+     * Crea preferencias con todos los canales habilitados.
+     *
+     * @param customerId identificador del cliente.
+     * @param at         momento de creación.
+     * @return las preferencias creadas.
+     */
     public static NotificationPreferences create(UUID customerId, Instant at) {
         return crear(customerId, true, true, true, true, at);
     }
 
+    /**
+     * Factoría completa. Usada por la persistencia.
+     *
+     * @return las preferencias reconstruidas.
+     */
     public static NotificationPreferences crear(UUID customerId, boolean emailEnabled, boolean smsEnabled,
                                                 boolean pushEnabled, boolean inAppEnabled, Instant updatedAt) {
         NotificationPreferences preferences = new NotificationPreferences();
@@ -39,6 +51,10 @@ public class NotificationPreferences {
         return preferences;
     }
 
+    /**
+     * @param channel canal de notificación.
+     * @return {@code true} si el canal está habilitado para el cliente.
+     */
     public boolean isEnabled(NotificationChannel channel) {
         return switch (channel) {
             case EMAIL -> emailEnabled;
@@ -48,6 +64,13 @@ public class NotificationPreferences {
         };
     }
 
+    /**
+     * Habilita o deshabilita un canal.
+     *
+     * @param channel canal.
+     * @param enabled {@code true} para habilitar.
+     * @param at      momento de la actualización.
+     */
     public void setEnabled(NotificationChannel channel, boolean enabled, Instant at) {
         switch (channel) {
             case EMAIL -> this.emailEnabled = enabled;

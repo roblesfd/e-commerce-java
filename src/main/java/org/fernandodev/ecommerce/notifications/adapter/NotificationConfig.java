@@ -29,6 +29,12 @@ import io.github.resilience4j.retry.RetryConfig;
 @Configuration
 public class NotificationConfig {
 
+    /**
+
+     * Configura un bean del contexto Notifications.
+
+     */
+
     @Bean
     public Retry notificationProviderRetry() {
         RetryConfig config = RetryConfig.custom()
@@ -38,6 +44,12 @@ public class NotificationConfig {
         return Retry.of("notificationProvider", config);
     }
 
+    /**
+
+     * Configura un bean del contexto Notifications.
+
+     */
+
     @Bean
     public NotificationProviderPort notificationProvider(List<ChannelProvider> channelProviders,
                                                          Retry notificationProviderRetry) {
@@ -45,16 +57,34 @@ public class NotificationConfig {
         return new ResilientNotificationProvider(router, notificationProviderRetry);
     }
 
+    /**
+
+     * Configura un bean del contexto Notifications.
+
+     */
+
     @Bean
     public NotificationUseCases notificationUseCases(NotificationRepository notifications,
                                                      NotificationProviderPort notificationProvider) {
         return new NotificationService(notifications, notificationProvider);
     }
 
+    /**
+
+     * Configura un bean del contexto Notifications.
+
+     */
+
     @Bean
     public TemplateUseCases templateUseCases(TemplateRepository templates) {
         return new TemplateService(templates);
     }
+
+    /**
+
+     * Configura un bean del contexto Notifications.
+
+     */
 
     @Bean
     public PreferencesUseCases preferencesUseCases(PreferencesRepository preferences) {

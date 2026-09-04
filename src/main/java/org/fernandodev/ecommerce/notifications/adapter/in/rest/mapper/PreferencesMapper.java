@@ -12,11 +12,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class PreferencesMapper {
 
+    /**
+     * @param request petición de preferencias.
+     * @return comando de aplicación equivalente.
+     */
     public UpdatePreferencesCommand toCommand(UpdatePreferencesRequest request) {
         return new UpdatePreferencesCommand(
                 request.emailEnabled(), request.smsEnabled(), request.pushEnabled(), request.inAppEnabled());
     }
 
+    /**
+     * @param preferences agregado de dominio.
+     * @return respuesta REST con las preferencias.
+     */
     public PreferencesResponse toResponse(NotificationPreferences preferences) {
         return new PreferencesResponse(
                 preferences.getCustomerId(),

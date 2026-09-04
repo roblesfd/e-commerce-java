@@ -31,6 +31,10 @@ public class PreferencesController {
     }
 
     @PutMapping
+    /**
+     * Update.
+     * @param request request.
+     */
     public PreferencesResponse update(@Valid @RequestBody UpdatePreferencesRequest request) {
         return mapper.toResponse(preferencesUseCases.update(SecurityUtils.requiredUserId(), mapper.toCommand(request)));
     }

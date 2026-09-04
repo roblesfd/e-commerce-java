@@ -19,6 +19,12 @@ public class TemplateService implements TemplateUseCases {
 
     private final TemplateRepository templates;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public NotificationTemplate create(String code, String title, String body) {
         NotificationTemplate template = NotificationTemplate.create(
@@ -26,15 +32,33 @@ public class TemplateService implements TemplateUseCases {
         return templates.save(template);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<NotificationTemplate> list() {
         return templates.findAll();
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public NotificationTemplate getById(NotificationTemplateId id) {
         return getExisting(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public NotificationTemplate update(NotificationTemplateId id, UpdateTemplateCommand command) {
@@ -43,12 +67,24 @@ public class TemplateService implements TemplateUseCases {
         return templates.save(template);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public NotificationTemplate activate(NotificationTemplateId id) {
         NotificationTemplate template = getExisting(id);
         template.activate();
         return templates.save(template);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public NotificationTemplate deactivate(NotificationTemplateId id) {

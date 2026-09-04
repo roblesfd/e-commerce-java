@@ -41,6 +41,11 @@ public class NotificationController {
     }
 
     @GetMapping
+    /**
+     * Mine.
+     * @param false false.
+     * @param unread unread.
+     */
     public List<NotificationResponse> mine(@RequestParam(required = false, defaultValue = "false") boolean unread) {
         return notificationUseCases.listByCustomer(SecurityUtils.requiredUserId(), unread).stream()
                 .map(mapper::toResponse)
@@ -48,33 +53,56 @@ public class NotificationController {
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public NotificationResponse get(@PathVariable UUID id) {
         return mapper.toResponse(notificationUseCases.getById(NotificationId.of(id)));
     }
 
     @PostMapping("/{id}/read")
+    /**
+     * Mark read.
+     * @param id id.
+     */
     public NotificationResponse markRead(@PathVariable UUID id) {
         return mapper.toResponse(notificationUseCases.markRead(NotificationId.of(id)));
     }
 
     @PostMapping("/{id}/unread")
+    /**
+     * Mark unread.
+     * @param id id.
+     */
     public NotificationResponse markUnread(@PathVariable UUID id) {
         return mapper.toResponse(notificationUseCases.markUnread(NotificationId.of(id)));
     }
 
     @PostMapping("/read-all")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Mark all read.
+     */
     public void markAllRead() {
         notificationUseCases.markAllRead(SecurityUtils.requiredUserId());
     }
 
     @PostMapping("/{id}/retry")
+    /**
+     * Retry.
+     * @param id id.
+     */
     public NotificationResponse retry(@PathVariable UUID id) {
         return mapper.toResponse(notificationUseCases.retry(NotificationId.of(id)));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * Delete.
+     * @param id id.
+     */
     public void delete(@PathVariable UUID id) {
         notificationUseCases.delete(NotificationId.of(id));
     }

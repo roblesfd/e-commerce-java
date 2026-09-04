@@ -37,6 +37,19 @@ public class Notification {
     private Instant createdAt;
     private Instant updatedAt;
 
+    /**
+     * Crea una notificación pendiente.
+     *
+     * @param id         identificador de la notificación.
+     * @param customerId destinatario.
+     * @param channel    canal de entrega.
+     * @param title      título.
+     * @param body       cuerpo.
+     * @param dedupKey   clave de deduplicación (opcional).
+     * @param at         momento de creación.
+     * @return la notificación en estado {@code PENDING}.
+     * @throws NullPointerException si algún campo obligatorio es {@code null}.
+     */
     public static Notification create(NotificationId id, UUID customerId, NotificationChannel channel,
                                       String title, String body, String dedupKey, Instant at) {
         Notification notification = new Notification();
@@ -58,6 +71,11 @@ public class Notification {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría completa con copia defensiva. Usada por la persistencia.
+     *
+     * @return la notificación reconstruida.
      */
     public static Notification crear(
             NotificationId id,
@@ -91,12 +109,24 @@ public class Notification {
         return notification;
     }
 
+    /**
+     * Marca la notificación como procesándose e incrementa el intento.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si no está {@code PENDING}.
+     */
     public void markProcessing(Instant at) {
         requireTransition(NotificationStatus.PROCESSING, "procesar");
         this.deliveryAttempts++;
         this.updatedAt = at;
     }
 
+    /**
+     * Marca la notificación como enviada y registra la fecha.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si no está {@code PROCESSING}.
+     */
     public void markSent(Instant at) {
         requireTransition(NotificationStatus.SENT, "marcar como enviada");
         this.sentAt = at;
@@ -104,6 +134,12 @@ public class Notification {
         this.updatedAt = at;
     }
 
+    /**
+     * Marca la notificación como fallida.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si no está {@code PENDING} o {@code PROCESSING}.
+     */
     public void markFailed(Instant at) {
         if (status != NotificationStatus.PROCESSING && status != NotificationStatus.PENDING) {
             throw new BusinessRuleViolationException("Solo se puede fallar una notificación PENDING o PROCESSING");
@@ -113,6 +149,12 @@ public class Notification {
         this.updatedAt = at;
     }
 
+    /**
+     * Reintenta una notificación fallida (vuelve a {@code PENDING}).
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si no está {@code FAILED}.
+     */
     public void retry(Instant at) {
         if (status != NotificationStatus.FAILED) {
             throw new BusinessRuleViolationException("Solo se puede reintentar una notificación fallida");
@@ -122,6 +164,12 @@ public class Notification {
         this.updatedAt = at;
     }
 
+    /**
+     * Marca la notificación como leída.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si no está {@code SENT}.
+     */
     public void markRead(Instant at) {
         if (status != NotificationStatus.SENT) {
             throw new BusinessRuleViolationException("Solo se puede leer una notificación enviada");
@@ -130,6 +178,12 @@ public class Notification {
         this.updatedAt = at;
     }
 
+    /**
+     * Marca la notificación como no leída.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si no está {@code SENT}.
+     */
     public void markUnread(Instant at) {
         if (status != NotificationStatus.SENT) {
             throw new BusinessRuleViolationException("Solo se puede marcar como no leída una notificación enviada");
@@ -138,6 +192,12 @@ public class Notification {
         this.updatedAt = at;
     }
 
+    /**
+     * Cancela la notificación.
+     *
+     * @param at momento de la operación.
+     * @throws BusinessRuleViolationException si no está {@code PENDING}.
+     */
     public void cancel(Instant at) {
         if (status != NotificationStatus.PENDING) {
             throw new BusinessRuleViolationException("Solo se puede cancelar una notificación PENDING");
@@ -146,6 +206,13 @@ public class Notification {
         this.updatedAt = at;
     }
 
+    /**
+     * Valida la transición permitida al estado objetivo.
+     *
+     * @param target    estado destino.
+     * @param operacion operación en curso.
+     * @throws BusinessRuleViolationException si la transición no está permitida.
+     */
     private void requireTransition(NotificationStatus target, String operacion) {
         boolean valid = switch (target) {
             case PROCESSING -> status == NotificationStatus.PENDING;

@@ -18,11 +18,23 @@ public class PreferencesService implements PreferencesUseCases {
 
     private final PreferencesRepository preferences;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public NotificationPreferences getByCustomer(UUID customerId) {
         return preferences.findByCustomerId(customerId)
                 .orElseGet(() -> preferences.save(NotificationPreferences.create(customerId, Instant.now())));
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public NotificationPreferences update(UUID customerId, UpdatePreferencesCommand command) {

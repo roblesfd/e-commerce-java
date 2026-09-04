@@ -33,6 +33,12 @@ public class NotificationService implements NotificationUseCases {
     private final NotificationRepository notifications;
     private final NotificationProviderPort provider;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Notification create(UUID customerId, CreateNotificationCommand command) {
@@ -45,15 +51,33 @@ public class NotificationService implements NotificationUseCases {
         return notifications.save(notification);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Notification getById(NotificationId id) {
         return getExisting(id);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public List<Notification> listByCustomer(UUID customerId, boolean unreadOnly) {
         return notifications.findByCustomerId(customerId, unreadOnly);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -63,6 +87,12 @@ public class NotificationService implements NotificationUseCases {
         return notifications.save(notification);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Notification markUnread(NotificationId id) {
@@ -70,6 +100,12 @@ public class NotificationService implements NotificationUseCases {
         notification.markUnread(Instant.now());
         return notifications.save(notification);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -80,12 +116,24 @@ public class NotificationService implements NotificationUseCases {
         });
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public void delete(NotificationId id) {
         getExisting(id);
         notifications.delete(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -99,6 +147,12 @@ public class NotificationService implements NotificationUseCases {
         return notifications.save(notification);
     }
 
+    /**
+     * Entrega la notificación: IN_APP se marca enviada directamente; los canales
+     * externos se envían por el proveedor (SENT o FAILED).
+     *
+     * @param notification notificación a entregar.
+     */
     private void deliver(Notification notification) {
         if (notification.getChannel() == NotificationChannel.IN_APP) {
             notification.markProcessing(Instant.now());
@@ -120,6 +174,11 @@ public class NotificationService implements NotificationUseCases {
         }
     }
 
+    /**
+     * @param id identificador de la notificación.
+     * @return la notificación existente.
+     * @throws ResourceNotFoundException si no existe.
+     */
     private Notification getExisting(NotificationId id) {
         return notifications.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Notificación no encontrada: " + id));

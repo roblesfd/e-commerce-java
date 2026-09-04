@@ -7,14 +7,29 @@ import org.fernandodev.ecommerce.notifications.domain.value_object.NotificationC
  */
 public interface NotificationProviderPort {
 
+    /**
+     * Envía la notificación por el canal indicado.
+     *
+     * @param channel    canal de entrega.
+     * @param customerId destinatario.
+     * @param title      título.
+     * @param body       cuerpo.
+     * @return el resultado de la entrega.
+     */
     DeliveryResult send(NotificationChannel channel, java.util.UUID customerId, String title, String body);
 
     record DeliveryResult(boolean success) {
-        public static DeliveryResult ok() {
+        /**
+         * @return un resultado de entrega exitoso.
+         */
+    public static DeliveryResult ok() {
             return new DeliveryResult(true);
         }
 
-        public static DeliveryResult fail() {
+        /**
+         * @return un resultado de entrega fallido.
+         */
+    public static DeliveryResult fail() {
             return new DeliveryResult(false);
         }
     }

@@ -14,6 +14,10 @@ public final class NotificationPersistenceMapper {
     private NotificationPersistenceMapper() {
     }
 
+    /**
+     * @param notification agregado de dominio.
+     * @return entidad JPA equivalente.
+     */
     public static NotificationJpaEntity toEntity(Notification notification) {
         NotificationJpaEntity entity = new NotificationJpaEntity();
         entity.setId(notification.getId().value());
@@ -31,6 +35,10 @@ public final class NotificationPersistenceMapper {
         return entity;
     }
 
+    /**
+     * @param notificationJpaEntity entidad JPA.
+     * @return agregado de dominio equivalente.
+     */
     public static Notification toDomain(NotificationJpaEntity entity) {
         return Notification.crear(
                 NotificationId.of(entity.getId()),

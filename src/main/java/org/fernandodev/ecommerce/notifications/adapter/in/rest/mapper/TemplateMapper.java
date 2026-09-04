@@ -13,10 +13,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class TemplateMapper {
 
+    /**
+     * @param request petición de actualización.
+     * @return comando de aplicación equivalente.
+     */
     public UpdateTemplateCommand toUpdateCommand(UpdateTemplateRequest request) {
         return new UpdateTemplateCommand(request.title(), request.body());
     }
 
+    /**
+     * @param template agregado de dominio.
+     * @return respuesta REST con la plantilla.
+     */
     public TemplateResponse toResponse(NotificationTemplate template) {
         return new TemplateResponse(
                 template.getId().value(),

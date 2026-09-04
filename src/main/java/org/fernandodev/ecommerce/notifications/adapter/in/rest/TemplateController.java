@@ -40,26 +40,46 @@ public class TemplateController {
     }
 
     @GetMapping
+    /**
+     * List.
+     */
     public List<TemplateResponse> list() {
         return templateUseCases.list().stream().map(mapper::toResponse).toList();
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public TemplateResponse get(@PathVariable UUID id) {
         return mapper.toResponse(templateUseCases.getById(NotificationTemplateId.of(id)));
     }
 
     @PutMapping("/{id}")
+    /**
+     * Update.
+     * @param id id.
+     * @param request request.
+     */
     public TemplateResponse update(@PathVariable UUID id, @Valid @RequestBody UpdateTemplateRequest request) {
         return mapper.toResponse(templateUseCases.update(NotificationTemplateId.of(id), mapper.toUpdateCommand(request)));
     }
 
     @PostMapping("/{id}/activate")
+    /**
+     * Activate.
+     * @param id id.
+     */
     public TemplateResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(templateUseCases.activate(NotificationTemplateId.of(id)));
     }
 
     @PostMapping("/{id}/deactivate")
+    /**
+     * Deactivate.
+     * @param id id.
+     */
     public TemplateResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(templateUseCases.deactivate(NotificationTemplateId.of(id)));
     }

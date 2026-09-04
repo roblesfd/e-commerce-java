@@ -10,7 +10,13 @@ import org.fernandodev.ecommerce.notifications.domain.NotificationPreferences;
  */
 public interface PreferencesUseCases {
 
+    /**
+     * Obtiene las preferencias del cliente (las crea por defecto si no existen).
+     */
     NotificationPreferences getByCustomer(UUID customerId);
 
+    /**
+     * Actualiza los canales habilitados del cliente.
+     */
     NotificationPreferences update(UUID customerId, UpdatePreferencesCommand command);
 }
