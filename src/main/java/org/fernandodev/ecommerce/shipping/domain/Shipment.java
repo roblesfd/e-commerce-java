@@ -44,6 +44,9 @@ public class Shipment {
     private Instant createdAt;
     private Instant updatedAt;
 
+    /**
+     * Factoría del agregado.
+     */
     public static Shipment create(
             ShipmentId id,
             OrderId orderId,
@@ -73,6 +76,9 @@ public class Shipment {
 
     /**
      * Factoría completa con copia defensiva. Usada por la persistencia.
+     */
+    /**
+     * Factoría completa usada por la persistencia.
      */
     public static Shipment crear(
             ShipmentId id,

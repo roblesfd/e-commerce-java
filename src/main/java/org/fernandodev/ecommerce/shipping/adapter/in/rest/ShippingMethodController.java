@@ -39,21 +39,36 @@ public class ShippingMethodController {
     }
 
     @GetMapping
+    /**
+     * List.
+     */
     public List<ShippingMethodResponse> list() {
         return shippingMethodUseCases.list().stream().map(mapper::toResponse).toList();
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public ShippingMethodResponse get(@PathVariable UUID id) {
         return mapper.toResponse(shippingMethodUseCases.getById(ShippingMethodId.of(id)));
     }
 
     @PatchMapping("/{id}/activate")
+    /**
+     * Activate.
+     * @param id id.
+     */
     public ShippingMethodResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(shippingMethodUseCases.activate(ShippingMethodId.of(id)));
     }
 
     @PatchMapping("/{id}/deactivate")
+    /**
+     * Deactivate.
+     * @param id id.
+     */
     public ShippingMethodResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(shippingMethodUseCases.deactivate(ShippingMethodId.of(id)));
     }

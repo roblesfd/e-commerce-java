@@ -11,10 +11,19 @@ import org.fernandodev.ecommerce.shipping.domain.value_object.ShippingMethodId;
  */
 public interface ShippingMethodRepository {
 
+    /**
+     * Persiste el método de envío.
+     */
     ShippingMethod save(ShippingMethod method);
 
+    /**
+     * Consulta un método de envío.
+     */
     Optional<ShippingMethod> findById(ShippingMethodId id);
 
+    /**
+     * Lista todos los métodos de envío.
+     */
     List<ShippingMethod> findAll();
 
     boolean existsById(ShippingMethodId id);

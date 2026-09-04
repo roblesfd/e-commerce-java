@@ -45,6 +45,12 @@ public class ShipmentService implements ShipmentUseCases {
     private final OrderPort orders;
     private final CustomerAddressProvider addresses;
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Shipment create(OrderId orderId, CreateShipmentCommand command) {
@@ -74,20 +80,44 @@ public class ShipmentService implements ShipmentUseCases {
         return shipments.save(shipment);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Shipment getById(ShipmentId id) {
         return getExisting(id);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public List<Shipment> listByCustomer(UUID customerId) {
         return shipments.findByCustomerId(customerId);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     public Optional<Shipment> getByOrder(OrderId orderId) {
         return shipments.findByOrderId(orderId);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     public Money calculateCost(ShippingMethodId methodId) {
@@ -96,11 +126,23 @@ public class ShipmentService implements ShipmentUseCases {
         return method.getCost();
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Shipment markPrepared(ShipmentId id) {
         return transition(id, Transition.PREPARED);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -108,11 +150,23 @@ public class ShipmentService implements ShipmentUseCases {
         return transition(id, Transition.SHIPPED);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Shipment markInTransit(ShipmentId id) {
         return transition(id, Transition.IN_TRANSIT);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -120,11 +174,23 @@ public class ShipmentService implements ShipmentUseCases {
         return transition(id, Transition.OUT_FOR_DELIVERY);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Shipment markDelivered(ShipmentId id) {
         return transition(id, Transition.DELIVERED);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional
@@ -134,6 +200,12 @@ public class ShipmentService implements ShipmentUseCases {
         return shipments.save(shipment);
     }
 
+    /**
+
+     * {@inheritDoc}
+
+     */
+
     @Override
     @Transactional
     public Shipment cancel(ShipmentId id) {
@@ -141,6 +213,12 @@ public class ShipmentService implements ShipmentUseCases {
         shipment.cancel(Instant.now());
         return shipments.save(shipment);
     }
+
+    /**
+
+     * {@inheritDoc}
+
+     */
 
     @Override
     @Transactional

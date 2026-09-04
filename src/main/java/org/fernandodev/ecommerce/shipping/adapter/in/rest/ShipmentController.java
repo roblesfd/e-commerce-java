@@ -43,11 +43,18 @@ public class ShipmentController {
     }
 
     @GetMapping("/{id}")
+    /**
+     * Get.
+     * @param id id.
+     */
     public ShipmentResponse get(@PathVariable UUID id) {
         return mapper.toResponse(shipmentUseCases.getById(ShipmentId.of(id)));
     }
 
     @GetMapping("/me")
+    /**
+     * Mine.
+     */
     public List<ShipmentResponse> mine() {
         return shipmentUseCases.listByCustomer(SecurityUtils.requiredUserId()).stream()
                 .map(mapper::toResponse)
@@ -55,6 +62,10 @@ public class ShipmentController {
     }
 
     @GetMapping
+    /**
+     * Get by order.
+     * @param orderId orderId.
+     */
     public ShipmentResponse getByOrder(@RequestParam UUID orderId) {
         return shipmentUseCases.getByOrder(OrderId.of(orderId))
                 .map(mapper::toResponse)
@@ -62,36 +73,64 @@ public class ShipmentController {
     }
 
     @PostMapping("/{id}/prepared")
+    /**
+     * Mark prepared.
+     * @param id id.
+     */
     public ShipmentResponse markPrepared(@PathVariable UUID id) {
         return mapper.toResponse(shipmentUseCases.markPrepared(ShipmentId.of(id)));
     }
 
     @PostMapping("/{id}/shipped")
+    /**
+     * Mark shipped.
+     * @param id id.
+     */
     public ShipmentResponse markShipped(@PathVariable UUID id) {
         return mapper.toResponse(shipmentUseCases.markShipped(ShipmentId.of(id)));
     }
 
     @PostMapping("/{id}/in-transit")
+    /**
+     * Mark in transit.
+     * @param id id.
+     */
     public ShipmentResponse markInTransit(@PathVariable UUID id) {
         return mapper.toResponse(shipmentUseCases.markInTransit(ShipmentId.of(id)));
     }
 
     @PostMapping("/{id}/out-for-delivery")
+    /**
+     * Mark out for delivery.
+     * @param id id.
+     */
     public ShipmentResponse markOutForDelivery(@PathVariable UUID id) {
         return mapper.toResponse(shipmentUseCases.markOutForDelivery(ShipmentId.of(id)));
     }
 
     @PostMapping("/{id}/delivered")
+    /**
+     * Mark delivered.
+     * @param id id.
+     */
     public ShipmentResponse markDelivered(@PathVariable UUID id) {
         return mapper.toResponse(shipmentUseCases.markDelivered(ShipmentId.of(id)));
     }
 
     @PostMapping("/{id}/failed")
+    /**
+     * Handle failure.
+     * @param id id.
+     */
     public ShipmentResponse handleFailure(@PathVariable UUID id) {
         return mapper.toResponse(shipmentUseCases.handleFailure(ShipmentId.of(id)));
     }
 
     @PostMapping("/{id}/cancel")
+    /**
+     * Cancel.
+     * @param id id.
+     */
     public ShipmentResponse cancel(@PathVariable UUID id) {
         return mapper.toResponse(shipmentUseCases.cancel(ShipmentId.of(id)));
     }

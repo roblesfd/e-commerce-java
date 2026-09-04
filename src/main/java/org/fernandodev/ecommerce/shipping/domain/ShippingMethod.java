@@ -23,6 +23,9 @@ public class ShippingMethod {
     private Money cost;
     private boolean active;
 
+    /**
+     * Factoría del agregado.
+     */
     public static ShippingMethod create(ShippingMethodId id, String name, String carrier, Money cost) {
         return crear(id, name, carrier, cost, true);
     }

@@ -16,29 +16,65 @@ import org.fernandodev.ecommerce.shared.domain.Money;
  */
 public interface ShipmentUseCases {
 
+    /**
+     * Crea un envío para una orden confirmada y solicita el tracking al proveedor.
+     */
     Shipment create(OrderId orderId, CreateShipmentCommand command);
 
+    /**
+     * Consulta un envío por identificador.
+     */
     Shipment getById(ShipmentId id);
 
+    /**
+     * Lista los envíos de un cliente.
+     */
     List<Shipment> listByCustomer(UUID customerId);
 
+    /**
+     * Consulta el envío de una orden.
+     */
     Optional<Shipment> getByOrder(OrderId orderId);
 
     Money calculateCost(ShippingMethodId methodId);
 
+    /**
+     * Marca el envío como preparado.
+     */
     Shipment markPrepared(ShipmentId id);
 
+    /**
+     * Marca el envío como enviado (y la orden como enviada).
+     */
     Shipment markShipped(ShipmentId id);
 
+    /**
+     * Marca el envío como en tránsito.
+     */
     Shipment markInTransit(ShipmentId id);
 
+    /**
+     * Marca el envío como fuera para entrega.
+     */
     Shipment markOutForDelivery(ShipmentId id);
 
+    /**
+     * Marca el envío como entregado (y la orden como entregada).
+     */
     Shipment markDelivered(ShipmentId id);
 
+    /**
+     * Marca el envío como fallido.
+     */
     Shipment handleFailure(ShipmentId id);
 
+    /**
+     * Cancela el envío (solo PENDING o PREPARING).
+     */
     Shipment cancel(ShipmentId id);
 
+    /**
+     * Procesa un callback del proveedor de envíos.
+     */
     Shipment processWebhook(String trackingNumber, String providerStatus);
 }
