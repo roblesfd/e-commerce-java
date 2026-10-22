@@ -30,6 +30,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de administración del catálogo.
+ * <p>
+ * Expone operaciones CRUD y de activación/desactivación sobre productos,
+ * categorías y marcas. Todos los endpoints están protegidos y requieren
+ * rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -38,6 +43,12 @@ public class AdminCatalogController {
 
     private final AdminCatalogUseCases adminCatalog;
 
+    /**
+     * Crea un producto en el catálogo.
+     *
+     * @param command datos del producto.
+     * @return el producto creado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/products")
@@ -46,164 +57,189 @@ public class AdminCatalogController {
         return adminCatalog.createProduct(command);
     }
 
+    /**
+     * Actualiza los datos de un producto existente.
+     *
+     * @param id      identificador del producto.
+     * @param command datos actualizados del producto.
+     * @return el producto actualizado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/products/{id}")
-    /**
-     * Update product.
-     * @param id id.
-     * @param command command.
-     */
     public Product updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductCommand command) {
         return adminCatalog.updateProduct(ProductId.of(id), command);
     }
 
+    /**
+     * Activa un producto del catálogo.
+     *
+     * @param id identificador del producto.
+     * @return el producto activado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/products/{id}/activate")
-    /**
-     * Activate product.
-     * @param id id.
-     */
     public Product activateProduct(@PathVariable UUID id) {
         return adminCatalog.activateProduct(ProductId.of(id));
     }
 
+    /**
+     * Desactiva un producto del catálogo.
+     *
+     * @param id identificador del producto.
+     * @return el producto desactivado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/products/{id}/deactivate")
-    /**
-     * Deactivate product.
-     * @param id id.
-     */
     public Product deactivateProduct(@PathVariable UUID id) {
         return adminCatalog.deactivateProduct(ProductId.of(id));
     }
 
+    /**
+     * Elimina un producto del catálogo.
+     *
+     * @param id identificador del producto.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @DeleteMapping("/products/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    /**
-     * Delete product.
-     * @param id id.
-     */
     public void deleteProduct(@PathVariable UUID id) {
         adminCatalog.deleteProduct(ProductId.of(id));
     }
 
+    /**
+     * Crea una categoría en el catálogo.
+     *
+     * @param command datos de la categoría.
+     * @return la categoría creada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    /**
-     * Create category.
-     * @param command command.
-     */
     public Category createCategory(@Valid @RequestBody CategoryCommand command) {
         return adminCatalog.createCategory(command);
     }
 
+    /**
+     * Actualiza los datos de una categoría existente.
+     *
+     * @param id      identificador de la categoría.
+     * @param command datos actualizados de la categoría.
+     * @return la categoría actualizada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/categories/{id}")
-    /**
-     * Update category.
-     * @param id id.
-     * @param command command.
-     */
     public Category updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryCommand command) {
         return adminCatalog.updateCategory(CategoryId.of(id), command);
     }
 
+    /**
+     * Activa una categoría del catálogo.
+     *
+     * @param id identificador de la categoría.
+     * @return la categoría activada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/categories/{id}/activate")
-    /**
-     * Activate category.
-     * @param id id.
-     */
     public Category activateCategory(@PathVariable UUID id) {
         return adminCatalog.activateCategory(CategoryId.of(id));
     }
 
+    /**
+     * Desactiva una categoría del catálogo.
+     *
+     * @param id identificador de la categoría.
+     * @return la categoría desactivada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/categories/{id}/deactivate")
-    /**
-     * Deactivate category.
-     * @param id id.
-     */
     public Category deactivateCategory(@PathVariable UUID id) {
         return adminCatalog.deactivateCategory(CategoryId.of(id));
     }
 
+    /**
+     * Elimina una categoría del catálogo.
+     *
+     * @param id identificador de la categoría.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @DeleteMapping("/categories/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    /**
-     * Delete category.
-     * @param id id.
-     */
     public void deleteCategory(@PathVariable UUID id) {
         adminCatalog.deleteCategory(CategoryId.of(id));
     }
 
+    /**
+     * Crea una marca en el catálogo.
+     *
+     * @param command datos de la marca.
+     * @return la marca creada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/brands")
     @ResponseStatus(HttpStatus.CREATED)
-    /**
-     * Create brand.
-     * @param command command.
-     */
     public Brand createBrand(@Valid @RequestBody BrandCommand command) {
         return adminCatalog.createBrand(command);
     }
 
+    /**
+     * Actualiza los datos de una marca existente.
+     *
+     * @param id      identificador de la marca.
+     * @param command datos actualizados de la marca.
+     * @return la marca actualizada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/brands/{id}")
-    /**
-     * Update brand.
-     * @param id id.
-     * @param command command.
-     */
     public Brand updateBrand(@PathVariable UUID id, @Valid @RequestBody BrandCommand command) {
         return adminCatalog.updateBrand(BrandId.of(id), command);
     }
 
+    /**
+     * Activa una marca del catálogo.
+     *
+     * @param id identificador de la marca.
+     * @return la marca activada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/brands/{id}/activate")
-    /**
-     * Activate brand.
-     * @param id id.
-     */
     public Brand activateBrand(@PathVariable UUID id) {
         return adminCatalog.activateBrand(BrandId.of(id));
     }
 
+    /**
+     * Desactiva una marca del catálogo.
+     *
+     * @param id identificador de la marca.
+     * @return la marca desactivada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/brands/{id}/deactivate")
-    /**
-     * Deactivate brand.
-     * @param id id.
-     */
     public Brand deactivateBrand(@PathVariable UUID id) {
         return adminCatalog.deactivateBrand(BrandId.of(id));
     }
 
+    /**
+     * Elimina una marca del catálogo.
+     *
+     * @param id identificador de la marca.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @DeleteMapping("/brands/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    /**
-     * Delete brand.
-     * @param id id.
-     */
     public void deleteBrand(@PathVariable UUID id) {
         adminCatalog.deleteBrand(BrandId.of(id));
     }

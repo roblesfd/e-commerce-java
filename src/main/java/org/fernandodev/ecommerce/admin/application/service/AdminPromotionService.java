@@ -27,11 +27,8 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     private final AuditService audit;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Promotion createPromotion(CreatePromotionCommand command) {
@@ -39,11 +36,8 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Promotion updatePromotion(PromotionId id, UpdatePromotionCommand command) {
@@ -51,11 +45,8 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Promotion activatePromotion(PromotionId id) {
@@ -63,11 +54,8 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Promotion deactivatePromotion(PromotionId id) {
@@ -76,9 +64,7 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
 
     @Override
@@ -88,11 +74,8 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Coupon createCoupon(CreateCouponCommand command) {
@@ -100,11 +83,8 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Coupon updateCoupon(CouponId id, UpdateCouponCommand command) {
@@ -112,11 +92,8 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Coupon activateCoupon(CouponId id) {
@@ -124,11 +101,8 @@ public class AdminPromotionService implements AdminPromotionUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Coupon deactivateCoupon(CouponId id) {

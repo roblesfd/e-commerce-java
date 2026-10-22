@@ -52,11 +52,16 @@ public class CartController {
     }
 
     /**
+     * Obtiene el carrito del usuario autenticado.
+     *
      * @return el carrito del usuario autenticado.
      */
     @GetMapping("/me")
     public CartResponse me() {
-        return mapper.toResponse(cartUseCases.getCart(SecurityUtils.requiredUserId()));
+
+        return mapper.toResponse(
+                cartUseCases.getCart(SecurityUtils.requiredUserId())
+        );
     }
 
     /**
@@ -68,7 +73,8 @@ public class CartController {
     @PostMapping("/me/items")
     public CartResponse addItem(@Valid @RequestBody AddItemRequest request) {
         return mapper.toResponse(cartUseCases.addItem(
-                SecurityUtils.requiredUserId(), mapper.toCommand(request)));
+                SecurityUtils.requiredUserId(), mapper.toCommand(request))
+        );
     }
 
     /**
@@ -82,7 +88,10 @@ public class CartController {
     public CartResponse updateItemQuantity(@PathVariable UUID itemId,
                                            @Valid @RequestBody UpdateQuantityRequest request) {
         return mapper.toResponse(cartUseCases.updateItemQuantity(
-                SecurityUtils.requiredUserId(), CartItemId.of(itemId), mapper.toCommand(request)));
+                SecurityUtils.requiredUserId(),
+                CartItemId.of(itemId),
+                mapper.toCommand(request))
+        );
     }
 
     /**
@@ -94,7 +103,8 @@ public class CartController {
     @DeleteMapping("/me/items/{itemId}")
     public CartResponse removeItem(@PathVariable UUID itemId) {
         return mapper.toResponse(cartUseCases.removeItem(
-                SecurityUtils.requiredUserId(), CartItemId.of(itemId)));
+                SecurityUtils.requiredUserId(), CartItemId.of(itemId))
+        );
     }
 
     /**
@@ -104,10 +114,15 @@ public class CartController {
      */
     @DeleteMapping("/me")
     public CartResponse clear() {
-        return mapper.toResponse(cartUseCases.clearCart(SecurityUtils.requiredUserId()));
+
+        return mapper.toResponse(
+                cartUseCases.clearCart(SecurityUtils.requiredUserId())
+        );
     }
 
     /**
+     * Devuelve el desglose del carrito del usuario autenticado.
+     *
      * @return subtotal, descuento y total del carrito del usuario autenticado.
      */
     @GetMapping("/me/totals")

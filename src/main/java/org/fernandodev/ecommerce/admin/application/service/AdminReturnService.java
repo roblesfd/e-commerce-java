@@ -20,33 +20,24 @@ public class AdminReturnService implements AdminReturnUseCases {
     private final AuditService audit;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Return> listAllReturns() {
         return returns.listAll();
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Return getReturn(ReturnId id) {
         return returns.getById(id);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Return approveReturn(ReturnId id) {
@@ -55,11 +46,8 @@ public class AdminReturnService implements AdminReturnUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Return rejectReturn(ReturnId id) {

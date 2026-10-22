@@ -24,11 +24,8 @@ public class AdminPricingService implements AdminPricingUseCases {
     private final AuditService audit;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Price defineBasePrice(DefinePriceCommand command) {
@@ -38,11 +35,8 @@ public class AdminPricingService implements AdminPricingUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Price updateBasePrice(PriceId id, UpdatePriceCommand command) {
@@ -51,11 +45,8 @@ public class AdminPricingService implements AdminPricingUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Price addOverride(PriceId id, AddPriceOverrideCommand command) {
@@ -64,11 +55,8 @@ public class AdminPricingService implements AdminPricingUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Price removeOverride(PriceId id, PriceOverrideId overrideId) {
@@ -77,11 +65,8 @@ public class AdminPricingService implements AdminPricingUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Price getPriceByProduct(ProductId productId, ProductVariantId variantId) {
         return pricing.getByProduct(productId, variantId);

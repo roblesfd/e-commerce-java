@@ -20,22 +20,16 @@ public class AdminReviewService implements AdminReviewUseCases {
     private final AuditService audit;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Review> listReviewsForModeration() {
         return reviews.listForModeration();
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review approveReview(ReviewId id) {
@@ -44,11 +38,8 @@ public class AdminReviewService implements AdminReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review rejectReview(ReviewId id) {
@@ -57,11 +48,8 @@ public class AdminReviewService implements AdminReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review hideReview(ReviewId id) {
@@ -70,11 +58,8 @@ public class AdminReviewService implements AdminReviewUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Review restoreReview(ReviewId id) {

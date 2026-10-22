@@ -28,6 +28,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de administración de precios.
+ * <p>
+ * Permite definir y actualizar precios base, gestionar overrides y consultar
+ * el precio de un producto. Todos los endpoints están protegidos y requieren
+ * rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin/prices")
@@ -36,6 +41,12 @@ public class AdminPricingController {
 
     private final AdminPricingUseCases adminPricing;
 
+    /**
+     * Define el precio base de un producto.
+     *
+     * @param command datos del precio base.
+     * @return el precio creado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping
@@ -43,50 +54,58 @@ public class AdminPricingController {
         return adminPricing.defineBasePrice(command);
     }
 
+    /**
+     * Actualiza un precio base existente.
+     *
+     * @param id      identificador del precio.
+     * @param command datos actualizados del precio.
+     * @return el precio actualizado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/{id}")
-    /**
-     * Update base price.
-     * @param id id.
-     * @param command command.
-     */
     public Price updateBasePrice(@PathVariable UUID id, @Valid @RequestBody UpdatePriceCommand command) {
         return adminPricing.updateBasePrice(PriceId.of(id), command);
     }
 
+    /**
+     * Añade un override de precio a un precio existente.
+     *
+     * @param id      identificador del precio.
+     * @param command datos del override.
+     * @return el precio con el override añadido.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/overrides")
-    /**
-     * Add override.
-     * @param id id.
-     * @param command command.
-     */
     public Price addOverride(@PathVariable UUID id, @Valid @RequestBody AddPriceOverrideCommand command) {
         return adminPricing.addOverride(PriceId.of(id), command);
     }
 
+    /**
+     * Elimina un override de precio.
+     *
+     * @param id         identificador del precio.
+     * @param overrideId identificador del override.
+     * @return el precio con el override eliminado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/overrides/{overrideId}/remove")
-    /**
-     * Remove override.
-     * @param id id.
-     * @param overrideId overrideId.
-     */
     public Price removeOverride(@PathVariable UUID id, @PathVariable UUID overrideId) {
         return adminPricing.removeOverride(PriceId.of(id), PriceOverrideId.of(overrideId));
     }
 
+    /**
+     * Consulta el precio de un producto, opcionalmente por variante.
+     *
+     * @param productId identificador del producto.
+     * @param variantId identificador de la variante (opcional).
+     * @return el precio vigente del producto.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/by-product")
-    /**
-     * Get by product.
-     * @param productId productId.
-     * @param variantId variantId.
-     */
     public Price getByProduct(@RequestParam UUID productId, @RequestParam(required = false) UUID variantId) {
         return adminPricing.getPriceByProduct(ProductId.of(productId),
                 variantId == null ? null : ProductVariantId.of(variantId));

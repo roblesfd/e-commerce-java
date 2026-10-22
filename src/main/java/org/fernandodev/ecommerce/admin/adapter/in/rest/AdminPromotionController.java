@@ -27,6 +27,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de administración de promociones y cupones.
+ * <p>
+ * Permite gestionar el ciclo de vida de promociones y cupones (crear,
+ * actualizar, activar/desactivar) y asociar productos a una promoción.
+ * Todos los endpoints están protegidos y requieren rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -35,6 +40,12 @@ public class AdminPromotionController {
 
     private final AdminPromotionUseCases adminPromotion;
 
+    /**
+     * Crea una promoción.
+     *
+     * @param command datos de la promoción.
+     * @return la promoción creada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/promotions")
@@ -42,93 +53,109 @@ public class AdminPromotionController {
         return adminPromotion.createPromotion(command);
     }
 
+    /**
+     * Actualiza una promoción existente.
+     *
+     * @param id      identificador de la promoción.
+     * @param command datos actualizados de la promoción.
+     * @return la promoción actualizada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/promotions/{id}")
-    /**
-     * Update promotion.
-     * @param id id.
-     * @param command command.
-     */
     public Promotion updatePromotion(@PathVariable UUID id, @Valid @RequestBody UpdatePromotionCommand command) {
         return adminPromotion.updatePromotion(PromotionId.of(id), command);
     }
 
+    /**
+     * Activa una promoción.
+     *
+     * @param id identificador de la promoción.
+     * @return la promoción activada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/promotions/{id}/activate")
-    /**
-     * Activate promotion.
-     * @param id id.
-     */
     public Promotion activatePromotion(@PathVariable UUID id) {
         return adminPromotion.activatePromotion(PromotionId.of(id));
     }
 
+    /**
+     * Desactiva una promoción.
+     *
+     * @param id identificador de la promoción.
+     * @return la promoción desactivada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/promotions/{id}/deactivate")
-    /**
-     * Deactivate promotion.
-     * @param id id.
-     */
     public Promotion deactivatePromotion(@PathVariable UUID id) {
         return adminPromotion.deactivatePromotion(PromotionId.of(id));
     }
 
+    /**
+     * Asocia un producto a una promoción.
+     *
+     * @param id        identificador de la promoción.
+     * @param productId identificador del producto.
+     * @return la promoción con el producto asociado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/promotions/{id}/products/{productId}")
-    /**
-     * Add product to promotion.
-     * @param id id.
-     * @param productId productId.
-     */
     public Promotion addProductToPromotion(@PathVariable UUID id, @PathVariable UUID productId) {
         return adminPromotion.addProductToPromotion(PromotionId.of(id), ProductId.of(productId));
     }
 
+    /**
+     * Crea un cupón de descuento.
+     *
+     * @param command datos del cupón.
+     * @return el cupón creado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/coupons")
-    /**
-     * Create coupon.
-     * @param command command.
-     */
     public Coupon createCoupon(@Valid @RequestBody CreateCouponCommand command) {
         return adminPromotion.createCoupon(command);
     }
 
+    /**
+     * Actualiza un cupón existente.
+     *
+     * @param id      identificador del cupón.
+     * @param command datos actualizados del cupón.
+     * @return el cupón actualizado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/coupons/{id}")
-    /**
-     * Update coupon.
-     * @param id id.
-     * @param command command.
-     */
     public Coupon updateCoupon(@PathVariable UUID id, @Valid @RequestBody UpdateCouponCommand command) {
         return adminPromotion.updateCoupon(CouponId.of(id), command);
     }
 
+    /**
+     * Activa un cupón.
+     *
+     * @param id identificador del cupón.
+     * @return el cupón activado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/coupons/{id}/activate")
-    /**
-     * Activate coupon.
-     * @param id id.
-     */
     public Coupon activateCoupon(@PathVariable UUID id) {
         return adminPromotion.activateCoupon(CouponId.of(id));
     }
 
+    /**
+     * Desactiva un cupón.
+     *
+     * @param id identificador del cupón.
+     * @return el cupón desactivado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/coupons/{id}/deactivate")
-    /**
-     * Deactivate coupon.
-     * @param id id.
-     */
     public Coupon deactivateCoupon(@PathVariable UUID id) {
         return adminPromotion.deactivateCoupon(CouponId.of(id));
     }

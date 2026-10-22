@@ -27,6 +27,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de administración de inventario.
+ * <p>
+ * Permite consultar el stock y el historial de movimientos de un producto
+ * y realizar aumentos, disminuciones o ajustes de stock. Todos los endpoints
+ * están protegidos y requieren rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin/inventory")
@@ -35,6 +40,13 @@ public class AdminInventoryController {
 
     private final AdminInventoryUseCases adminInventory;
 
+    /**
+     * Consulta el inventario de un producto, opcionalmente por variante.
+     *
+     * @param productId identificador del producto.
+     * @param variantId identificador de la variante (opcional).
+     * @return el inventario encontrado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{productId}")
@@ -43,59 +55,67 @@ public class AdminInventoryController {
                 variantId == null ? null : ProductVariantId.of(variantId));
     }
 
+    /**
+     * Incrementa el stock de un producto, opcionalmente por variante.
+     *
+     * @param productId identificador del producto.
+     * @param variantId identificador de la variante (opcional).
+     * @param command   datos del movimiento de incremento.
+     * @return el inventario actualizado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{productId}/increase")
-    /**
-     * Increase.
-     * @param productId productId.
-     * @param variantId variantId.
-     * @param command command.
-     */
     public Inventory increase(@PathVariable UUID productId, @RequestParam(required = false) UUID variantId,
                               @Valid @RequestBody IncreaseStockCommand command) {
         return adminInventory.increaseStock(ProductId.of(productId),
                 variantId == null ? null : ProductVariantId.of(variantId), command);
     }
 
+    /**
+     * Disminuye el stock de un producto, opcionalmente por variante.
+     *
+     * @param productId identificador del producto.
+     * @param variantId identificador de la variante (opcional).
+     * @param command   datos del movimiento de disminución.
+     * @return el inventario actualizado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{productId}/decrease")
-    /**
-     * Decrease.
-     * @param productId productId.
-     * @param variantId variantId.
-     * @param command command.
-     */
     public Inventory decrease(@PathVariable UUID productId, @RequestParam(required = false) UUID variantId,
                               @Valid @RequestBody DecreaseStockCommand command) {
         return adminInventory.decreaseStock(ProductId.of(productId),
                 variantId == null ? null : ProductVariantId.of(variantId), command);
     }
 
+    /**
+     * Ajusta el stock de un producto, opcionalmente por variante, a un valor absoluto.
+     *
+     * @param productId identificador del producto.
+     * @param variantId identificador de la variante (opcional).
+     * @param command   datos del ajuste de stock.
+     * @return el inventario actualizado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{productId}/adjust")
-    /**
-     * Adjust.
-     * @param productId productId.
-     * @param variantId variantId.
-     * @param command command.
-     */
     public Inventory adjust(@PathVariable UUID productId, @RequestParam(required = false) UUID variantId,
                             @Valid @RequestBody AdjustStockCommand command) {
         return adminInventory.adjustStock(ProductId.of(productId),
                 variantId == null ? null : ProductVariantId.of(variantId), command);
     }
 
+    /**
+     * Consulta el historial de movimientos de stock de un producto.
+     *
+     * @param productId identificador del producto.
+     * @param variantId identificador de la variante (opcional).
+     * @return los movimientos de stock del producto.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{productId}/movements")
-    /**
-     * Movements.
-     * @param productId productId.
-     * @param variantId variantId.
-     */
     public List<StockMovement> movements(@PathVariable UUID productId,
                                          @RequestParam(required = false) UUID variantId) {
         return adminInventory.movementHistory(ProductId.of(productId),

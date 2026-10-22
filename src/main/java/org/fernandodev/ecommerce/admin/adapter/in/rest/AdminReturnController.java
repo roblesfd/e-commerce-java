@@ -19,6 +19,10 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de administración de devoluciones.
+ * <p>
+ * Permite listar las devoluciones y decidir su aprobación o rechazo.
+ * Todos los endpoints están protegidos y requieren rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin/returns")
@@ -27,6 +31,11 @@ public class AdminReturnController {
 
     private final AdminReturnUseCases adminReturn;
 
+    /**
+     * Lista todas las devoluciones registradas.
+     *
+     * @return las devoluciones existentes.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping
@@ -34,35 +43,41 @@ public class AdminReturnController {
         return adminReturn.listAllReturns();
     }
 
+    /**
+     * Consulta una devolución por identificador.
+     *
+     * @param id identificador de la devolución.
+     * @return la devolución encontrada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{id}")
-    /**
-     * Get.
-     * @param id id.
-     */
     public Return get(@PathVariable UUID id) {
         return adminReturn.getReturn(ReturnId.of(id));
     }
 
+    /**
+     * Aprueba una devolución, habilitando su reembolso.
+     *
+     * @param id identificador de la devolución.
+     * @return la devolución aprobada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/approve")
-    /**
-     * Approve.
-     * @param id id.
-     */
     public Return approve(@PathVariable UUID id) {
         return adminReturn.approveReturn(ReturnId.of(id));
     }
 
+    /**
+     * Rechaza una devolución.
+     *
+     * @param id identificador de la devolución.
+     * @return la devolución rechazada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/reject")
-    /**
-     * Reject.
-     * @param id id.
-     */
     public Return reject(@PathVariable UUID id) {
         return adminReturn.rejectReturn(ReturnId.of(id));
     }

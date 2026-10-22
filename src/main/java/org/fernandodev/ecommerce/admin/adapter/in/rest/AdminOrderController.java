@@ -19,6 +19,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de administración de órdenes.
+ * <p>
+ * Permite consultar órdenes y avanzar su ciclo de vida (cancelar, marcar como
+ * enviada o entregada). Todos los endpoints están protegidos y requieren rol
+ * y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin/orders")
@@ -27,6 +32,11 @@ public class AdminOrderController {
 
     private final AdminOrderUseCases adminOrder;
 
+    /**
+     * Lista todas las órdenes registradas.
+     *
+     * @return las órdenes existentes.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping
@@ -34,46 +44,54 @@ public class AdminOrderController {
         return adminOrder.listAllOrders();
     }
 
+    /**
+     * Consulta una orden por identificador.
+     *
+     * @param id identificador de la orden.
+     * @return la orden encontrada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{id}")
-    /**
-     * Get.
-     * @param id id.
-     */
     public Order get(@PathVariable UUID id) {
         return adminOrder.getOrder(OrderId.of(id));
     }
 
+    /**
+     * Cancela una orden.
+     *
+     * @param id identificador de la orden.
+     * @return la orden cancelada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/cancel")
-    /**
-     * Cancel.
-     * @param id id.
-     */
     public Order cancel(@PathVariable UUID id) {
         return adminOrder.cancelOrder(OrderId.of(id));
     }
 
+    /**
+     * Marca una orden como enviada.
+     *
+     * @param id identificador de la orden.
+     * @return la orden con el estado actualizado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/shipped")
-    /**
-     * Shipped.
-     * @param id id.
-     */
     public Order shipped(@PathVariable UUID id) {
         return adminOrder.markOrderShipped(OrderId.of(id));
     }
 
+    /**
+     * Marca una orden como entregada.
+     *
+     * @param id identificador de la orden.
+     * @return la orden con el estado actualizado.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/delivered")
-    /**
-     * Delivered.
-     * @param id id.
-     */
     public Order delivered(@PathVariable UUID id) {
         return adminOrder.markOrderDelivered(OrderId.of(id));
     }

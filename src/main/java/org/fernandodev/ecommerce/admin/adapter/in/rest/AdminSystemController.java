@@ -25,6 +25,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de configuración, auditoría y operaciones administrativas.
+ * <p>
+ * Permite gestionar la configuración del sistema, consultar la auditoría y
+ * las métricas de operación. Todos los endpoints están protegidos y requieren
+ * rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -33,6 +38,13 @@ public class AdminSystemController {
 
     private final AdminSystemUseCases adminSystem;
 
+    /**
+     * Establece el valor de una clave de configuración.
+     *
+     * @param key clave de configuración.
+     * @param body valor a asignar.
+     * @return la configuración guardada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PutMapping("/config/{key}")
@@ -40,80 +52,85 @@ public class AdminSystemController {
         return adminSystem.setConfig(key, body.value());
     }
 
+    /**
+     * Consulta el valor de una clave de configuración.
+     *
+     * @param key clave de configuración.
+     * @return la configuración encontrada.
+     * @throws ResourceNotFoundException si la clave no está configurada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/config/{key}")
-    /**
-     * Get config.
-     * @param key key.
-     */
     public SystemConfig getConfig(@PathVariable String key) {
         return adminSystem.getConfig(key)
                 .orElseThrow(() -> new ResourceNotFoundException("Configuración no encontrada: " + key));
     }
 
+    /**
+     * Lista todas las claves de configuración.
+     *
+     * @return las configuraciones existentes.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/config")
-    /**
-     * List config.
-     */
     public List<SystemConfig> listConfig() {
         return adminSystem.listConfig();
     }
 
+    /**
+     * Consulta los registros de auditoría, opcionalmente filtrados.
+     *
+     * @param action  acción a filtrar (opcional).
+     * @param actorId identificador del actor a filtrar (opcional).
+     * @return los registros de auditoría.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/audit")
-    /**
-     * List audit.
-     * @param action action.
-     * @param actorId actorId.
-     */
     public List<AuditEntry> listAudit(@RequestParam(required = false) String action,
                                       @RequestParam(required = false) UUID actorId) {
         return adminSystem.listAudit(action, actorId);
     }
 
+    /**
+     * Consulta las métricas de operación del sistema.
+     *
+     * @return las métricas de operación.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/operations/metrics")
-    /**
-     * Metrics.
-     */
     public AdminSystemUseCases.Metrics metrics() {
         return adminSystem.metrics();
     }
 
+    /**
+     * Consulta el número de fallos de integración registrados.
+     *
+     * @return el conteo de fallos de integración.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/operations/integration-failures")
-    /**
-     * Integration failures.
-     */
     public IntegrationFailures integrationFailures() {
         return new IntegrationFailures(adminSystem.integrationFailures());
     }
 
     /**
-
-     * Config value.
-
-     * @param value value.
-
+     * Valor a asignar a una clave de configuración.
+     *
+     * @param value valor de la configuración.
      */
-
     public record ConfigValue(String value) {
     }
 
     /**
-
-     * Integration failures.
-
-     * @param count count.
-
+     * Conteo de fallos de integración.
+     *
+     * @param count número de fallos.
      */
-
     public record IntegrationFailures(int count) {
     }
 }

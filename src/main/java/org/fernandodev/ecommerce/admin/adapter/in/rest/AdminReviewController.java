@@ -19,6 +19,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de moderación de reviews.
+ * <p>
+ * Permite listar las reviews pendientes de moderación y aprobarlas, rechazarlas,
+ * ocultarlas o restaurarlas. Todos los endpoints están protegidos y requieren
+ * rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin/reviews")
@@ -27,6 +32,11 @@ public class AdminReviewController {
 
     private final AdminReviewUseCases adminReview;
 
+    /**
+     * Lista las reviews pendientes de moderación.
+     *
+     * @return las reviews pendientes.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/moderation")
@@ -34,46 +44,54 @@ public class AdminReviewController {
         return adminReview.listReviewsForModeration();
     }
 
+    /**
+     * Aprueba una review pendiente.
+     *
+     * @param id identificador de la review.
+     * @return la review aprobada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/approve")
-    /**
-     * Approve.
-     * @param id id.
-     */
     public Review approve(@PathVariable UUID id) {
         return adminReview.approveReview(ReviewId.of(id));
     }
 
+    /**
+     * Rechaza una review pendiente.
+     *
+     * @param id identificador de la review.
+     * @return la review rechazada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/reject")
-    /**
-     * Reject.
-     * @param id id.
-     */
     public Review reject(@PathVariable UUID id) {
         return adminReview.rejectReview(ReviewId.of(id));
     }
 
+    /**
+     * Oculta una review publicada.
+     *
+     * @param id identificador de la review.
+     * @return la review oculta.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/hide")
-    /**
-     * Hide.
-     * @param id id.
-     */
     public Review hide(@PathVariable UUID id) {
         return adminReview.hideReview(ReviewId.of(id));
     }
 
+    /**
+     * Restaura una review oculta.
+     *
+     * @param id identificador de la review.
+     * @return la review restaurada.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @PostMapping("/{id}/restore")
-    /**
-     * Restore.
-     * @param id id.
-     */
     public Review restore(@PathVariable UUID id) {
         return adminReview.restoreReview(ReviewId.of(id));
     }

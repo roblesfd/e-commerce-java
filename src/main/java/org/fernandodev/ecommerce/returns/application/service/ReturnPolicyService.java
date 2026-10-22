@@ -21,7 +21,6 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public ReturnPolicy create(CreateReturnPolicyCommand command) {
         ReturnPolicy policy = ReturnPolicy.create(
@@ -32,7 +31,6 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public List<ReturnPolicy> list() {
         return policies.findAll();
@@ -41,7 +39,6 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public ReturnPolicy getById(ReturnPolicyId id) {
         return getExisting(id);
@@ -50,7 +47,6 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public ReturnPolicy activate(ReturnPolicyId id) {
         ReturnPolicy policy = getExisting(id);
@@ -61,7 +57,6 @@ public class ReturnPolicyService implements ReturnPolicyUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public ReturnPolicy deactivate(ReturnPolicyId id) {
         ReturnPolicy policy = getExisting(id);

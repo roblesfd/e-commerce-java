@@ -30,11 +30,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     private final AuditService audit;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Product createProduct(ProductCommand command) {
@@ -42,11 +39,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Product updateProduct(ProductId id, ProductCommand command) {
@@ -54,11 +48,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Product activateProduct(ProductId id) {
@@ -66,11 +57,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Product deactivateProduct(ProductId id) {
@@ -79,11 +67,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public void deleteProduct(ProductId id) {
@@ -92,11 +77,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Category createCategory(CategoryCommand command) {
@@ -104,11 +86,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Category updateCategory(CategoryId id, CategoryCommand command) {
@@ -116,11 +95,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Category activateCategory(CategoryId id) {
@@ -128,11 +104,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Category deactivateCategory(CategoryId id) {
@@ -141,11 +114,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public void deleteCategory(CategoryId id) {
@@ -154,11 +124,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Brand createBrand(BrandCommand command) {
@@ -166,11 +133,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Brand updateBrand(BrandId id, BrandCommand command) {
@@ -178,11 +142,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Brand activateBrand(BrandId id) {
@@ -190,11 +151,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public Brand deactivateBrand(BrandId id) {
@@ -203,11 +161,8 @@ public class AdminCatalogService implements AdminCatalogUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     @Transactional
     public void deleteBrand(BrandId id) {

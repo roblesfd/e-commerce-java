@@ -8,6 +8,7 @@ import org.fernandodev.ecommerce.returns.adapter.in.rest.dto.ReturnPolicyRespons
 import org.fernandodev.ecommerce.returns.adapter.in.rest.mapper.ReturnPolicyMapper;
 import org.fernandodev.ecommerce.returns.application.port.in.ReturnPolicyUseCases;
 import org.fernandodev.ecommerce.returns.domain.value_object.ReturnPolicyId;
+import org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,43 +33,60 @@ public class ReturnPolicyController {
     private final ReturnPolicyUseCases returnPolicyUseCases;
     private final ReturnPolicyMapper mapper;
 
+    /**
+     * Crea una política de devoluciones.
+     *
+     * @param request datos de la nueva política.
+     * @return la política de devoluciones creada.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ReturnPolicyResponse create(@Valid @RequestBody CreateReturnPolicyRequest request) {
         return mapper.toResponse(returnPolicyUseCases.create(mapper.toCommand(request)));
     }
 
-    @GetMapping
     /**
-     * List.
+     * Lista todas las políticas de devoluciones.
+     *
+     * @return las políticas de devoluciones existentes.
      */
+    @GetMapping
     public List<ReturnPolicyResponse> list() {
         return returnPolicyUseCases.list().stream().map(mapper::toResponse).toList();
     }
 
-    @GetMapping("/{id}")
     /**
-     * Get.
-     * @param id id.
+     * Consulta una política de devoluciones por identificador.
+     *
+     * @param id identificador de la política.
+     * @return la política de devoluciones encontrada.
+     * @throws ResourceNotFoundException si no existe la política indicada.
      */
+    @GetMapping("/{id}")
     public ReturnPolicyResponse get(@PathVariable UUID id) {
         return mapper.toResponse(returnPolicyUseCases.getById(ReturnPolicyId.of(id)));
     }
 
-    @PatchMapping("/{id}/activate")
     /**
-     * Activate.
-     * @param id id.
+     * Activa una política de devoluciones.
+     *
+     * @param id identificador de la política.
+     * @return la política de devoluciones activada.
+     * @throws ResourceNotFoundException si no existe la política indicada.
      */
+    @PatchMapping("/{id}/activate")
     public ReturnPolicyResponse activate(@PathVariable UUID id) {
         return mapper.toResponse(returnPolicyUseCases.activate(ReturnPolicyId.of(id)));
     }
 
-    @PatchMapping("/{id}/deactivate")
     /**
-     * Deactivate.
-     * @param id id.
+     * Desactiva una política de devoluciones.
+     *
+     * @param id identificador de la política.
+     * @return la política de devoluciones desactivada.
+     * @throws ResourceNotFoundException si no existe la política indicada.
      */
+    @PatchMapping("/{id}/deactivate")
     public ReturnPolicyResponse deactivate(@PathVariable UUID id) {
         return mapper.toResponse(returnPolicyUseCases.deactivate(ReturnPolicyId.of(id)));
     }

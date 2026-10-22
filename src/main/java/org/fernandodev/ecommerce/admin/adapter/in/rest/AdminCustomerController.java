@@ -8,6 +8,7 @@ import org.fernandodev.ecommerce.admin.security.AdminRoles;
 import org.fernandodev.ecommerce.admin.security.RequireGroup;
 import org.fernandodev.ecommerce.admin.security.RequireRole;
 import org.fernandodev.ecommerce.customer.domain.Customer;
+import org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,10 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de administración de clientes.
+ * <p>
+ * Permite consultar los clientes registrados. Todos los endpoints están
+ * protegidos y requieren rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin/customers")
@@ -25,6 +30,11 @@ public class AdminCustomerController {
 
     private final AdminCustomerUseCases adminCustomer;
 
+    /**
+     * Lista todos los clientes registrados.
+     *
+     * @return los clientes existentes.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping
@@ -32,13 +42,16 @@ public class AdminCustomerController {
         return adminCustomer.listAllCustomers();
     }
 
+    /**
+     * Consulta un cliente por su identificador IAM.
+     *
+     * @param iamUserId identificador IAM del cliente.
+     * @return el cliente encontrado.
+     * @throws ResourceNotFoundException si no existe un cliente con ese identificador.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping("/{iamUserId}")
-    /**
-     * Get.
-     * @param iamUserId iamUserId.
-     */
     public Customer get(@PathVariable UUID iamUserId) {
         return adminCustomer.getCustomerByIamUserId(iamUserId);
     }

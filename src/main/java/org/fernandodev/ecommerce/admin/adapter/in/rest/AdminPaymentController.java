@@ -27,6 +27,10 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Controlador REST de administración de pagos y reembolsos.
+ * <p>
+ * Permite consultar los pagos registrados y reembolsar un pago por un monto.
+ * Todos los endpoints están protegidos y requieren rol y grupo de administrador.
+ * </p>
  */
 @RestController
 @RequestMapping("/api/v1/admin/payments")
@@ -35,6 +39,11 @@ public class AdminPaymentController {
 
     private final AdminPaymentUseCases adminPayment;
 
+    /**
+     * Lista todos los pagos registrados.
+     *
+     * @return los pagos existentes.
+     */
     @RequireRole(AdminRoles.ADMIN_ROLE)
     @RequireGroup(AdminRoles.ADMIN_GROUP)
     @GetMapping
@@ -43,6 +52,8 @@ public class AdminPaymentController {
     }
 
     /**
+     * Consulta un pago por identificador.
+     *
      * @param id identificador del pago.
      * @return el pago y su estado.
      */

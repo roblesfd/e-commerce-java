@@ -51,7 +51,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AuditService auditService(AuditRepository audit, CurrentActorPort actor) {
         return new AuditService(audit, actor);
@@ -62,7 +61,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminCatalogUseCases adminCatalogUseCases(ProductUseCases products, CategoryUseCases categories,
                                                      BrandUseCases brands, AuditService auditService) {
@@ -74,7 +72,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminPricingUseCases adminPricingUseCases(PricingUseCases pricing, AuditService auditService) {
         return new AdminPricingService(pricing, auditService);
@@ -85,7 +82,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminPromotionUseCases adminPromotionUseCases(PromotionUseCases promotions, CouponUseCases coupons,
                                                          AuditService auditService) {
@@ -97,7 +93,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminInventoryUseCases adminInventoryUseCases(InventoryUseCases inventory, AuditService auditService) {
         return new AdminInventoryService(inventory, auditService);
@@ -108,7 +103,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminCustomerUseCases adminCustomerUseCases(CustomerUseCases customers) {
         return new AdminCustomerService(customers);
@@ -119,7 +113,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminOrderUseCases adminOrderUseCases(OrderUseCases orders, AuditService auditService) {
         return new AdminOrderService(orders, auditService);
@@ -130,7 +123,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminPaymentUseCases adminPaymentUseCases(PaymentUseCases payments, AuditService auditService) {
         return new AdminPaymentService(payments, auditService);
@@ -141,7 +133,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminReturnUseCases adminReturnUseCases(ReturnUseCases returns, AuditService auditService) {
         return new AdminReturnService(returns, auditService);
@@ -152,7 +143,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminReviewUseCases adminReviewUseCases(ReviewUseCases reviews, AuditService auditService) {
         return new AdminReviewService(reviews, auditService);
@@ -163,7 +153,6 @@ public class AdminConfig {
      * Configura un bean de servicio de orquestación administrativa.
 
      */
-
     @Bean
     public AdminSystemUseCases adminSystemUseCases(
             SystemConfigRepository configs, AuditRepository audit, AuditService auditService,

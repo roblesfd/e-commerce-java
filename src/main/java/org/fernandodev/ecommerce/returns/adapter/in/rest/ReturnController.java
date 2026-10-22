@@ -26,9 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 /**
- * Controlador REST de solicitudes de devolución.
+ * Controlador REST para la gestión de solicitudes de devolución.
+ *
+ * <p>Expone los endpoints necesarios para crear, consultar y gestionar
+ * el ciclo de vida de una devolución dentro del contexto Returns.</p>
+ *
+ * <p>El controlador se limita a gestionar aspectos HTTP y delega la
+ * lógica de negocio en {@link ReturnUseCases}. La transformación entre
+ * modelos HTTP y modelos de aplicación se realiza mediante
+ * {@link ReturnMapper}.</p>
  */
 @RestController
 @RequestMapping("/api/v1/returns")
@@ -38,6 +45,12 @@ public class ReturnController {
     private final ReturnUseCases returnUseCases;
     private final ReturnMapper mapper;
 
+    /**
+     * Crea una nueva solicitud de devolución para una orden.
+     *
+     * @param request datos necesarios para crear la solicitud de devolución.
+     * @return la devolución creada.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ReturnResponse create(@Valid @RequestBody CreateReturnRequest request) {
@@ -45,30 +58,39 @@ public class ReturnController {
                 OrderId.of(request.orderId()), mapper.toCommand(request)));
     }
 
-    @GetMapping("/{id}")
     /**
-     * Get.
-     * @param id id.
+     * Obtiene una solicitud de devolución por su identificador.
+     *
+     * @param id identificador único de la devolución.
+     * @return la devolución solicitada.
      */
+    @GetMapping("/{id}")
     public ReturnResponse get(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.getById(ReturnId.of(id)));
     }
 
-    @GetMapping("/me")
     /**
-     * Mine.
+     * Obtiene las solicitudes de devolución pertenecientes al cliente
+     * autenticado.
+     *
+     * @return lista de devoluciones del cliente autenticado.
      */
+    @GetMapping("/me")
     public List<ReturnResponse> mine() {
         return returnUseCases.listByCustomer(SecurityUtils.requiredUserId()).stream()
                 .map(mapper::toResponse)
                 .toList();
     }
 
-    @GetMapping
     /**
-     * Get by order.
-     * @param orderId orderId.
+     * Obtiene la solicitud de devolución asociada a una orden.
+     *
+     * @param orderId identificador único de la orden.
+     * @return la devolución asociada a la orden.
+     * @throws ResourceNotFoundException si no existe una devolución
+     * asociada a la orden indicada.
      */
+    @GetMapping
     public ReturnResponse getByOrder(@RequestParam UUID orderId) {
         return returnUseCases.getByOrder(OrderId.of(orderId))
                 .map(mapper::toResponse)
@@ -76,78 +98,109 @@ public class ReturnController {
                         "Devolución no encontrada para la orden: " + orderId));
     }
 
-    @PostMapping("/{id}/approve")
     /**
-     * Approve.
-     * @param id id.
+     * Aprueba una solicitud de devolución.
+     *
+     * @param id identificador único de la devolución.
+     * @return la devolución con su estado actualizado.
      */
+    @PostMapping("/{id}/approve")
     public ReturnResponse approve(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.approve(ReturnId.of(id)));
     }
 
-    @PostMapping("/{id}/reject")
     /**
-     * Reject.
-     * @param id id.
+     * Rechaza una solicitud de devolución.
+     *
+     * @param id identificador único de la devolución.
+     * @return la devolución con su estado actualizado.
      */
+    @PostMapping("/{id}/reject")
     public ReturnResponse reject(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.reject(ReturnId.of(id)));
     }
 
-    @PostMapping("/{id}/cancel")
     /**
-     * Cancel.
-     * @param id id.
+     * Cancela una solicitud de devolución.
+     *
+     * @param id identificador único de la devolución.
+     * @return la devolución con su estado actualizado.
      */
+    @PostMapping("/{id}/cancel")
     public ReturnResponse cancel(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.cancel(ReturnId.of(id)));
     }
 
-    @PostMapping("/{id}/return-shipment")
     /**
-     * Register return shipment.
-     * @param id id.
-     * @param request request.
+     * Registra el envío de un producto devuelto y su número de seguimiento.
+     *
+     * @param id identificador único de la devolución.
+     * @param request datos del envío de devolución.
+     * @return la devolución con la información del envío registrada.
      */
-    public ReturnResponse registerReturnShipment(@PathVariable UUID id,
-                                                 @Valid @RequestBody RegisterReturnShipmentRequest request) {
-        return mapper.toResponse(returnUseCases.registerReturnShipment(ReturnId.of(id), request.trackingNumber()));
+    @PostMapping("/{id}/return-shipment")
+    public ReturnResponse registerReturnShipment(
+            @PathVariable UUID id,
+            @Valid @RequestBody RegisterReturnShipmentRequest request) {
+
+        return mapper.toResponse(
+                returnUseCases.registerReturnShipment(
+                        ReturnId.of(id),
+                        request.trackingNumber()));
     }
 
-    @PostMapping("/{id}/receive")
     /**
-     * Receive.
-     * @param id id.
+     * Registra la recepción del producto devuelto.
+     *
+     * @param id identificador único de la devolución.
+     * @return la devolución con su estado actualizado.
      */
+    @PostMapping("/{id}/receive")
     public ReturnResponse receive(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.receive(ReturnId.of(id)));
     }
 
-    @PostMapping("/{id}/inspect")
     /**
-     * Inspect.
-     * @param id id.
-     * @param request request.
+     * Registra el resultado de la inspección del producto devuelto.
+     *
+     * @param id identificador único de la devolución.
+     * @param request datos y resultado de la inspección.
+     * @return la devolución con la información de inspección registrada.
      */
-    public ReturnResponse inspect(@PathVariable UUID id, @Valid @RequestBody InspectReturnRequest request) {
-        return mapper.toResponse(returnUseCases.inspect(ReturnId.of(id),
-                request.condition(), request.notes(), request.passed()));
+    @PostMapping("/{id}/inspect")
+    public ReturnResponse inspect(
+            @PathVariable UUID id,
+            @Valid @RequestBody InspectReturnRequest request) {
+
+        return mapper.toResponse(
+                returnUseCases.inspect(
+                        ReturnId.of(id),
+                        request.condition(),
+                        request.notes(),
+                        request.passed()));
     }
 
-    @PostMapping("/{id}/complete")
     /**
-     * Complete.
-     * @param id id.
+     * Completa el proceso de devolución.
+     *
+     * @param id identificador único de la devolución.
+     * @return la devolución con su estado actualizado.
      */
+    @PostMapping("/{id}/complete")
     public ReturnResponse complete(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.complete(ReturnId.of(id)));
     }
 
-    @PostMapping("/{id}/retry-refund")
     /**
-     * Retry refund.
-     * @param id id.
+     * Reintenta el procesamiento del reembolso asociado a una devolución.
+     *
+     * <p>Esta operación se utiliza cuando el procesamiento anterior
+     * del reembolso ha fallado.</p>
+     *
+     * @param id identificador único de la devolución.
+     * @return la devolución con el estado actualizado del reembolso.
      */
+    @PostMapping("/{id}/retry-refund")
     public ReturnResponse retryRefund(@PathVariable UUID id) {
         return mapper.toResponse(returnUseCases.retryRefund(ReturnId.of(id)));
     }

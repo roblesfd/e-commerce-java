@@ -78,7 +78,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public Return getById(ReturnId id) {
         return getExisting(id);
@@ -87,7 +86,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public List<Return> listByCustomer(UUID customerId) {
         return returns.findByCustomerId(customerId);
@@ -96,7 +94,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public Optional<Return> getByOrder(OrderId orderId) {
         return returns.findByOrderId(orderId);
@@ -105,7 +102,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public List<Return> listAll() {
         return returns.findAll();
@@ -114,7 +110,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     @Transactional
     public Return approve(ReturnId id) {
@@ -130,7 +125,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     @Transactional
     public Return reject(ReturnId id) {
@@ -142,7 +136,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     @Transactional
     public Return cancel(ReturnId id) {
@@ -154,7 +147,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     @Transactional
     public Return registerReturnShipment(ReturnId id, String trackingNumber) {
@@ -166,7 +158,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     @Transactional
     public Return receive(ReturnId id) {
@@ -178,7 +169,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     @Transactional
     public Return inspect(ReturnId id, String condition, String notes, boolean passed) {
@@ -190,7 +180,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     @Transactional
     public Return complete(ReturnId id) {
@@ -205,7 +194,6 @@ public class ReturnService implements ReturnUseCases {
     /**
      * {@inheritDoc}
      */
-
     @Override
     @Transactional
     public Return retryRefund(ReturnId id) {

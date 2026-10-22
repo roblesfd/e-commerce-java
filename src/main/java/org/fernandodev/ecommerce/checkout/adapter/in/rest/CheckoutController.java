@@ -45,7 +45,11 @@ public class CheckoutController {
     public CheckoutResponse start(@RequestHeader("Idempotency-Key") String idempotencyKey,
                                   @Valid @RequestBody StartCheckoutRequest request) {
         return mapper.toResponse(checkoutUseCases.start(
-                SecurityUtils.requiredUserId(), idempotencyKey, mapper.toCommand(request)));
+                SecurityUtils.requiredUserId(),
+                idempotencyKey,
+                mapper.toCommand(request)
+                )
+        );
     }
 
     /**
@@ -54,7 +58,10 @@ public class CheckoutController {
      */
     @GetMapping("/{id}")
     public CheckoutResponse get(@PathVariable UUID id) {
-        return mapper.toResponse(checkoutUseCases.getById(SecurityUtils.requiredUserId(), CheckoutId.of(id)));
+        return mapper.toResponse(checkoutUseCases.getById(
+                SecurityUtils.requiredUserId(),
+                CheckoutId.of(id))
+        );
     }
 
     /**
@@ -65,7 +72,10 @@ public class CheckoutController {
      */
     @PostMapping("/{id}/confirm")
     public CheckoutResponse confirm(@PathVariable UUID id) {
-        return mapper.toResponse(checkoutUseCases.confirm(SecurityUtils.requiredUserId(), CheckoutId.of(id)));
+        return mapper.toResponse(checkoutUseCases.confirm(
+                SecurityUtils.requiredUserId(),
+                CheckoutId.of(id))
+        );
     }
 
     /**
@@ -76,6 +86,9 @@ public class CheckoutController {
      */
     @PostMapping("/{id}/cancel")
     public CheckoutResponse cancel(@PathVariable UUID id) {
-        return mapper.toResponse(checkoutUseCases.cancel(SecurityUtils.requiredUserId(), CheckoutId.of(id)));
+        return mapper.toResponse(checkoutUseCases.cancel(
+                SecurityUtils.requiredUserId(),
+                CheckoutId.of(id))
+        );
     }
 }

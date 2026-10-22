@@ -18,22 +18,16 @@ public class AdminCustomerService implements AdminCustomerUseCases {
     private final CustomerUseCases customers;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Customer> listAllCustomers() {
         return customers.listAll();
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Customer getCustomerByIamUserId(UUID iamUserId) {
         return customers.getByIamUserId(iamUserId);

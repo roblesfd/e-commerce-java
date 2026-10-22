@@ -24,11 +24,8 @@ public class OrderService implements OrderUseCases {
     private final OrderRepository orders;
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Order create(CreateOrderCommand command) {
         List<OrderItem> items = command.items().stream()
@@ -49,44 +46,32 @@ public class OrderService implements OrderUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Order getById(OrderId id) {
         return getExisting(id);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Order> listByCustomer(UUID customerId) {
         return orders.findByCustomerId(customerId);
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public List<Order> listAll() {
         return orders.findAll();
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Order confirm(OrderId id) {
         Order order = getExisting(id);
@@ -95,11 +80,8 @@ public class OrderService implements OrderUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Order process(OrderId id) {
         Order order = getExisting(id);
@@ -108,11 +90,8 @@ public class OrderService implements OrderUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Order markReadyToShip(OrderId id) {
         Order order = getExisting(id);
@@ -121,11 +100,8 @@ public class OrderService implements OrderUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Order markShipped(OrderId id) {
         Order order = getExisting(id);
@@ -134,11 +110,8 @@ public class OrderService implements OrderUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Order markDelivered(OrderId id) {
         Order order = getExisting(id);
@@ -147,11 +120,8 @@ public class OrderService implements OrderUseCases {
     }
 
     /**
-
      * {@inheritDoc}
-
      */
-
     @Override
     public Order cancel(OrderId id) {
         Order order = getExisting(id);
