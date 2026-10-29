@@ -24,6 +24,13 @@ import org.fernandodev.ecommerce.shipping.domain.value_object.ShippingMethodId;
 import org.fernandodev.ecommerce.shared.domain.Money;
 import org.fernandodev.ecommerce.shared.domain.exception.BusinessRuleViolationException;
 import org.fernandodev.ecommerce.shared.domain.exception.ResourceNotFoundException;
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
+
+import org.fernandodev.ecommerce.shipping.application.port.out.ShippingQuoteRequest;
+import org.fernandodev.ecommerce.shipping.application.port.out.ShippingQuoteResult;
+import org.fernandodev.ecommerce.shipping.application.port.out.ShipmentTrackingResult;
 import org.junit.jupiter.api.Test;
 
 class ShipmentServiceTest {
@@ -224,10 +231,94 @@ class ShipmentServiceTest {
         }
     }
 
+
     private static final class FakeShippingProviderPort implements ShippingProviderPort {
+
+        private final Map<String, FakeProviderShipment> shipments = new HashMap<>();
+
+        @Override
+        public ShippingQuoteResult quote(ShippingQuoteRequest request) {
+            return new ShippingQuoteResult(List.of(
+                    new ShippingQuoteResult.ShippingOption(
+                            "DHL",
+                            "Estándar",
+                            new BigDecimal("50.00"),
+                            "USD",
+                            Duration.ofDays(5)
+                    ),
+                    new ShippingQuoteResult.ShippingOption(
+                            "DHL",
+                            "Exprés",
+                            new BigDecimal("100.00"),
+                            "USD",
+                            Duration.ofDays(2)
+                    )
+            ));
+        }
+
         @Override
         public String createShipment(String carrier, String addressSnapshot) {
-            return "SHIP-" + UUID.randomUUID().toString().substring(0, 8);
+            String trackingNumber =
+                    "SHIP-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+            shipments.put(
+                    trackingNumber,
+                    new FakeProviderShipment(carrier, addressSnapshot, "created")
+            );
+
+            return trackingNumber;
+        }
+
+        @Override
+        public ShipmentTrackingResult trackShipment(String providerShipmentId) {
+            FakeProviderShipment shipment = shipments.get(providerShipmentId);
+
+            if (shipment == null) {
+                throw new IllegalArgumentException(
+                        "Envío no encontrado en el proveedor: " + providerShipmentId);
+            }
+
+            return new ShipmentTrackingResult(
+                    providerShipmentId,
+                    providerShipmentId,
+                    shipment.status(),
+                    shipment.lastUpdatedAt(),
+                    null
+            );
+        }
+
+        @Override
+        public void cancelShipment(String providerShipmentId) {
+            FakeProviderShipment shipment = shipments.get(providerShipmentId);
+
+            if (shipment == null) {
+                throw new IllegalArgumentException(
+                        "Envío no encontrado en el proveedor: " + providerShipmentId);
+            }
+
+            shipments.put(
+                    providerShipmentId,
+                    new FakeProviderShipment(
+                            shipment.carrier(),
+                            shipment.addressSnapshot(),
+                            "cancelled"
+                    )
+            );
+        }
+
+        private record FakeProviderShipment(
+                String carrier,
+                String addressSnapshot,
+                String status,
+                Instant lastUpdatedAt
+        ) {
+            private FakeProviderShipment(
+                    String carrier,
+                    String addressSnapshot,
+                    String status
+            ) {
+                this(carrier, addressSnapshot, status, Instant.now());
+            }
         }
     }
 

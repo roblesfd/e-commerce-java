@@ -25,7 +25,7 @@ public class CartCartProvider implements CartProvider {
         Cart cart = cartUseCases.getCart(customerId);
         return new CartData(
                 cart.getId().value(),
-                cart.getItems().stream()
+                cart.getItems().values().stream()
                         .map(item -> new CartData.CartItemData(
                                 item.productId(), item.variantId(), item.quantity(), item.unitPrice()))
                         .toList(),

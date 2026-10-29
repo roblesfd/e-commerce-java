@@ -48,9 +48,10 @@ class CartTest {
     void addItemMismoProductoIncrementaCantidadYActualizaPrecio() {
         Cart cart = carrito();
         ProductId productId = ProductId.generate();
-        cart.addItem(productId, null, 2, usd(900), T0);
+        ProductVariantId varId = ProductVariantId.generate();
+        cart.addItem(productId, varId, 2, usd(900), T0);
 
-        CartItem updated = cart.addItem(productId, null, 3, usd(950), T1);
+        CartItem updated = cart.addItem(productId, varId, 3, usd(950), T1);
 
         assertThat(cart.getItems()).hasSize(1);
         assertThat(updated.quantity()).isEqualTo(5);
@@ -81,7 +82,7 @@ class CartTest {
 
         cart.updateItemQuantity(item.id(), 4, T1);
 
-        assertThat(cart.getItems().get(0).quantity()).isEqualTo(4);
+        assertThat(cart.getItems().get(item.id()).quantity()).isEqualTo(4);
         assertThat(cart.subtotal()).contains(usd(3600));
     }
 

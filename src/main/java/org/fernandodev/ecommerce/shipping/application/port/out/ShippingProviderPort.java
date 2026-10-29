@@ -17,4 +17,31 @@ public interface ShippingProviderPort {
      * @throws IllegalStateException si el proveedor no confirma el envío.
      */
     String createShipment(String carrier, String addressSnapshot);
+
+
+    /**
+     * Solicita una cotización de envío al proveedor externo.
+     *
+     * @param request datos del paquete y de las direcciones necesarias
+     *                para calcular las opciones de envío.
+     * @return cotización con las opciones de envío disponibles.
+     */
+    ShippingQuoteResult quote(ShippingQuoteRequest request);
+
+    /**
+     * Consulta al proveedor el estado actual de un envío.
+     *
+     * @param providerShipmentId identificador del envío en el sistema
+     *                           del proveedor externo.
+     * @return información de seguimiento proporcionada por el proveedor.
+     */
+    ShipmentTrackingResult trackShipment(String providerShipmentId);
+
+    /**
+     * Solicita al proveedor la cancelación de un envío.
+     *
+     * @param providerShipmentId identificador del envío en el sistema
+     *                           del proveedor externo.
+     */
+    void cancelShipment(String providerShipmentId);
 }

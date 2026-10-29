@@ -61,7 +61,7 @@ public class CartMapper {
     public CartResponse toResponse(Cart cart) {
         return new CartResponse(
                 cart.getId().value(),
-                cart.getItems().stream().map(this::toItemResponse).toList(),
+                cart.getItems().values().stream().map(this::toItemResponse).toList(),
                 cart.getCoupon() == null ? null : toCouponResponse(cart.getCoupon()),
                 toMoneyResponse(cart.subtotal()),
                 toMoneyResponse(cart.discount()),

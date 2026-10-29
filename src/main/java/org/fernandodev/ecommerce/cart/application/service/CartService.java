@@ -2,6 +2,7 @@ package org.fernandodev.ecommerce.cart.application.service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -120,7 +121,7 @@ public class CartService implements CartUseCases {
         if (cart.getItems().isEmpty()) {
             throw new BusinessRuleViolationException("El carrito no puede estar vacío");
         }
-        List<CouponItemDto> items = cart.getItems().stream()
+        List<CouponItemDto> items = cart.getItems().values().stream()
                 .map(item -> new CouponItemDto(item.productId(), item.quantity(), item.unitPrice()))
                 .toList();
         var discount = coupons.discountFor(ownerId, command.code(), items);
@@ -179,7 +180,7 @@ public class CartService implements CartUseCases {
     @Override
     public Cart validateCart(UUID ownerId) {
         Cart cart = getExisting(ownerId);
-        for (CartItem item : List.copyOf(cart.getItems())) {
+        for (CartItem item : cart.getItems().values()) {
             assertAvailable(item.productId(), item.variantId(), item.quantity());
             cart.refreshPrice(item.id(), prices.currentPrice(item.productId(), item.variantId()), Instant.now());
         }
@@ -211,7 +212,7 @@ public class CartService implements CartUseCases {
      * @throws ResourceNotFoundException si el item no pertenece al carrito.
      */
     private CartItem findItem(Cart cart, CartItemId itemId) {
-        return cart.getItems().stream()
+        return cart.getItems().values().stream()
                 .filter(item -> item.id().equals(itemId))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Item no encontrado en el carrito: " + itemId));

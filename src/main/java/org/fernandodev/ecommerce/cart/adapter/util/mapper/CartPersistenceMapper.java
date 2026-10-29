@@ -10,6 +10,10 @@ import org.fernandodev.ecommerce.catalog.domain.value_object.ProductId;
 import org.fernandodev.ecommerce.catalog.domain.value_object.ProductVariantId;
 import org.fernandodev.ecommerce.shared.domain.Money;
 
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 /**
  * Mapper manual entre el agregado de dominio {@link Cart} y el documento
  * serializable {@link CartDocument}. Sin lógica de negocio.
@@ -28,7 +32,7 @@ public final class CartPersistenceMapper {
                 cart.getId().value(),
                 cart.getOwnerId(),
                 cart.getUpdatedAt(),
-                cart.getItems().stream()
+                cart.getItems().values().stream()
                         .map(CartPersistenceMapper::toItemDocument)
                         .toList(),
                 cart.getCoupon() == null ? null : toCouponDocument(cart.getCoupon()));
@@ -42,9 +46,10 @@ public final class CartPersistenceMapper {
         return Cart.crear(
                 CartId.of(document.id()),
                 document.ownerId(),
-                document.items().stream()
+                document.items()
+                        .stream()
                         .map(CartPersistenceMapper::toDomainItem)
-                        .toList(),
+                        .collect(Collectors.toMap(CartItem::id, Function.identity())),
                 document.coupon() == null ? null : toDomainCoupon(document.coupon()),
                 document.updatedAt());
     }

@@ -17,7 +17,6 @@ import org.fernandodev.ecommerce.cart.application.port.out.CartRepository;
 import org.fernandodev.ecommerce.cart.application.port.out.CouponProvider;
 import org.fernandodev.ecommerce.cart.application.port.out.PriceProvider;
 import org.fernandodev.ecommerce.cart.domain.Cart;
-import org.fernandodev.ecommerce.cart.domain.value_object.CartItem;
 import org.fernandodev.ecommerce.catalog.domain.value_object.ProductId;
 import org.fernandodev.ecommerce.catalog.domain.value_object.ProductVariantId;
 import org.fernandodev.ecommerce.shared.domain.Money;
@@ -69,8 +68,8 @@ class CartServiceTest {
         Cart cart = service.addItem(ownerId, new AddItemCommand(productId, null, 2));
 
         assertThat(cart.getItems()).hasSize(1);
-        assertThat(cart.getItems().get(0).unitPrice()).isEqualTo(usd(900));
-        assertThat(cart.getItems().get(0).quantity()).isEqualTo(2);
+        assertThat(cart.getItems().values().stream().findFirst().get().unitPrice()).isEqualTo(usd(900));
+        assertThat(cart.getItems().values().stream().findFirst().get().quantity()).isEqualTo(2);
     }
 
     @Test
@@ -89,9 +88,9 @@ class CartServiceTest {
         prices.price = usd(900);
         Cart cart = service.addItem(ownerId, new AddItemCommand(productId, null, 2));
 
-        Cart updated = service.updateItemQuantity(ownerId, cart.getItems().get(0).id(), new UpdateQuantityCommand(5));
+        Cart updated = service.updateItemQuantity(ownerId,  cart.getItems().values().stream().findFirst().get().id(), new UpdateQuantityCommand(5));
 
-        assertThat(updated.getItems().get(0).quantity()).isEqualTo(5);
+        assertThat(updated.getItems().values().stream().findFirst().get().quantity()).isEqualTo(5);
     }
 
     @Test
@@ -100,7 +99,7 @@ class CartServiceTest {
         prices.price = usd(900);
         Cart cart = service.addItem(ownerId, new AddItemCommand(ProductId.generate(), null, 1));
 
-        Cart updated = service.removeItem(ownerId, cart.getItems().get(0).id());
+        Cart updated = service.removeItem(ownerId, cart.getItems().values().stream().findFirst().get().id());
 
         assertThat(updated.getItems()).isEmpty();
     }
@@ -140,7 +139,14 @@ class CartServiceTest {
         prices.price = usd(1000);
         Cart validated = service.validateCart(ownerId);
 
-        assertThat(validated.getItems().get(0).unitPrice()).isEqualTo(usd(1000));
+        assertThat(validated.getItems()
+                .values()
+                .stream()
+                .filter(i -> i.productId().equals(productId)
+                ).findFirst()
+                .get()
+                .unitPrice()
+        ).isEqualTo(usd(1000));
     }
 
     @Test

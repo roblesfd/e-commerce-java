@@ -9,7 +9,7 @@ import org.fernandodev.ecommerce.shipping.domain.value_object.ShippingMethodId;
 /**
  * Puerto de salida de persistencia del agregado {@link ShippingMethod}.
  */
-public interface ShippingMethodRepository {
+public interface    ShippingMethodRepository {
 
     /**
      * Persiste el método de envío.

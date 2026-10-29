@@ -3,6 +3,7 @@ package org.fernandodev.ecommerce.cart.adapter.out.persistence.redis;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 import org.fernandodev.ecommerce.AbstractIntegrationTest;
@@ -34,8 +35,8 @@ class CartRedisRepositoryTest extends AbstractIntegrationTest {
         assertThat(loaded.getId()).isEqualTo(cart.getId());
         assertThat(loaded.getOwnerId()).isEqualTo(ownerId);
         assertThat(loaded.getItems()).hasSize(1);
-        assertThat(loaded.getItems().get(0).unitPrice()).isEqualTo(usd(900));
-        assertThat(loaded.getItems().get(0).quantity()).isEqualTo(2);
+        assertThat(loaded.getItems().values().stream().findFirst().get().unitPrice()).isEqualTo(usd(900));
+        assertThat(loaded.getItems().values().stream().findFirst().get().quantity()).isEqualTo(2);
         assertThat(loaded.subtotal()).contains(usd(1800));
     }
 
@@ -60,7 +61,7 @@ class CartRedisRepositoryTest extends AbstractIntegrationTest {
         Cart cart = Cart.create(CartId.generate(), ownerId, T0);
         repository.save(cart);
 
-        Cart updated = Cart.crear(cart.getId(), ownerId, java.util.List.of(), null, T0);
+        Cart updated = Cart.crear(cart.getId(), ownerId, Map.of(), null, T0);
         repository.save(updated);
 
         Cart loaded = repository.findByOwner(ownerId).orElseThrow();
